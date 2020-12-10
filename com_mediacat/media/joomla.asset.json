@@ -1,0 +1,26 @@
+{
+  "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+  "name": "com_mediacat",
+  "version": "4.0.0",
+  "description": "Joomla CMS",
+  "license": "GPL-2.0-or-later",
+  "assets": [
+    {
+      "name": "com_mediacat.mediacat",
+      "type": "script",
+      "uri": "com_mediacat/mediacat.js",
+      "dependencies": [
+        "core"
+      ],
+      "attributes": {
+        "defer": true
+      }
+    },
+    {
+      "name": "com_mediacat.mediacat",
+      "type": "style",
+      "uri": "com_mediacat/mediacat.css"
+    }
+
+  ]
+}

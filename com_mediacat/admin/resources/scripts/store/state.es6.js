@@ -1,7 +1,7 @@
 import { persistedStateOptions } from './plugins/persisted-state.es6';
 
 // Get the disks from joomla option storage
-const options = Joomla.getOptions('com_media', {});
+const options = Joomla.getOptions('com_mediacat', {});
 if (options.providers === undefined || options.providers.length === 0) {
   throw new TypeError('Media providers are not defined.');
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package     Joomla.Administrator
- * @subpackage  com_media
+ * @subpackage  com_mediacat
  *
  * @copyright   (C) 2017 Open Source Matters, Inc. <https://www.joomla.org>
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -37,10 +37,10 @@ class FileModel extends FormModel
 		PluginHelper::importPlugin('media-action');
 
 		// Load backend forms in frontend.
-		FormHelper::addFormPath(JPATH_ADMINISTRATOR . '/components/com_media/forms');
+		FormHelper::addFormPath(JPATH_ADMINISTRATOR . '/components/com_mediacat/forms');
 
 		// Get the form.
-		$form = $this->loadForm('com_media.file', 'file', ['control' => 'jform', 'load_data' => $loadData]);
+		$form = $this->loadForm('com_mediacat.file', 'file', ['control' => 'jform', 'load_data' => $loadData]);
 
 		if (empty($form))
 		{
@@ -65,7 +65,7 @@ class FileModel extends FormModel
 	{
 		list($adapter, $path) = explode(':', $path, 2);
 
-		return $this->bootComponent('com_media')->getMVCFactory()->createModel('Api', 'Administrator')
+		return $this->bootComponent('com_mediacat')->getMVCFactory()->createModel('Api', 'Administrator')
 			->getFile($adapter, $path, ['url' => true, 'content' => true]);
 	}
 }

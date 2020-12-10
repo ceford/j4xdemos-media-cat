@@ -1,7 +1,7 @@
 <?php
 /**
  * @package     Joomla.Administrator
- * @subpackage  com_media
+ * @subpackage  com_mediacat
  *
  * @copyright   (C) 2017 Open Source Matters, Inc. <https://www.joomla.org>
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -41,7 +41,7 @@ class HtmlView extends BaseHtmlView
 		$this->form = $this->get('Form');
 
 		// The component params
-		$this->params = ComponentHelper::getParams('com_media');
+		$this->params = ComponentHelper::getParams('com_mediacat');
 
 		// The requested file
 		$this->file = $this->getModel()->getFileInformation($input->getString('path', null));

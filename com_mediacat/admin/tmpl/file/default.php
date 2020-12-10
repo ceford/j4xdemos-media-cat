@@ -1,7 +1,7 @@
 <?php
 /**
  * @package     Joomla.Administrator
- * @subpackage  com_media
+ * @subpackage  com_mediacat
  *
  * @copyright   (C) 2017 Open Source Matters, Inc. <https://www.joomla.org>
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -21,10 +21,10 @@ use Joomla\CMS\Uri\Uri;
 $wa = $this->document->getWebAssetManager();
 $wa->useScript('keepalive')
 	->useScript('form.validate')
-	->useScript('com_media.edit-images')
-	->useStyle('com_media.mediamanager');
+	->useScript('com_mediacat.edit-images')
+	->useStyle('com_mediacat.mediamanager');
 
-$params = ComponentHelper::getParams('com_media');
+$params = ComponentHelper::getParams('com_mediacat');
 
 /** @var \Joomla\CMS\Form\Form $form */
 $form = $this->form;
@@ -39,16 +39,16 @@ if ($tmpl == 'component')
 
 // Populate the media config
 $config = [
-	'apiBaseUrl'              => Uri::base() . 'index.php?option=com_media&format=json',
+	'apiBaseUrl'              => Uri::base() . 'index.php?option=com_mediacat&format=json',
 	'csrfToken'               => Session::getFormToken(),
 	'uploadPath'              => $this->file->path,
-	'editViewUrl'             => Uri::base() . 'index.php?option=com_media&view=file' . ($tmpl ? '&tmpl=' . $tmpl : ''),
+	'editViewUrl'             => Uri::base() . 'index.php?option=com_mediacat&view=file' . ($tmpl ? '&tmpl=' . $tmpl : ''),
 	'allowedUploadExtensions' => $params->get('upload_extensions', ''),
 	'maxUploadSizeMb'         => $params->get('upload_maxsize', 10),
 	'contents'                => $this->file->content,
 ];
 
-$this->document->addScriptOptions('com_media', $config);
+$this->document->addScriptOptions('com_mediacat', $config);
 
 $this->useCoreUI = true;
 ?>

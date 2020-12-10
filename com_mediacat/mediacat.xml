@@ -11,33 +11,24 @@
 	<version>0.1</version>
 	<description>COM_MEDIACAT_XML_DESCRIPTION</description>
 	<namespace path="src">J4xdemos\Component\Mediacat</namespace>
-	<install> <!-- Runs on install -->
-		<sql>
-			<file driver="mysql" charset="utf8">sql/install.mysql.sql</file>
-		</sql>
-	</install>
-	<uninstall> <!-- Runs on uninstall -->
-		<sql>
-			<file driver="mysql" charset="utf8">sql/uninstall.mysql.sql</file>
-		</sql>
-	</uninstall>
 
 	<!-- Site Main File Copy Section -->
 	<!-- Note the folder attribute: This attribute describes the folder
 		to copy FROM in the package to install therefore files copied
 		in this section are copied from /site/ in the package -->
+	<media destination="com_mediacat" folder="media">
+		<file>joomla.asset.json</file>
+		<folder>css</folder>
+		<folder>js</folder>
+	</media>
 
 	<files folder="site">
 		<folder>src</folder>
 	</files>
-	<languages folder="site">
-		<language tag="en-GB">language/en-GB/com_mediacat.ini</language>
-	</languages>
 	<administration>
 		<files folder="admin">
 			<filename>access.xml</filename>
 			<filename>config.xml</filename>
-			<filename>media.xml</filename>
 			<folder>forms</folder>
 			<folder>layouts</folder>
 			<folder>resources</folder>
@@ -49,5 +40,21 @@
 			<language tag="en-GB">language/en-GB/com_mediacat.ini</language>
 			<language tag="en-GB">language/en-GB/com_mediacat.sys.ini</language>
 		</languages>
+		<menu img="class:default">com_mediacat</menu>
+		<submenu>
+			<!--
+				Note that all & must be escaped to &amp; for the file to be valid
+				XML and be parsed by the installer
+			-->
+			<menu
+				link="option=com_mediacat&amp;view=navigator"
+				view="navigator"
+				img="class:navigator"
+				alt="Mediacat/Navigator"
+				>
+				com_mediacat_navigator
+			</menu>
+		</submenu>
+
 	</administration>
 </extension>

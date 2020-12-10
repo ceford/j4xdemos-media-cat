@@ -1,7 +1,7 @@
 <?php
 /**
  * @package     Joomla.Administrator
- * @subpackage  com_media
+ * @subpackage  com_mediacat
  *
  * @copyright   (C) 2017 Open Source Matters, Inc. <https://www.joomla.org>
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -26,7 +26,7 @@ use Joomla\Component\Media\Administrator\Exception\InvalidPathException;
 /**
  * Api Media Controller
  *
- * This is NO public api controller, it is internal for the com_media component only!
+ * This is NO public api controller, it is internal for the com_mediacat component only!
  *
  * @since  4.0.0
  */
@@ -103,26 +103,26 @@ class ApiController extends BaseController
 	 * Examples:
 	 *
 	 * - GET a list of folders below the root:
-	 * 		index.php?option=com_media&task=api.files
+	 * 		index.php?option=com_mediacat&task=api.files
 	 * 		/api/files
 	 * - GET a list of files and subfolders of a given folder:
-	 * 		index.php?option=com_media&task=api.files&format=json&path=/sampledata/fruitshop
+	 * 		index.php?option=com_mediacat&task=api.files&format=json&path=/sampledata/fruitshop
 	 * 		/api/files/sampledata/fruitshop
 	 * - GET a list of files and subfolders of a given folder for a given search term:
 	 *   use recursive=1 to search recursively in the working directory
-	 * 		index.php?option=com_media&task=api.files&format=json&path=/sampledata/fruitshop&search=apple
+	 * 		index.php?option=com_mediacat&task=api.files&format=json&path=/sampledata/fruitshop&search=apple
 	 * 		/api/files/sampledata/fruitshop?search=apple
 	 *   To look up in same working directory set flag recursive=0
-	 *      index.php?option=com_media&task=api.files&format=json&path=/sampledata/fruitshop&search=apple&recursive=0
+	 *      index.php?option=com_mediacat&task=api.files&format=json&path=/sampledata/fruitshop&search=apple&recursive=0
 	 * 		/api/files/sampledata/fruitshop?search=apple&recursive=0
 	 * - GET file information for a specific file:
-	 * 		index.php?option=com_media&task=api.files&format=json&path=/sampledata/fruitshop/test.jpg
+	 * 		index.php?option=com_mediacat&task=api.files&format=json&path=/sampledata/fruitshop/test.jpg
 	 * 		/api/files/sampledata/fruitshop/test.jpg
 	 * - GET a temporary URL to a given file
-	 *      index.php?option=com_media&task=api.files&format=json&path=/sampledata/fruitshop/test.jpg&url=1&temp=1
+	 *      index.php?option=com_mediacat&task=api.files&format=json&path=/sampledata/fruitshop/test.jpg&url=1&temp=1
 	 * 		/api/files/sampledata/fruitshop/test.jpg&url=1&temp=1
 	 * - GET a temporary URL to a given file
-	 *      index.php?option=com_media&task=api.files&format=json&path=/sampledata/fruitshop/test.jpg&url=1
+	 *      index.php?option=com_mediacat&task=api.files&format=json&path=/sampledata/fruitshop/test.jpg&url=1
 	 * 		/api/files/sampledata/fruitshop/test.jpg&url=1
 	 *
 	 * @return  array  The data to send with the response
@@ -149,10 +149,10 @@ class ApiController extends BaseController
 	 * Examples:
 	 *
 	 * - DELETE an existing folder in a specific folder:
-	 * 		index.php?option=com_media&task=api.files&format=json&path=/sampledata/fruitshop/test
+	 * 		index.php?option=com_mediacat&task=api.files&format=json&path=/sampledata/fruitshop/test
 	 * 		/api/files/sampledata/fruitshop/test
 	 * - DELETE an existing file in a specific folder:
-	 * 		index.php?option=com_media&task=api.files&path=/sampledata/fruitshop/test.jpg
+	 * 		index.php?option=com_mediacat&task=api.files&path=/sampledata/fruitshop/test.jpg
 	 * 		/api/files/sampledata/fruitshop/test.jpg
 	 *
 	 * @return  null
@@ -173,7 +173,7 @@ class ApiController extends BaseController
 	 * Examples:
 	 *
 	 * - POST a new file or folder into a specific folder, the file or folder information is returned:
-	 * 		index.php?option=com_media&task=api.files&format=json&path=/sampledata/fruitshop
+	 * 		index.php?option=com_mediacat&task=api.files&format=json&path=/sampledata/fruitshop
 	 * 		/api/files/sampledata/fruitshop
 	 *
 	 * 		New file body:
@@ -222,7 +222,7 @@ class ApiController extends BaseController
 	 * Examples:
 	 *
 	 * - PUT a media file, the file or folder information is returned:
-	 * 		index.php?option=com_media&task=api.files&format=json&path=/sampledata/fruitshop/test.jpg
+	 * 		index.php?option=com_mediacat&task=api.files&format=json&path=/sampledata/fruitshop/test.jpg
 	 * 		/api/files/sampledata/fruitshop/test.jpg
 	 *
 	 * 		Update file body:
@@ -232,7 +232,7 @@ class ApiController extends BaseController
 	 *
 	 * - PUT move a file, folder to another one
 	 *     path : will be taken as the source
-	 *     index.php?option=com_media&task=api.files&format=json&path=/sampledata/fruitshop/test.jpg
+	 *     index.php?option=com_mediacat&task=api.files&format=json&path=/sampledata/fruitshop/test.jpg
 	 * 	   /api/files/sampledata/fruitshop/test.jpg
 	 *
 	 *     JSON body:
@@ -243,7 +243,7 @@ class ApiController extends BaseController
 	 *
 	 * - PUT copy a file, folder to another one
 	 *     path : will be taken as the source
-	 *     index.php?option=com_media&task=api.files&format=json&path=/sampledata/fruitshop/test.jpg
+	 *     index.php?option=com_mediacat&task=api.files&format=json&path=/sampledata/fruitshop/test.jpg
 	 * 	   /api/files/sampledata/fruitshop/test.jpg
 	 *
 	 *     JSON body:
@@ -346,12 +346,12 @@ class ApiController extends BaseController
 	 */
 	private function checkContent()
 	{
-		if (!Factory::getUser()->authorise('core.create', 'com_media'))
+		if (!Factory::getUser()->authorise('core.create', 'com_mediacat'))
 		{
 			throw new \Exception(Text::_('COM_MEDIA_ERROR_CREATE_NOT_PERMITTED'), 403);
 		}
 
-		$params = ComponentHelper::getParams('com_media');
+		$params = ComponentHelper::getParams('com_mediacat');
 
 		$helper       = new MediaHelper;
 		$serverlength = $this->input->server->getInt('CONTENT_LENGTH');

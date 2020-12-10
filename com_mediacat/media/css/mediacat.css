@@ -1,0 +1,44 @@
+@charset "UTF-8";
+.indent-1 {
+	padding-left: 1rem;
+}
+.indent-2 {
+	padding-left: 2rem;
+}
+.indent-3 {
+	padding-left: 3rem;
+}
+.indent-4 {
+	padding-left: 4rem;
+}
+.indent-5 {
+	padding-left: 5rem;
+}
+.indent-6 {
+	padding-left: 6rem;
+}
+.indent-7 {
+	padding-left: 7rem;
+}
+.indent-8 {
+	padding-left: 8rem;
+}
+.indent-9 {
+	padding-left: 9rem;
+}
+.cat-folder:hover {
+	background-color: #eee;
+}
+
+.image-cropped {
+	padding-bottom: 100%;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+	border-radius: .25rem;
+}
+
+.cover {
+	object-fit: cover;
+	max-width: 100%;
+}

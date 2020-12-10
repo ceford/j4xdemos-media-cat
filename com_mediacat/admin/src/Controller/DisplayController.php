@@ -1,7 +1,7 @@
 <?php
 /**
  * @package     Joomla.Administrator
- * @subpackage  com_media
+ * @subpackage  com_mediacat
  *
  * @copyright   (C) 2007 Open Source Matters, Inc. <https://www.joomla.org>
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -26,7 +26,7 @@ class DisplayController extends BaseController
 	 * @var    string
 	 * @since  1.6
 	 */
-	protected $default_view = 'media';
+	protected $default_view = 'navigator';
 
 	/**
 	 * Method to get a reference to the current view and load it if necessary.

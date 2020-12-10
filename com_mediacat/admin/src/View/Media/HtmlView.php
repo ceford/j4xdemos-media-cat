@@ -1,7 +1,7 @@
 <?php
 /**
  * @package     Joomla.Administrator
- * @subpackage  com_media
+ * @subpackage  com_mediacat
  *
  * @copyright   (C) 2007 Open Source Matters, Inc. <https://www.joomla.org>
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -87,42 +87,47 @@ class HtmlView extends BaseHtmlView
 		$tmpl = Factory::getApplication()->input->getCmd('tmpl');
 
 		// Get the toolbar object instance
-		$bar  = Toolbar::getInstance('toolbar');
+		$toolbar  = Toolbar::getInstance('toolbar');
 		$user = Factory::getUser();
 
 		// Set the title
-		ToolbarHelper::title(Text::_('COM_MEDIA'), 'images mediamanager');
-
+		ToolbarHelper::title(Text::_('COM_MEDIACAT'), 'images mediamanager');
+		
 		// Add the upload and create folder buttons
-		if ($user->authorise('core.create', 'com_media'))
+		if ($user->authorise('core.create', 'com_mediacat'))
 		{
+			$toolbar->appendButton(
+				'Popup', 'archive', 'COM_MEDIACAT_INDEX', 'index.php?option=com_mediacat&view=indexer&tmpl=component', 500, 210, 0, 0,
+				'window.parent.location.reload()', Text::_('COM_MEDIACAT_HEADING_INDEXER')
+				);
+
 			// Add the upload button
 			$layout = new FileLayout('toolbar.upload', JPATH_COMPONENT_ADMINISTRATOR . '/layouts');
 
-			$bar->appendButton('Custom', $layout->render([]), 'upload');
+			$toolbar->appendButton('Custom', $layout->render([]), 'upload');
 			ToolbarHelper::divider();
 
 			// Add the create folder button
 			$layout = new FileLayout('toolbar.create-folder', JPATH_COMPONENT_ADMINISTRATOR . '/layouts');
 
-			$bar->appendButton('Custom', $layout->render([]), 'new');
+			$toolbar->appendButton('Custom', $layout->render([]), 'new');
 			ToolbarHelper::divider();
 		}
 
 		// Add a delete button
-		if ($user->authorise('core.delete', 'com_media'))
+		if ($user->authorise('core.delete', 'com_mediacat'))
 		{
 			// Instantiate a new FileLayout instance and render the layout
 			$layout = new FileLayout('toolbar.delete');
 
-			$bar->appendButton('Custom', $layout->render([]), 'delete');
+			$toolbar->appendButton('Custom', $layout->render([]), 'delete');
 			ToolbarHelper::divider();
 		}
 
 		// Add the preferences button
-		if (($user->authorise('core.admin', 'com_media') || $user->authorise('core.options', 'com_media')) && $tmpl !== 'component')
+		if (($user->authorise('core.admin', 'com_mediacat') || $user->authorise('core.options', 'com_mediacat')) && $tmpl !== 'component')
 		{
-			ToolbarHelper::preferences('com_media');
+			ToolbarHelper::preferences('com_mediacat');
 			ToolbarHelper::divider();
 		}
 

@@ -125,7 +125,7 @@ export default {
       };
     },
     isModal() {
-      return Joomla.getOptions('com_media', {}).isModal;
+      return Joomla.getOptions('com_mediacat', {}).isModal;
     },
     currentDirectory() {
       const parts = this.$store.state.selectedDirectory.split('/').filter((crumb) => crumb.length !== 0);

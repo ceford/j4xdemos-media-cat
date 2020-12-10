@@ -10,7 +10,7 @@ class Api {
      * Store constructor
      */
   constructor() {
-    const options = Joomla.getOptions('com_media', {});
+    const options = Joomla.getOptions('com_mediacat', {});
     if (options.apiBaseUrl === undefined) {
       throw new TypeError('Media api baseUrl is not defined');
     }

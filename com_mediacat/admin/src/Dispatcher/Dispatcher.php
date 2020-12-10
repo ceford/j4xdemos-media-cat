@@ -1,7 +1,7 @@
 <?php
 /**
  * @package     Joomla.Administrator
- * @subpackage  com_media
+ * @subpackage  com_mediacat
  *
  * @copyright   (C) 2017 Open Source Matters, Inc. <https://www.joomla.org>
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -15,7 +15,7 @@ use Joomla\CMS\Access\Exception\NotAllowed;
 use Joomla\CMS\Dispatcher\ComponentDispatcher;
 
 /**
- * ComponentDispatcher class for com_media
+ * ComponentDispatcher class for com_mediacat
  *
  * @since  4.0.0
  */
@@ -35,7 +35,7 @@ class Dispatcher extends ComponentDispatcher
 		$author = $this->input->get('author');
 
 		// Access check
-		if (!$user->authorise('core.manage', 'com_media')
+		if (!$user->authorise('core.manage', 'com_mediacat')
 			&& (!$asset || (!$user->authorise('core.edit', $asset)
 			&& !$user->authorise('core.create', $asset)
 			&& count($user->getAuthorisedCategories($asset, 'core.create')) == 0)

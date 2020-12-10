@@ -1,7 +1,7 @@
 <?php
 /**
  * @package     Joomla.Administrator
- * @subpackage  com_media
+ * @subpackage  com_mediacat
  *
  * @copyright   (C) 2017 Open Source Matters, Inc. <https://www.joomla.org>
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -28,7 +28,7 @@ class PluginController extends BaseController
 	/**
 	 * Handles an OAuth Callback request for a specified plugin.
 	 *
-	 * URLs containing [sitename]/administrator/index.php?option=com_media&task=plugin.oauthcallback
+	 * URLs containing [sitename]/administrator/index.php?option=com_mediacat&task=plugin.oauthcallback
 	 *  &plugin=[plugin_name]
 	 *
 	 * will be handled by this endpoint.
@@ -103,7 +103,7 @@ class PluginController extends BaseController
 				 * Use this for close New Windows opened for OAuth Process
 				 */
 				case 'close':
-					$this->setRedirect(Route::_('index.php?option=com_media&view=plugin&action=close', false));
+					$this->setRedirect(Route::_('index.php?option=com_mediacat&view=plugin&action=close', false));
 					break;
 
 				// Redirect browser to any page specified by the user
@@ -124,7 +124,7 @@ class PluginController extends BaseController
 				// Redirect browser to Media Manager
 				case 'media-manager':
 				default:
-					$this->setRedirect(Route::_('index.php?option=com_media&view=media', false));
+					$this->setRedirect(Route::_('index.php?option=com_mediacat&view=media', false));
 			}
 		}
 		catch (\Exception $e)

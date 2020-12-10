@@ -1,7 +1,7 @@
 <?php
 /**
  * @package     Joomla.Administrator
- * @subpackage  com_media
+ * @subpackage  com_mediacat
  *
  * @copyright   (C) 2017 Open Source Matters, Inc. <https://www.joomla.org>
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -236,7 +236,7 @@ class ApiModel extends BaseDatabaseModel
 
 		PluginHelper::importPlugin('content');
 
-		$result = $app->triggerEvent('onContentBeforeSave', ['com_media.folder', $object, true, $object]);
+		$result = $app->triggerEvent('onContentBeforeSave', ['com_mediacat.folder', $object, true, $object]);
 
 		if (in_array(false, $result, true))
 		{
@@ -245,7 +245,7 @@ class ApiModel extends BaseDatabaseModel
 
 		$object->name = $this->getAdapter($object->adapter)->createFolder($object->name, $object->path);
 
-		$app->triggerEvent('onContentAfterSave', ['com_media.folder', $object, true, $object]);
+		$app->triggerEvent('onContentAfterSave', ['com_mediacat.folder', $object, true, $object]);
 
 		return $object->name;
 	}
@@ -302,7 +302,7 @@ class ApiModel extends BaseDatabaseModel
 		// Also include the filesystem plugins, perhaps they support batch processing too
  		PluginHelper::importPlugin('media-action');
 
-		$result = $app->triggerEvent('onContentBeforeSave', ['com_media.file', $object, true, $object]);
+		$result = $app->triggerEvent('onContentBeforeSave', ['com_mediacat.file', $object, true, $object]);
 
 		if (in_array(false, $result, true))
 		{
@@ -311,7 +311,7 @@ class ApiModel extends BaseDatabaseModel
 
 		$object->name = $this->getAdapter($object->adapter)->createFile($object->name, $object->path, $object->data);
 
-		$app->triggerEvent('onContentAfterSave', ['com_media.file', $object, true, $object]);
+		$app->triggerEvent('onContentAfterSave', ['com_mediacat.file', $object, true, $object]);
 
 		return $object->name;
 	}
@@ -352,7 +352,7 @@ class ApiModel extends BaseDatabaseModel
 		// Also include the filesystem plugins, perhaps they support batch processing too
  		PluginHelper::importPlugin('media-action');
 
-		$result = $app->triggerEvent('onContentBeforeSave', ['com_media.file', $object, false, $object]);
+		$result = $app->triggerEvent('onContentBeforeSave', ['com_mediacat.file', $object, false, $object]);
 
 		if (in_array(false, $result, true))
 		{
@@ -361,7 +361,7 @@ class ApiModel extends BaseDatabaseModel
 
 		$this->getAdapter($object->adapter)->updateFile($object->name, $object->path, $object->data);
 
-		$app->triggerEvent('onContentAfterSave', ['com_media.file', $object, false, $object]);
+		$app->triggerEvent('onContentAfterSave', ['com_mediacat.file', $object, false, $object]);
 	}
 
 	/**
@@ -395,7 +395,7 @@ class ApiModel extends BaseDatabaseModel
 
 		PluginHelper::importPlugin('content');
 
-		$result = $app->triggerEvent('onContentBeforeDelete', ['com_media.' . $type, $object]);
+		$result = $app->triggerEvent('onContentBeforeDelete', ['com_mediacat.' . $type, $object]);
 
 		if (in_array(false, $result, true))
 		{
@@ -404,7 +404,7 @@ class ApiModel extends BaseDatabaseModel
 
 		$this->getAdapter($object->adapter)->delete($object->path);
 
-		$app->triggerEvent('onContentAfterDelete', ['com_media.' . $type, $object]);
+		$app->triggerEvent('onContentAfterDelete', ['com_mediacat.' . $type, $object]);
 	}
 
 	/**
@@ -530,7 +530,7 @@ class ApiModel extends BaseDatabaseModel
 		if ($this->allowedExtensions === null)
 		{
 			// Get the setting from the params
-			$this->allowedExtensions = ComponentHelper::getParams('com_media')->get(
+			$this->allowedExtensions = ComponentHelper::getParams('com_mediacat')->get(
 				'upload_extensions',
 				'bmp,csv,doc,gif,ico,jpg,jpeg,odg,odp,ods,odt,pdf,png,ppt,txt,xcf,xls,BMP,CSV,DOC,GIF,ICO,JPG,JPEG,ODG,ODP,ODS,ODT,PDF,PNG,PPT,TXT,XCF,XLS'
 			);

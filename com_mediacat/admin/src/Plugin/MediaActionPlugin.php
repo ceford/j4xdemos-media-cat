@@ -1,7 +1,7 @@
 <?php
 /**
  * @package     Joomla.Administrator
- * @subpackage  com_media
+ * @subpackage  com_mediacat
  *
  * @copyright   (C) 2017 Open Source Matters, Inc. <https://www.joomla.org>
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -45,7 +45,7 @@ class MediaActionPlugin extends CMSPlugin
 	public function onContentPrepareForm(Form $form, $data)
 	{
 		// Check if it is the right form
-		if ($form->getName() != 'com_media.file')
+		if ($form->getName() != 'com_mediacat.file')
 		{
 			return;
 		}

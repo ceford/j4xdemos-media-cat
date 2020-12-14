@@ -12,6 +12,7 @@ namespace J4xdemos\Component\Mediacat\Administrator\Model;
 \defined('_JEXEC') or die;
 
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\CMS\Table\Table;
 use Joomla\Database\ParameterType;
@@ -21,7 +22,7 @@ use Joomla\Database\ParameterType;
  *
  * @since  1.6
  */
-class NavigatorModel extends ListModel
+class FilesModel extends ListModel
 {
 	/**
 	 * Constructor.
@@ -53,18 +54,18 @@ class NavigatorModel extends ListModel
 	 */
 	protected function getListQuery()
 	{
-		$current = $this->getState('filter.activepath');
+		$current = $this->getState('filter.activefilepath');
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
 		$query->select('*');
-		$query->from('#__mediacat_index AS a');
+		$query->from('#__mediacat_files AS a');
 		$query->where('file_path LIKE ' . $db->quote($current . '%'));
 		// Add the list ordering clause.
 		$orderCol  = $this->state->get('list.ordering', 'a.id');
 		$orderDirn = $this->state->get('list.direction', 'ASC');
 		$ordering = $db->escape($orderCol) . ' ' . $db->escape($orderDirn);
 		$query->order($ordering);
-		
+
 		return $query;
 	}
 
@@ -123,10 +124,10 @@ class NavigatorModel extends ListModel
 
 		$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
 		$this->setState('filter.search', $search);
-		
-		$activepath = $this->getUserStateFromRequest($this->context . '.filter.activepath', 'filter_activepath', '/images');
+
+		$activepath = $this->getUserStateFromRequest($this->context . '.filter.activefilepath', 'filter_activefilepath', '/files');
 		$this->setState('filter.activepath', $activepath);
-		
+		Factory::getApplication()->setUserState('com_mediacat.images.activefilepath', $activepath);
 		// List state information.
 		parent::populateState($ordering, $direction);
 	}

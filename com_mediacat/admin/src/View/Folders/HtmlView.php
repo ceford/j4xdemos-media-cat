@@ -7,7 +7,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-namespace J4xdemos\Component\Mediacat\Administrator\View\Media;
+namespace J4xdemos\Component\Mediacat\Administrator\View\Folders;
 
 \defined('_JEXEC') or die;
 
@@ -91,20 +91,16 @@ class HtmlView extends BaseHtmlView
 		$user = Factory::getUser();
 
 		// Set the title
-		ToolbarHelper::title(Text::_('COM_MEDIACAT'), 'images mediamanager');
-		
+		ToolbarHelper::title(Text::_('COM_MEDIACAT_TITLE_BAR_FOLDERS'), 'images mediamanager');
+
 		// Add the upload and create folder buttons
 		if ($user->authorise('core.create', 'com_mediacat'))
 		{
 			$toolbar->appendButton(
-				'Popup', 'archive', 'COM_MEDIACAT_INDEX', 'index.php?option=com_mediacat&view=indexer&tmpl=component', 500, 210, 0, 0,
+				'Popup', 'archive', 'COM_MEDIACAT_TOOLBAR_BUTTON_INDEXER', 'index.php?option=com_mediacat&view=indexer&tmpl=component', 500, 210, 0, 0,
 				'window.parent.location.reload()', Text::_('COM_MEDIACAT_HEADING_INDEXER')
 				);
 
-			// Add the upload button
-			$layout = new FileLayout('toolbar.upload', JPATH_COMPONENT_ADMINISTRATOR . '/layouts');
-
-			$toolbar->appendButton('Custom', $layout->render([]), 'upload');
 			ToolbarHelper::divider();
 
 			// Add the create folder button

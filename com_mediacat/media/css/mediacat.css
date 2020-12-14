@@ -42,3 +42,7 @@
 	object-fit: cover;
 	max-width: 100%;
 }
+
+.cursor-zoom {
+	cursor: zoom-in;
+}

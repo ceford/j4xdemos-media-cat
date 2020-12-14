@@ -22,7 +22,7 @@ use Joomla\Component\Media\Administrator\Provider\ProviderManager;
  *
  * @since  4.0.0
  */
-class MediaModel extends BaseDatabaseModel
+class FoldersModel extends BaseDatabaseModel
 {
 	/**
 	 * Obtain list of supported providers

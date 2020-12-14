@@ -32,7 +32,7 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 
 ?>
 
-<form action="<?php echo Route::_('index.php?option=com_mediacat&view=navigator'); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo Route::_('index.php?option=com_mediacat&view=images'); ?>" method="post" name="adminForm" id="adminForm">
 	<div class="row">
 		<div class="col-md-12">
 			<div id="j-main-container" class="j-main-container">
@@ -60,29 +60,30 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 						</caption>
 						<thead>
 							<tr>
-								<td class="w-1 text-center">
-									<?php echo HTMLHelper::_('grid.checkall'); ?>
-								</td>
-								<td>Preview</td>
-								<td>File Name</td>
-								<td>Extension</td>
-								<td>Created</td>
-								<td>Width</td>
-								<td>Height</td>
-								<td>Size</td>
+								<td><?php echo Text::_('COM_MEDIACAT_PREVIEW'); ?></td>
+								<td><?php echo Text::_('COM_MEDIACAT_MEDIA_NAME'); ?></td>
+								<td><?php echo Text::_('COM_MEDIACAT_MEDIA_EXTENSION'); ?></td>
+								<td><?php echo Text::_('COM_MEDIACAT_MEDIA_DATE_CREATED'); ?></td>
+								<td><?php echo Text::_('COM_MEDIACAT_MEDIA_WIDTH'); ?></td>
+								<td><?php echo Text::_('COM_MEDIACAT_MEDIA_HEIGHT'); ?></td>
+								<td><?php echo Text::_('COM_MEDIACAT_MEDIA_SIZE'); ?></td>
 								<th scope="col" class="w-5 d-none d-md-table-cell">
 									<?php echo HTMLHelper::_('searchtools.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
 								</th>
 							</tr>
 						</thead>
 						<tbody>
-							<?php foreach ($this->items as $i => $item) : ?>
+							<?php foreach ($this->items as $i => $item) :
+								$imageurl = substr($item->file_path, 1);
+							?>
 								<tr>
-									<td rowspan="2" class="text-center">
-										<?php echo HTMLHelper::_('grid.id', $i, $item->id); ?>
+									<td rowspan="2" class="image-cropped preview cursor-zoom" style="background-image: url('<?php echo $fileBaseUrl . $item->file_path; ?>');"
+									onclick="mediacatAction('zoom',<?php echo "'{$imageurl}'";?>)"></td>
+									<td class="break-word">
+										<a href="index.php?option=com_mediacat&view=image&layout=edit&id=<?php echo $item->id; ?>">
+											<?php echo $item->file_name; ?>
+										</a>
 									</td>
-									<td rowspan="2" class="image-cropped" style="background-image: url('<?php echo $fileBaseUrl . $item->file_path; ?>');"></td>
-									<td class="break-word"><?php echo $item->file_name; ?></td>
 									<td><?php echo $item->extension; ?></td>
 									<td><?php echo $item->date_created; ?></td>
 									<td id="width-<?php echo $item->id; ?>"><?php echo $item->width; ?></td>
@@ -94,17 +95,15 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 								</tr>
 								<tr>
 									<td>
-										<select id="actionlist_<?php echo $item->id; ?>" class="custom-select" 
-											onChange="mediacatAction(this, '<?php echo substr($item->file_path, 1); ?>')">
-											<option value="">- Action -</option>
-											<option value="zoom">Zoom</option>
-											<option value="edit">Edit</option>
-											<option value="download">Download</option>
-											<option value="share">Share URL</option>
-											<option value="image">Image Tag</option>
-											<option value="figure">Figure Tag</option>
-											<option value="picture">Picture Tag</option>
-											<option value="delete">Delete</option>
+										<select id="actionlist_<?php echo $item->id; ?>" class="custom-select"
+											onChange="mediacatAction(this, '<?php echo $imageurl; ?>')">
+											<option value=""><?php echo Text::_('COM_MEDIACAT_ACTIONS'); ?></option>
+											<option value="share"><?php echo Text::_('COM_MEDIACAT_ACTIONS_SHARE_URL'); ?></option>
+											<option value="image"><?php echo Text::_('COM_MEDIACAT_ACTIONS_IMAGE_TAG'); ?></option>
+											<option value="figure"><?php echo Text::_('COM_MEDIACAT_ACTIONS_FIGURE_TAG'); ?></option>
+											<option value="picture"><?php echo Text::_('COM_MEDIACAT_ACTIONS_PICTURE_TAG'); ?></option>
+											<option value="edit"><?php echo Text::_('COM_MEDIACAT_ACTIONS_EDIT'); ?></option>
+											<option value="trash"><?php echo Text::_('JTRASH'); ?></option>
 										</select>
 									</td>
 									<td id="id="alt-<?php echo $item->id; ?>" colspan="6">
@@ -132,7 +131,7 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 	</div>
 </form>
 
-<?php 
+<?php
 $footer = '
 	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 ';

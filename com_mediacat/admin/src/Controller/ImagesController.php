@@ -23,7 +23,7 @@ use Joomla\Utilities\ArrayHelper;
  *
  * @since  1.6
  */
-class NavigatorController extends AdminController
+class ImagesController extends AdminController
 {
 	/**
 	 * The prefix to use with controller messages.
@@ -31,7 +31,7 @@ class NavigatorController extends AdminController
 	 * @var    string
 	 * @since  1.6
 	 */
-	protected $text_prefix = 'COM_MEDIACAT_NAVIGATOR';
+	protected $text_prefix = 'COM_MEDIACAT_IMAGES';
 
 	/**
 	 * Constructor.
@@ -60,7 +60,7 @@ class NavigatorController extends AdminController
 	 *
 	 * @since   1.6
 	 */
-	public function getModel($name = 'Banner', $prefix = 'Administrator', $config = array('ignore_request' => true))
+	public function getModel($name = 'Mediacat', $prefix = 'Administrator', $config = array('ignore_request' => true))
 	{
 		return parent::getModel($name, $prefix, $config);
 	}

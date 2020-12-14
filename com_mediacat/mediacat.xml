@@ -47,12 +47,28 @@
 				XML and be parsed by the installer
 			-->
 			<menu
-				link="option=com_mediacat&amp;view=navigator"
-				view="navigator"
-				img="class:navigator"
-				alt="Mediacat/Navigator"
+				link="option=com_mediacat&amp;view=images"
+				view="images"
+				img="images"
+				alt="Mediacat/Images"
 				>
-				com_mediacat_navigator
+				com_mediacat_images
+			</menu>
+			<menu
+				link="option=com_mediacat&amp;view=files"
+				view="files"
+				img="files"
+				alt="Mediacat/Files"
+				>
+				com_mediacat_files
+			</menu>
+			<menu
+				link="option=com_mediacat&amp;view=folders"
+				view="folders"
+				img="folders"
+				alt="Mediacat/Folders"
+				>
+				com_mediacat_folders
 			</menu>
 		</submenu>
 

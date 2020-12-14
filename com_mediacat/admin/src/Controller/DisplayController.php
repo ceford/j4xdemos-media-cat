@@ -26,7 +26,7 @@ class DisplayController extends BaseController
 	 * @var    string
 	 * @since  1.6
 	 */
-	protected $default_view = 'navigator';
+	protected $default_view = 'images';
 
 	/**
 	 * Method to get a reference to the current view and load it if necessary.

@@ -7,7 +7,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-namespace J4xdemos\Component\Mediacat\Administrator\View\Navigator;
+namespace J4xdemos\Component\Mediacat\Administrator\View\Images;
 
 \defined('_JEXEC') or die;
 
@@ -87,7 +87,7 @@ class HtmlView extends BaseHtmlView
 	 * @since  4.0
 	 */
 	protected $tree;
-	
+
 	/**
 	 * Method to display the view.
 	 *
@@ -128,75 +128,29 @@ class HtmlView extends BaseHtmlView
 	 */
 	protected function addToolbar(): void
 	{
-		$canDo = ContentHelper::getActions('com_mediacat');
+		//$canDo = ContentHelper::getActions('com_mediacat');
 		$user  = Factory::getUser();
 
 		// Get the toolbar object instance
 		$toolbar = Toolbar::getInstance('toolbar');
 
-		ToolbarHelper::title(Text::_('COM_MEDIACAT_NAVIGATOR'), 'bookmark mediacat');
+		ToolbarHelper::title(Text::_('COM_MEDIACAT_IMAGES'), 'bookmark mediacat');
 
 		$toolbar->appendButton(
 			'Popup', 'archive', 'COM_MEDIACAT_INDEX', 'index.php?option=com_mediacat&view=indexer&tmpl=component', 500, 210, 0, 0,
 			'window.parent.location.reload()', Text::_('COM_MEDIACAT_HEADING_INDEXER')
 		);
-		
-		$toolbar->addNew('mediacat.add');
 
-		if ($canDo->get('core.edit.state') || ($this->state->get('filter.published') == -2 && $canDo->get('core.delete')))
-		{
-			$dropdown = $toolbar->dropdownButton('status-group')
-				->text('JTOOLBAR_CHANGE_STATUS')
-				->toggleSplit(false)
-				->icon('icon-ellipsis-h')
-				->buttonClass('btn btn-action')
-				->listCheck(true);
+		$toolbar->addNew('image.add');
 
-			$childBar = $dropdown->getChildToolbar();
-
-			if ($canDo->get('core.edit.state'))
-			{
-				if ($this->state->get('filter.published') != 2)
-				{
-					$childBar->publish('mediacat.publish')->listCheck(true);
-
-					$childBar->unpublish('mediacat.unpublish')->listCheck(true);
-				}
-
-				if ($this->state->get('filter.published') != -1)
-				{
-					if ($this->state->get('filter.published') != 2)
-					{
-						$childBar->archive('mediacat.archive')->listCheck(true);
-					}
-					elseif ($this->state->get('filter.published') == 2)
-					{
-						$childBar->publish('publish')->task('mediacat.publish')->listCheck(true);
-					}
-				}
-
-				$childBar->checkin('mediacat.checkin')->listCheck(true);
-
-				if ($this->state->get('filter.published') != -2)
-				{
-					$childBar->trash('mediacat.trash')->listCheck(true);
-				}
-			}
-
-			if ($this->state->get('filter.published') == -2 && $canDo->get('core.delete'))
-			{
-				$toolbar->delete('mediacat.delete')
-					->text('JTOOLBAR_EMPTY_TRASH')
-					->message('JGLOBAL_CONFIRM_DELETE')
-					->listCheck(true);
-			}
-		}
+		$nRecords = $this->pagination->total;
+		ToolbarHelper::custom('','info', '', $nRecords . ' ' . Text::_('COM_MEDIACAT_TOOLBAR_BUTTON_RECORDS'), true);
 
 		if ($user->authorise('core.admin', 'com_mediacat') || $user->authorise('core.options', 'com_mediacat'))
 		{
 			$toolbar->preferences('com_mediacat');
 		}
 
-		$toolbar->help('JHELP_COMPONENTS_BANNERS_BANNERS');
+		$toolbar->help('JHELP_COMPONENTS_MEDIACAT_IMAGES');
 	}
 }

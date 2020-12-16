@@ -54,7 +54,7 @@ class FilesModel extends ListModel
 	 */
 	protected function getListQuery()
 	{
-		$current = $this->getState('filter.activefilepath');
+		$current = $this->getState('filter.activepath');
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
 		$query->select('*');
@@ -125,9 +125,9 @@ class FilesModel extends ListModel
 		$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
 		$this->setState('filter.search', $search);
 
-		$activepath = $this->getUserStateFromRequest($this->context . '.filter.activefilepath', 'filter_activefilepath', '/files');
+		$activepath = $this->getUserStateFromRequest($this->context . '.filter.activepath', 'filter_activepath', '/files');
 		$this->setState('filter.activepath', $activepath);
-		Factory::getApplication()->setUserState('com_mediacat.images.activefilepath', $activepath);
+		Factory::getApplication()->setUserState('com_mediacat.files.activepath', $activepath);
 		// List state information.
 		parent::populateState($ordering, $direction);
 	}

@@ -77,7 +77,9 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 							?>
 								<tr>
 									<td rowspan="2" class="">
-										<span class="fiv-cla fiv-icon-<?php echo $item->extension; ?>"></span>
+										<a href="<?php echo $fileBaseUrl . $item->file_path; ?>">
+											<span class="fiv-cla fiv-icon-<?php echo $item->extension; ?>"></span>
+										</a>
 									</td>
 									<td class="break-word">
 										<a href="index.php?option=com_mediacat&view=file&layout=edit&id=<?php echo $item->id; ?>">
@@ -119,7 +121,7 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 
 				<input type="hidden" name="task" value="">
 				<input type="hidden" name="boxchecked" value="0">
-				<input type="hidden" name="filter[activfileepath]" id="filter_activefilepath" value="<?php echo $this->state->get('filter.activefilepath')?>">
+				<input type="hidden" name="filter[activepath]" id="filter_activepath" value="<?php echo $this->state->get('filter.activepath')?>">
 				<?php echo HTMLHelper::_('form.token'); ?>
 			</div>
 		</div>

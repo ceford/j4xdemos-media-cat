@@ -19,6 +19,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Table\Table;
 use J4xdemos\Component\Mediacat\Administrator\Helper\MimetypesHelper;
+use J4xdemos\Component\Mediacat\Administrator\Sanitizer\Sanitizer;
 
 /**
  * Item Model for a single walk.
@@ -199,7 +200,6 @@ class ImageModel extends AdminModel
 
 		if (!isset($data['id']) && empty($file['uploadfile']['name']))
 		{
-			var_dump($file['uploadfile']);die;
 			// a file is required but a file has not been selected
 			$app->enqueueMessage(Text::_('COM_MEDIACAT_ERROR_FILE_NOT_SELECTED'), 'error');
 			return false;
@@ -215,7 +215,7 @@ class ImageModel extends AdminModel
 			return false;
 		}
 
-		$mime = $this->getImageMimeType($file['uploadfile']['tmp_name']);
+		$mime = $file['uploadfile']['type'];
 
 		// check that mimtype has an extension in the allowed list
 		$allowed = $this->checkInAllowedImageExtensions($mime, $params);
@@ -230,6 +230,18 @@ class ImageModel extends AdminModel
 		//ToDo check that the uploaded file has an extension good for the mimetype
 
 		$tmp_name = $file['uploadfile']['tmp_name'];
+
+		// if this is an svg - sanitize it
+		if ($mime == 'image/svg+xml') {
+			// Create a new sanitizer instance
+			$sanitizer = new Sanitizer();
+
+			// Load the dirty svg
+			$dirtySVG = file_get_contents($tmp_name);
+
+			// Pass it to the sanitizer and get it back clean
+			file_put_contents($tmp_name, $sanitizer->sanitize($dirtySVG));
+		}
 
 		$activePath = $app->getUserState('com_mediacat.images.activepath');
 		$new_path = JPATH_SITE . $activePath . '/' . $data['file_name'];
@@ -250,6 +262,7 @@ class ImageModel extends AdminModel
 		list ($width, $height, $type, $wandhstring) = getimagesize($file_path);
 		$size = filesize($file_path);
 		$hash = hash('md5', $file_path);
+		$data['extension'] = substr($data['file_name'], strrpos($data['file_name'], '.') + 1);
 		$data['width'] = $width;
 		$data['height'] = $height;
 		$data['size'] = $size;

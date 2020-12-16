@@ -11,6 +11,9 @@ namespace J4xdemos\Component\Mediacat\Administrator\Helper;
 
 \defined('JPATH_PLATFORM') or die;
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 /**
  * Medicat component helper.
  *
@@ -219,12 +222,26 @@ class MimetypesHelper
 		{
 			return false;
 		}
+		$executable = array(
+				'php', 'js', 'exe', 'phtml', 'java', 'perl', 'py', 'asp', 'dll', 'go', 'ade', 'adp', 'bat', 'chm', 'cmd', 'com', 'cpl', 'hta', 'ins', 'isp',
+				'jse', 'lib', 'mde', 'msc', 'msp', 'mst', 'pif', 'scr', 'sct', 'shb', 'sys', 'vb', 'vbe', 'vbs', 'vxd', 'wsc', 'wsf', 'wsh',
+		);
 		$result = [];
 		$items = (array) explode(',', $extensions);
 		foreach ($items as $item)
 		{
+			// skip if the mime-type is not in the list - but log it?
+			if (!isset($this->types[$item])) {
+				Factory::getApplication()->enqueueMessage(Text::_('COM_MEDIACAT_ERROR_EXTENSION_NOT_IN_LIST') . ' '. $item, 'warning');
+				continue;
+			}
 			if ($this->types[$item] == 'text/html')
 			{
+				continue;
+			}
+			if (in_array($item, $executable))
+			{
+				Factory::getApplication()->enqueueMessage(Text::_('COM_MEDIACAT_ERROR_EXTENSION_FORBIDDEN') . ' '. $item, 'warning');
 				continue;
 			}
 			$result[] = $this->types[$item];

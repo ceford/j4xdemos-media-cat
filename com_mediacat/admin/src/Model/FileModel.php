@@ -206,8 +206,7 @@ class FileModel extends AdminModel
 			return false;
 		}
 
-		$mimeHelper = new MimetypesHelper;
-		$mime = $mimeHelper->getFileMimeType($file['uploadfile']['tmp_name']);
+		$mime = $file['uploadfile']['type'];
 
 		// check that mimtype has an extension in the allowed list
 		$allowed = $mimeHelper->checkInAllowedExtensions($mime, $params, 'file');
@@ -242,6 +241,7 @@ class FileModel extends AdminModel
 		list ($width, $height, $type, $wandhstring) = getimagesize($file_path);
 		$size = filesize($file_path);
 		$hash = hash('md5', $file_path);
+		$data['extension'] = substr($data['file_name'], strrpos($data['file_name'], '.') + 1);
 		$data['width'] = $width;
 		$data['height'] = $height;
 		$data['size'] = $size;

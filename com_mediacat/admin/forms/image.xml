@@ -4,17 +4,17 @@
 	<fieldset name="image" label="COM_MEDIACAT_IMAGE_TAB">
 
 		<field
-			name="file_name"
+			name="alt"
 			type="text"
-			label="COM_MEDIACAT_IMAGE_FILE_NAME"
+			label="COM_MEDIACAT_IMAGE_ALT_LABEL"
 			size="40"
 			required="true"
 		 />
 
 		<field
-			name="alt"
+			name="file_name"
 			type="text"
-			label="COM_MEDIACAT_IMAGE_ALT"
+			label="COM_MEDIACAT_FILE_UPLOAD_FILE_NAME_LABEL"
 			size="40"
 			required="true"
 		 />
@@ -22,7 +22,7 @@
 		<field
 			name="caption"
 			type="textarea"
-			label="COM_MEDIACAT_IMAGE_CAPTION"
+			label="COM_MEDIACAT_IMAGE_CAPTION_LABEL"
 			rows="5"
 			cols="40"
 			required="true"

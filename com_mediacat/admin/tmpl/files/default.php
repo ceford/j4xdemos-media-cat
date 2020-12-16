@@ -25,6 +25,7 @@ $fileBaseUrl = Uri::root(true);
 $wa = $this->document->getWebAssetManager();
 $wa->useScript('keepalive')
 	->useStyle('com_mediacat.mediacat')
+	->registerAndUseStyle('com_mediacat.file-icon-vectors', 'media/com_mediacat/css/file-icon-vectors.min.css')
 	->useScript('com_mediacat.mediacat');
 
 $listOrder  = $this->escape($this->state->get('list.ordering'));
@@ -32,7 +33,7 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 
 ?>
 
-<form action="<?php echo Route::_('index.php?option=com_mediacat&view=images'); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo Route::_('index.php?option=com_mediacat&view=files'); ?>" method="post" name="adminForm" id="adminForm">
 	<div class="row">
 		<div class="col-md-12">
 			<div id="j-main-container" class="j-main-container">
@@ -60,7 +61,7 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 						</caption>
 						<thead>
 							<tr>
-								<td><?php echo Text::_('COM_MEDIACAT_PREVIEW'); ?></td>
+								<td><?php echo Text::_('COM_MEDIACAT_ICON'); ?></td>
 								<td><?php echo Text::_('COM_MEDIACAT_MEDIA_NAME'); ?></td>
 								<td><?php echo Text::_('COM_MEDIACAT_MEDIA_EXTENSION'); ?></td>
 								<td><?php echo Text::_('COM_MEDIACAT_MEDIA_DATE_CREATED'); ?></td>
@@ -75,10 +76,11 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 								$imageurl = substr($item->file_path, 1);
 							?>
 								<tr>
-									<td rowspan="2" class="image-cropped preview cursor-zoom" style="background-image: url('<?php echo $fileBaseUrl . $item->file_path; ?>');"
-									onclick="mediacatAction('zoom',<?php echo "'{$imageurl}'";?>)"></td>
+									<td rowspan="2" class="">
+										<span class="fiv-cla fiv-icon-<?php echo $item->extension; ?>"></span>
+									</td>
 									<td class="break-word">
-										<a href="index.php?option=com_mediacat&view=image&layout=edit&id=<?php echo $item->id; ?>">
+										<a href="index.php?option=com_mediacat&view=file&layout=edit&id=<?php echo $item->id; ?>">
 											<?php echo $item->file_name; ?>
 										</a>
 									</td>
@@ -95,10 +97,7 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 											onChange="mediacatAction(this, '<?php echo $imageurl; ?>')">
 											<option value=""><?php echo Text::_('COM_MEDIACAT_ACTIONS'); ?></option>
 											<option value="share"><?php echo Text::_('COM_MEDIACAT_ACTIONS_SHARE_URL'); ?></option>
-											<option value="image"><?php echo Text::_('COM_MEDIACAT_ACTIONS_IMAGE_TAG'); ?></option>
-											<option value="figure"><?php echo Text::_('COM_MEDIACAT_ACTIONS_FIGURE_TAG'); ?></option>
-											<option value="picture"><?php echo Text::_('COM_MEDIACAT_ACTIONS_PICTURE_TAG'); ?></option>
-											<option value="edit"><?php echo Text::_('COM_MEDIACAT_ACTIONS_EDIT'); ?></option>
+											<option value="link"><?php echo Text::_('COM_MEDIACAT_ACTIONS_LINK'); ?></option>
 											<option value="trash"><?php echo Text::_('JTRASH'); ?></option>
 										</select>
 									</td>

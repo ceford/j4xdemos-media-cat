@@ -36,20 +36,14 @@ class HtmlView extends BaseHtmlView
 	 */
 	public function display($tpl = null)
 	{
-		$input = Factory::getApplication()->input;
+		$input = Factory::getApplication()->input;		// Initialise variables.
+		$this->form  = $this->get('Form');
+		$this->item  = $this->get('Item');
+		$this->state = $this->get('State');
 
-		$this->form = $this->get('Form');
-
-		// The component params
-		$this->params = ComponentHelper::getParams('com_mediacat');
-
-		// The requested file
-		$this->file = $this->getModel()->getFileInformation($input->getString('path', null));
-
-		if (empty($this->file->content))
+		if (count($errors = $this->get('Errors')))
 		{
-			// @todo error handling controller redirect files
-			throw new \Exception('No content available!');
+			throw new GenericDataException(implode("\n", $errors), 500);
 		}
 
 		$this->addToolbar();
@@ -66,12 +60,20 @@ class HtmlView extends BaseHtmlView
 	 */
 	protected function addToolbar()
 	{
-		ToolbarHelper::title(Text::_('COM_MEDIA_EDIT'), 'images mediamanager');
+		Factory::getApplication()->input->set('hidemainmenu', true);
 
-		ToolbarHelper::apply('apply');
-		ToolbarHelper::save('save');
-		ToolbarHelper::custom('reset', 'refresh', '',  'COM_MEDIA_RESET', false);
+		$user       = Factory::getUser();
+		$userId     = $user->id;
+		$isNew      = ($this->item->id == 0);
 
-		ToolbarHelper::cancel('cancel');
+		ToolbarHelper::title($isNew ? Text::_('COM_MEDIACAT_FILE_NEW') : Text::_('COM_MEDIACAT_FILE_EDIT'), 'address-book mediacat');
+
+		ToolbarHelper::apply('file.apply');
+		ToolbarHelper::save('file.save');
+		ToolbarHelper::cancel('file.cancel');
+
+		ToolbarHelper::divider();
+		ToolbarHelper::help('JHELP_COMPONENTS_MEDIACAT_FILE_EDIT');
+
 	}
 }

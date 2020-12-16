@@ -18,7 +18,9 @@ Factory::getDocument()->getWebAssetManager()
 $title = Text::_('COM_MEDIACAT_CREATE_NEW_FOLDER');
 ?>
 <joomla-toolbar-button>
-	<button class="btn btn-info" onclick="MediacatManager.Event.fire('onClickCreateFolder');">
+	<button id="mediacatCreateFolder" class="btn btn-info"
+	onclick="mediacatCreateFolder();"
+	disabled="true">
 		<span class="icon-folder icon-fw" aria-hidden="true"></span>
 		<?php echo $title; ?>
 	</button>

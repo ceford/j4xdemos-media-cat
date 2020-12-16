@@ -41,10 +41,10 @@ asort($subs);
  * /images/tests
  */
 
-array_unshift($subs, '/images');
+array_unshift($subs, '/files');
 
 foreach ($subs as $sub) {
-	// make an array 
+	// make an array
 	$members = explode('/', substr($sub, 1));
 	$space = count($members) -1;
 	$active = ($sub == $current) ? ' active' : '';

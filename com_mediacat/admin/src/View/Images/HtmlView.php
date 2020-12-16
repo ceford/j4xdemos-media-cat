@@ -136,11 +136,6 @@ class HtmlView extends BaseHtmlView
 
 		ToolbarHelper::title(Text::_('COM_MEDIACAT_IMAGES'), 'bookmark mediacat');
 
-		$toolbar->appendButton(
-			'Popup', 'archive', 'COM_MEDIACAT_INDEX', 'index.php?option=com_mediacat&view=indexer&tmpl=component', 500, 210, 0, 0,
-			'window.parent.location.reload()', Text::_('COM_MEDIACAT_HEADING_INDEXER')
-		);
-
 		$toolbar->addNew('image.add');
 
 		$nRecords = $this->pagination->total;

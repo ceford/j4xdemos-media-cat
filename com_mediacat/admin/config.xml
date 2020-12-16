@@ -40,7 +40,7 @@
 		label="COM_MEDIACAT_FIELDSET_FILES_LABEL">
 
 		<field
-			name="file_extensions"
+			name="file_upload_extensions"
 			type="text"
 			label="COM_MEDIACAT_FIELD_LEGAL_FILE_EXTENSIONS_LABEL"
 			description="COM_MEDIACAT_FIELD_LEGAL_FILE_EXTENSIONS_DESC"

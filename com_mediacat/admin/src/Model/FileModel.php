@@ -11,36 +11,78 @@ namespace J4xdemos\Component\Mediacat\Administrator\Model;
 
 \defined('_JEXEC') or die;
 
-use Joomla\CMS\Form\FormHelper;
-use Joomla\CMS\MVC\Model\FormModel;
-use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\Table\Table;
+use J4xdemos\Component\Mediacat\Administrator\Helper\MimetypesHelper;
 
 /**
  * File Model
  *
  * @since  4.0.0
  */
-class FileModel extends FormModel
+class FileModel extends AdminModel
 {
+	/**
+	 * Method to test whether a record can be deleted.
+	 *
+	 * @param   object  $record  A record object.
+	 *
+	 * @return  boolean  True if allowed to delete the record. Defaults to the permission set in the component.
+	 *
+	 * @since   1.6
+	 */
+	protected function canDelete($record)
+	{
+		if (!empty($record->id))
+		{
+			return Factory::getUser()->authorise('core.delete', 'com_mediacat.mediacat.' . (int) $record->id);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Method to test whether a record can have its state edited.
+	 *
+	 * @param   object  $record  A record object.
+	 *
+	 * @return  boolean  True if allowed to change the state of the record. Defaults to the permission set in the component.
+	 *
+	 * @since   1.6
+	 */
+	protected function canEditState($record)
+	{
+		$user = Factory::getUser();
+
+		// Check for existing article.
+		if (!empty($record->id))
+		{
+			return $user->authorise('core.edit.state', 'com_mediacat.mediacat.' . (int) $record->id);
+		}
+
+		// Default to component settings if neither article nor category known.
+		return parent::canEditState($record);
+	}
+
 	/**
 	 * Method to get the record form.
 	 *
 	 * @param   array    $data      Data for the form.
 	 * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
 	 *
-	 * @return  \Joomla\CMS\Form\Form|boolean  A Form object on success, false on failure
+	 * @return  Form|boolean  A Form object on success, false on failure
 	 *
-	 * @since   4.0.0
+	 * @since   1.6
 	 */
-	public function getForm($data = [], $loadData = true)
+	public function getForm($data = array(), $loadData = true)
 	{
-		PluginHelper::importPlugin('media-action');
-
-		// Load backend forms in frontend.
-		FormHelper::addFormPath(JPATH_ADMINISTRATOR . '/components/com_mediacat/forms');
-
 		// Get the form.
-		$form = $this->loadForm('com_mediacat.file', 'file', ['control' => 'jform', 'load_data' => $loadData]);
+		$form = $this->loadForm('com_mediacat.file', 'file', array('control' => 'jform', 'load_data' => $loadData));
 
 		if (empty($form))
 		{
@@ -48,6 +90,163 @@ class FileModel extends FormModel
 		}
 
 		return $form;
+	}
+	/**
+	 * Method to get a single record.
+	 *
+	 * @param   integer  $pk  The id of the primary key.
+	 *
+	 * @return  mixed  Object on success, false on failure.
+	 */
+	public function getItem($pk = null)
+	{
+		return parent::getItem($pk);
+	}
+
+	/**
+	 * Method to get the data that should be injected in the form.
+	 *
+	 * @return  mixed  The data for the form.
+	 *
+	 * @since   1.6
+	 */
+	protected function loadFormData()
+	{
+		// Check the session for previously entered form data.
+		$app = Factory::getApplication();
+		$data = $app->getUserState('com_mediacat.edit.mediacat.data', array());
+
+		if (empty($data))
+		{
+			$data = $this->getItem();
+
+			// Pre-select some filters (Status, Category, Language, Access) in edit form if those have been selected in Article Manager: Articles
+		}
+
+		$this->preprocessData('com_mediacat.mediacat', $data);
+
+		return $data;
+	}
+
+	/**
+	 * Method to change the published state of one or more records.
+	 *
+	 * @param   array    &$pks   A list of the primary keys to change.
+	 * @param   integer  $value  The value of the published state.
+	 *
+	 * @return  boolean  True on success.
+	 *
+	 * @since   4.0.0
+	 */
+	public function publish(&$pks, $value = 1) {
+		/* this is a very simple method to change the state of each item selected */
+		$db = $this->getDbo();
+
+		$query = $db->getQuery(true);
+
+		$query->update('`#__mediacat`');
+		$query->set('state = ' . $value);
+		$query->where('id IN (' . implode(',', $pks). ')');
+		$db->setQuery($query);
+		$db->execute();
+	}
+	/**
+	 * Method to save the form data.
+	 *
+	 * @param   array  $data  The form data.
+	 *
+	 * @return  boolean  True on success.
+	 *
+	 * @since   1.6
+	 */
+	public function save($data)
+	{
+		$savedFile = $this->saveFile($data);
+		if (empty($savedFile))
+		{
+			return false;
+		}
+
+		return parent::save($data);
+	}
+
+	protected function saveFile(&$data)
+	{
+		$app = Factory::getApplication();
+		$file = $app->input->files->get('jform', '', 'array');
+		// array (size=1)
+		// 'uploadfile' =>
+		// array (size=5)
+		// 'name' => string 'joomla-topmenu-test.png' (length=23)
+		// 'type' => string 'image/png' (length=9)
+		// 'tmp_name' => string '/private/var/tmp/phpVr8sUp' (length=26)
+		// 'error' => int 0
+		// 'size' => int 70637
+		if (isset($data['id']) && empty($file['uploadfile']['name']))
+		{
+			// a file is not required if a record exists
+			return true;
+		}
+
+		if (!isset($data['id']) && empty($file['uploadfile']['name']))
+		{
+			var_dump($file['uploadfile']);die;
+			// a file is required but a file has not been selected
+			$app->enqueueMessage(Text::_('COM_MEDIACAT_ERROR_FILE_NOT_SELECTED'), 'error');
+			return false;
+		}
+
+		$params = ComponentHelper::getParams('com_mediacat');
+
+		// check size
+		if ($file['uploadfile']['size'] > ($params->get('file_upload_maxsize')*1024*1024))
+		{
+			$app->enqueueMessage(Text::_('COM_MEDIACAT_ERROR_WARNFILETOOLARGE'), 'error');
+			unlink($file['uploadfile']['tmp_name']);
+			return false;
+		}
+
+		$mimeHelper = new MimetypesHelper;
+		$mime = $mimeHelper->getFileMimeType($file['uploadfile']['tmp_name']);
+
+		// check that mimtype has an extension in the allowed list
+		$allowed = $mimeHelper->checkInAllowedExtensions($mime, $params, 'file');
+
+		if (empty($allowed))
+		{
+			$app->enqueueMessage(Text::_('COM_MEDIACAT_ERROR_NOT_AN_ALLOWED_TYPE'), 'error');
+			unlink($file['uploadfile']['tmp_name']);
+			return false;
+		}
+
+		//ToDo check that the uploaded file has an extension good for the mimetype
+
+		$tmp_name = $file['uploadfile']['tmp_name'];
+
+		$activePath = $app->getUserState('com_mediacat.files.activepath');
+		$new_path = JPATH_SITE . $activePath . '/' . $data['file_name'];
+
+		if (!File::upload($tmp_name, $new_path))
+		{
+			$app->enqueueMessage(Text::_('COM_MEDIACAT_ERROR_NOT_UPLOADED'), 'error');
+			File::delete($tmp_name);
+			return false;
+		}
+		File::delete($tmp_name);
+
+		// add the file information to the data
+		$activePath = $app->getUserState('com_mediacat.files.activepath');
+		$data['file_path'] = $activePath . '/' . $data['file_name'];
+		$file_path = JPATH_SITE . $data['file_path'];
+
+		list ($width, $height, $type, $wandhstring) = getimagesize($file_path);
+		$size = filesize($file_path);
+		$hash = hash('md5', $file_path);
+		$data['width'] = $width;
+		$data['height'] = $height;
+		$data['size'] = $size;
+		$data['hash'] = $hash;
+		return true;
 	}
 
 	/**

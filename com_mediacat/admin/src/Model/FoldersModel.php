@@ -12,51 +12,43 @@ namespace J4xdemos\Component\Mediacat\Administrator\Model;
 \defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\CMS\Plugin\PluginHelper;
-use Joomla\Component\Media\Administrator\Event\MediaProviderEvent;
-use Joomla\Component\Media\Administrator\Provider\ProviderManager;
+
+use \RecursiveIteratorIterator;
+use \RecursiveDirectoryIterator;
 
 /**
  * Media View Model
  *
  * @since  4.0.0
  */
-class FoldersModel extends BaseDatabaseModel
+class FoldersModel extends ListModel
 {
-	/**
-	 * Obtain list of supported providers
-	 *
-	 * @return array
-	 *
-	 * @since 4.0.0
-	 */
-	public function getProviders()
+	public function getFolders($media_type_selected)
 	{
-		// Setup provider manager and event parameters
-		$providerManager = new ProviderManager;
-		$eventParameters = ['context' => 'AdapterManager', 'providerManager' => $providerManager];
-		$event           = new MediaProviderEvent('onSetupProviders', $eventParameters);
-		$results         = [];
+		$path = JPATH_SITE . '/' . $media_type_selected;
+		$root = JPATH_SITE;
+		$rootlen = strlen($root);
 
-		// Import plugin group and fire the event
-		PluginHelper::importPlugin('filesystem');
-		Factory::getApplication()->triggerEvent('onSetupProviders', $event);
+		$folders[] = '/' . $media_type_selected;
 
-		foreach ($providerManager->getProviders() as $provider)
+		$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path),
+				RecursiveIteratorIterator::SELF_FIRST);
+		foreach($objects as $name => $object)
 		{
-			$result = new \stdClass;
-			$result->name = $provider->getID();
-			$result->displayName = $provider->getDisplayName();
-
-			foreach ($provider->getAdapters() as $adapter)
+			if (!is_dir($name))
 			{
-				$result->adapterNames[] = $adapter->getAdapterName();
+				continue;
 			}
-
-			$results[] = $result;
+			$fileName = $object->getFilename();
+			if ($fileName == '.' || $fileName == '..')
+			{
+				continue;
+			}
+			$folders[] = substr($name, $rootlen);
 		}
-
-		return $results;
+		sort($folders);
+		return $folders;
 	}
 }

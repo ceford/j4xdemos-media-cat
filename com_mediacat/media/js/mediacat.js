@@ -146,3 +146,76 @@ function updateFilename(element) {
 	var sink = clean.replace(/ /g, '-');
 	filename.value = sink.toLowerCase() + '.' + ext;
 }
+
+function mediacatSelectFolder(element) {
+	var parts = element.id.split('-');
+	var id = parts[1];
+	var folder = document.getElementById('folder-' + id);
+	var value = folder.innerText;
+	var activepath = document.getElementById('activepath');
+	activepath.value = value;
+	var mediaIndexer = document.getElementById('mediacatIndexer');
+	var mediaCreateFolder = document.getElementById('mediacatCreateFolder');
+	var mediaTrash = document.getElementById('mediacatTrash');
+	mediaIndexer.removeAttribute('disabled');
+	mediaCreateFolder.removeAttribute('disabled');
+	mediaTrash.removeAttribute('disabled');
+}
+
+function mediacatUnselectFolder(element) {
+	var mediaIndexer = document.getElementById('mediacatIndexer');
+	var mediaCreateFolder = document.getElementById('mediacatCreateFolder');
+	var mediaTrash = document.getElementById('mediacatTrash');
+	mediaIndexer.setAttribute('disabled', true);
+	mediaCreateFolder.setAttribute('disabled', true);
+	mediaTrash.setAttribute('disabled', true);
+}
+
+function mediacatIndexer() {
+	var activepath = document.getElementById('activepath');
+	if (confirm('Index Folder in ' + activepath.value)) {
+		
+	} else {
+		
+	}
+}
+
+function mediacatCreateFolder() {
+	var activepath = document.getElementById('activepath');
+	var task = document.getElementById('task');
+	var form = document.getElementById('adminForm');
+	var newfoldername = prompt('Create Folder in ' + activepath.value);
+	if (newfoldername != null) {
+		// make sure the foldername is acceptable
+		newfoldername = newfoldername.trim();
+		if (!newfoldername) {
+			alert('Folder name is empty!')
+			return;
+		}
+		// without full stops
+		if (newfoldername.indexOf('.') >= 0) {
+			alert('Folder name may not contain a full stop!');
+			return;
+		}
+		// and replace spaces and underlines with -
+		let regexp = /_| /gi;
+		newfoldername = newfoldername.replace(regexp, '-');
+		// now ask if this is ok
+		ok = confirm('Is this OK: ' + newfoldername);
+		if (ok) {
+			task.value = 'folders.newfolder';
+			document.getElementById('newfoldername').value = newfoldername;
+			document.getElementById('adminForm')
+			form.submit();
+		}
+	}
+}
+
+function mediacatTrash() {
+	var activepath = document.getElementById('activepath');
+	if (confirm('Trash Folder in ' + activepath.value)) {
+		
+	} else {
+		
+	}
+}

@@ -46,3 +46,7 @@
 .cursor-zoom {
 	cursor: zoom-in;
 }
+
+.fiv-cla, .fiv-viv, .fiv-sqo {
+	font-size: 6rem; 
+}

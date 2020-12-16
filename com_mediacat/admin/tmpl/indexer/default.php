@@ -13,7 +13,7 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 
-Text::script('COM_MEDIACAT_INDEXER_MESSAGE_COMPLETE', true);
+Text::script('COM_mediacat_imagesER_MESSAGE_COMPLETE', true);
 
 /** @var Joomla\CMS\WebAsset\WebAssetManager $wa */
 //$wa = $this->document->getWebAssetManager();
@@ -24,8 +24,8 @@ Text::script('COM_MEDIACAT_INDEXER_MESSAGE_COMPLETE', true);
 ?>
 
 <div class="text-center">
-	<h1 id="finder-progress-header" class="m-t-2" aria-live="assertive"><?php echo Text::_('COM_MEDIACAT_INDEXER_HEADER_INIT'); ?></h1>
-	<p id="finder-progress-message" aria-live="polite"><?php echo Text::_('COM_MEDIACAT_INDEXER_MESSAGE_INIT'); ?></p>
+	<h1 id="finder-progress-header" class="m-t-2" aria-live="assertive"><?php echo Text::_('COM_mediacat_imagesER_HEADER_INIT'); ?></h1>
+	<p id="finder-progress-message" aria-live="polite"><?php echo Text::_('COM_mediacat_imagesER_MESSAGE_INIT'); ?></p>
 	<div id="progress" class="progress">
 		<div id="progress-bar" class="progress-bar bg-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
 	</div>
@@ -83,18 +83,18 @@ foreach(new RecursiveIteratorIterator($it) as $file) {
 	$query = $db->getQuery(true);
 	// does the record exist
 	$query->select('id');
-	$query->from('#__mediacat_index');
+	$query->from('#__mediacat_images');
 	$query->where('file_path = ' . $db->quote($path));
 	$db->setQuery($query);
 	$id = $db->loadResult();
 	// if yes then update it
 	$query = $db->getQuery(true);
 	if ($id) {
-		$query->update('#__mediacat_index');
+		$query->update('#__mediacat_images');
 		$query->where('id = ' . $id);
 		$old_files++;
 	} else {
-		$query->insert('#__mediacat_index');
+		$query->insert('#__mediacat_images');
 		$new_files++;
 	}
 	$query->set('file_path = ' . $db->quote($path));

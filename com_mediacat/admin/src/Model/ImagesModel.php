@@ -58,7 +58,7 @@ class ImagesModel extends ListModel
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
 		$query->select('*');
-		$query->from('#__mediacat_index AS a');
+		$query->from('#__mediacat_images AS a');
 		$query->where('file_path LIKE ' . $db->quote($current . '%'));
 		// Add the list ordering clause.
 		$orderCol  = $this->state->get('list.ordering', 'a.id');

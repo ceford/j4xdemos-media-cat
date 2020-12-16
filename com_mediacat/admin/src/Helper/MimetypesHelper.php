@@ -54,6 +54,7 @@ class MimetypesHelper
 			'dmg'     => 'application/octet-stream',
 			'dms'     => 'application/octet-stream',
 			'doc'     => 'application/msword',
+			'docx'    => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
 			'dtd'     => 'application/xml-dtd',
 			'dvi'     => 'application/x-dvi',
 			'dxr'     => 'application/x-director',
@@ -106,7 +107,10 @@ class MimetypesHelper
 			'mxu'     => 'video/vnd.mpegurl',
 			'nc'      => 'application/x-netcdf',
 			'oda'     => 'application/oda',
+			'odp'     => 'application/vnd.oasis.opendocument.presentation',
 			'ogg'     => 'application/ogg',
+			'ods'     => 'application/vnd.oasis.opendocument.spreadsheet',
+			'odt'     => 'application/vnd.oasis.opendocument.text',
 			'pbm'     => 'image/x-portable-bitmap',
 			'pdb'     => 'chemical/x-pdb',
 			'pdf'     => 'application/pdf',
@@ -185,6 +189,27 @@ class MimetypesHelper
 			'xyz'     => 'chemical/x-xyz',
 			'zip'     => 'application/zip'
 	);
+
+	/**
+	 * Check the Image Mime type is in the allowed extensions list
+	 *
+	 * @param   string   $mimetype     The mimetype of the uploaded image
+	 *
+	 * @return  bool    true if the mime type is in the allowed list, otherwise false
+	 *
+	 * @since   4.0
+	 */
+	public function checkInAllowedExtensions($mime, $params, $type)
+	{
+		$extensions = $this->getExtensions($mime);
+
+		$allowed_extensions = explode(',',$params->get($type . '_upload_extensions'));
+		// check whether $extensions is in allowed extensions
+		$result = array_intersect($allowed_extensions, $extensions);
+		// return extensions that match the mimetype
+		return count($result);
+	}
+
 	/*
 	 * Get mimetypes given a comma separated list of extensions
 	 */
@@ -212,5 +237,45 @@ class MimetypesHelper
 	 */
 	public function getExtensions($mimeType) {
 		return array_keys($this->types, $mimeType);
+	}
+
+	/**
+	 * Get the Image Mime type
+	 *
+	 * @param   string   $file     The link to the file to be checked
+	 * @param   boolean  $isImage  True if the passed file is an image else false
+	 *
+	 * @return  mixed    the mime type detected false on error
+	 *
+	 * @since   3.7.2
+	 */
+	public function getFileMimeType($file)
+	{
+		// If we can't detect anything mime is false
+		$mime = false;
+
+		try
+		{
+			if (\function_exists('mime_content_type'))
+			{
+				// We have mime magic.
+				$mime = mime_content_type($file);
+			}
+			elseif (\function_exists('finfo_open'))
+			{
+				// We have fileinfo
+				$finfo = finfo_open(FILEINFO_MIME_TYPE);
+				$mime  = finfo_file($finfo, $file);
+				finfo_close($finfo);
+			}
+		}
+		catch (\Exception $e)
+		{
+			// If we have any kind of error here => false;
+			return false;
+		}
+
+		// We have a mime here
+		return $mime;
 	}
 }

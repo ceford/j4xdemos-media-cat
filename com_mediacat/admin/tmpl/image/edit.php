@@ -59,29 +59,27 @@ $mimeTypes = $mthelper->getMimetypes($params->get('image_upload_extensions'));
 			<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'photo', 'Image'); ?>
 
 			<div class="row">
-				<div class="col">
-					<h3>Image</h3>
-				</div>
-			</div>
-
-			<div class="row">
 				<div class="col-12 col-lg-6">
-					<p>Allowed image types: <?php echo str_replace(',', ', ', $params->get('image_upload_extensions')); ?>.
-					Images larger than 8Mb will not upload!</p>
+
+					<p><?php echo Text::_('COM_MEDIACAT_FIELD_IMAGE_EXTENSIONS_LABEL'); ?>
+					<?php echo str_replace(',', ', ', $params->get('image_upload_extensions')); ?>.
+					<br />
+					<?php echo Text::_('COM_MEDIACAT_FIELD_IMAGE_MAXIMUM_SIZE_LABEL'); ?>
+					<?php echo $params->get('image_upload_maxsize'); ?></p>
 
 					<?php if (empty($this->item->id)) : ?>
 					<div class="control-group">
 						<div class="control-label">
 							<label id="jform_uploadfile-lbl" for="jform_uploadfile">
-								Select Image:
+								<?php echo Text::_('COM_MEDIACAT_IMAGE_UPLOAD_LABEL'); ?>
 							</label>
 						</div>
 						<div class="controls">
-							<input type="file" name="jform[uploadfile]" id="jform_uploadfile" class="form-control"
+							<input type="file" required="required" name="jform[uploadfile]" id="jform_uploadfile" class="form-control"
 							accept="<?php echo $mimeTypes; ?>">
 							<div id="jform[uploadfile]-desc">
 								<small class="form-text text-muted">
-									Maximum upload size: <strong>8.00 MB</strong>
+								<?php echo Text::_('COM_MEDIACAT_IMAGE_UPLOAD_DESC'); ?>
 								</small>
 							</div>
 						</div>
@@ -91,7 +89,7 @@ $mimeTypes = $mthelper->getMimetypes($params->get('image_upload_extensions'));
 					<div class="control-group">
 						<div class="control-label">
 							<label id="jform_alt-lbl" for="jform_alt">
-							Alt attribute
+							<?php echo Text::_('COM_MEDIACAT_IMAGE_ALT_LABEL'); ?>
 							</label>
 						</div>
 						<div class="controls">
@@ -103,11 +101,11 @@ $mimeTypes = $mthelper->getMimetypes($params->get('image_upload_extensions'));
 								$alt = $this->item->alt;
 							}
 							?>
-							<input type="text" name="jform[alt]" id="jform_alt" class="form-control"
+							<input type="text" required="required" name="jform[alt]" id="jform_alt" class="form-control"
 							value="<?php echo $alt; ?>" onkeyup="updateFilename(this)"/>
 							<div id="jform[alt]-desc">
 								<small class="form-text text-muted">
-									What this image shows in up to 128 characters.
+									<?php echo Text::_('COM_MEDIACAT_IMAGE_ALT_DESC'); ?>
 								</small>
 							</div>
 						</div>
@@ -116,7 +114,7 @@ $mimeTypes = $mthelper->getMimetypes($params->get('image_upload_extensions'));
 					<div class="control-group">
 						<div class="control-label">
 							<label id="jform_file_name-lbl" for="jform_file_name">
-							File name
+							<?php echo Text::_('COM_MEDIACAT_FILE_UPLOAD_FILE_NAME_LABEL'); ?>
 							</label>
 						</div>
 						<div class="controls">
@@ -124,7 +122,7 @@ $mimeTypes = $mthelper->getMimetypes($params->get('image_upload_extensions'));
 							value="<?php echo isset($this->item->file_name) ? $this->item->file_name : ''; ?>"/>
 							<div id="jform[file_name]-desc">
 								<small class="form-text text-muted">
-									Constructed from the alt attribute.
+									<?php echo Text::_('COM_MEDIACAT_FILE_UPLOAD_FILE_NAME_DESC'); ?>
 								</small>
 							</div>
 						</div>
@@ -133,15 +131,15 @@ $mimeTypes = $mthelper->getMimetypes($params->get('image_upload_extensions'));
 					<div class="control-group">
 						<div class="control-label">
 							<label id="jform_photo_caption-lbl" for="jform_photo_caption" class="hasPopover" title="Photo caption" data-content="What, Where, When in up to 256 characters.">
-							Image caption
+								<?php echo Text::_('COM_MEDIACAT_IMAGE_CAPTION_LABEL'); ?>
 							</label>
 						</div>
 						<div class="controls">
-							<textarea cols="60" rows="3" name="jform[caption]" id="jform_caption"
+							<textarea required="required" cols="60" rows="3" name="jform[caption]" id="jform_caption"
 							class="form-control" ><?php echo (isset($this->item->caption) ? $this->item->caption : ''); ?></textarea>
 							<div id="jform[caption]-desc">
 								<small class="form-text text-muted">
-									Used as a caption in a <em>figure</em> tag.
+									<?php echo Text::_('COM_MEDIACAT_IMAGE_CAPTION_DESC'); ?>
 								</small>
 							</div>
 						</div>
@@ -151,7 +149,7 @@ $mimeTypes = $mthelper->getMimetypes($params->get('image_upload_extensions'));
 					<div class="control-group">
 						<div class="control-label">
 							<label id="jform_uploadfile-lbl" for="jform_uploadfile">
-								Replacement Image (Optional):
+								<?php echo Text::_('COM_MEDIACAT_FILE_REPLACEMENT_LABEL'); ?>
 							</label>
 						</div>
 						<div class="controls">
@@ -159,7 +157,7 @@ $mimeTypes = $mthelper->getMimetypes($params->get('image_upload_extensions'));
 							accept="<?php echo $mimeTypes; ?>">
 							<div id="jform[uploadfile]-desc">
 								<small class="form-text text-muted">
-									Maximum upload size: <strong>8.00 MB</strong>
+									<?php echo Text::_('COM_MEDIACAT_FILE_UPLOAD_DESC'); ?>
 								</small>
 							</div>
 						</div>

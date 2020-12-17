@@ -134,7 +134,7 @@ class HtmlView extends BaseHtmlView
 		// Get the toolbar object instance
 		$toolbar = Toolbar::getInstance('toolbar');
 
-		ToolbarHelper::title(Text::_('COM_MEDIACAT_IMAGES'), 'bookmark mediacat');
+		ToolbarHelper::title(Text::_('COM_MEDIACAT_IMAGES'), 'images mediacat');
 
 		$toolbar->addNew('image.add');
 

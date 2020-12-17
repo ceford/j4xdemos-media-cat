@@ -36,7 +36,8 @@ Text::script('COM_mediacat_imagesER_MESSAGE_COMPLETE', true);
 	<input id="finder-indexer-token" type="hidden" name="<?php echo Factory::getSession()->getFormToken(); ?>" value="1">
 </div>
 
-<?php 
+<?php if (false) : ?>
+<?php
 $path = JPATH_SITE . "/images";
 
 // Construct the iterator
@@ -75,11 +76,11 @@ foreach(new RecursiveIteratorIterator($it) as $file) {
 	$size = filesize($file);
 	// takes 5x longer to hash - needs time saving ploy if file has not changed
 	$hash = hash('md5', $file);
-	
+
 	$nfiles++;
-	
+
 	//echo $path. "<br />\n";
-	
+
 	$query = $db->getQuery(true);
 	// does the record exist
 	$query->select('id');
@@ -104,7 +105,7 @@ foreach(new RecursiveIteratorIterator($it) as $file) {
 	$query->set('height = ' . $db->quote($height));
 	$query->set('size = ' . $db->quote($size));
 	$query->set('hash = ' . $db->quote($hash));
-	
+
 	$db->setQuery($query);
 	try
 	{
@@ -138,3 +139,7 @@ echo "<p>This process used " . rutime($ru, $rustart, "utime") .
 " ms for its computations</p>\n";
 echo "<p>It spent " . rutime($ru, $rustart, "stime") .
 " ms in system calls</p>\n";
+
+?>
+
+<?php endif; ?>

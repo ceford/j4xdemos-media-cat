@@ -24,6 +24,43 @@ use Joomla\CMS\Language\Text;
 class FoldersController extends BaseController
 {
 	/*
+	 * get the folder tree to be indexed separately
+	 *
+	 *  return a jason encoded array
+	 */
+	public function getTree()
+	{
+		$this->checkToken();
+		$app = Factory::getApplication();
+		$folder = $app->input->get('activepath', '/images', 'path');
+		$media_type = $app->input->get('media_type');
+		$model = $this->getModel();
+		$result = $model->getFolders($result);
+		echo json_encode($filename);
+		jexit();
+	}
+
+	/*
+	 * index all of the files in a given folder
+	 *
+	 *  return a json encoded message
+	 */
+	public function indexer()
+	{
+		// Check for request forgeries.
+		$this->checkToken();
+		$app = Factory::getApplication();
+		$jform = $this->input->get('jform', '', 'array');
+		$folder = $jform['activepath'];
+		$media_type = $jform['media_type'];
+		$model = $this->getModel();
+		$result = $model->getFiles($media_type, $folder);
+		echo json_encode($result);//$folder . ' = ' . $result);
+		// not finished
+		jexit();
+	}
+
+	/*
 	 * Create a new folder from data in the adminForm
 	 *
 	 *  redirect to the folders view
@@ -34,7 +71,8 @@ class FoldersController extends BaseController
 		$this->checkToken();
 		$app = Factory::getApplication();
 		// get the path where the new folder is required
-		$activepath = $this->input->get('activepath', '', 'path');
+		$jform = $this->input->get('jform', '', 'array');
+		$activepath = $jform['activepath'];
 		$newfoldername = $this->input->get('newfoldername');
 		// if there is a full stop
 		if (strpos($newfoldername, '.') !== false)

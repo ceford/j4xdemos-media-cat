@@ -49,7 +49,7 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 				<?php else : ?>
 				<div class="row">
 					<div class="col-12 col-md-3">
-					File Tree
+					<h3><?php echo Text::_('COM_MEDIACAT_FOLDER_TREE'); ?></h3>
 					<?php require 'tree.php'; ?>
 					</div>
 					<div class="col-12 col-md-9">

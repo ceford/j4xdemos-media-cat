@@ -12,6 +12,7 @@ namespace J4xdemos\Component\Mediacat\Administrator\View\Folders;
 \defined('_JEXEC') or die;
 
 use Joomla\CMS\Application\CMSApplication;
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\FileLayout;
@@ -57,7 +58,28 @@ class HtmlView extends BaseHtmlView
 	 */
 	public function display($tpl = null)
 	{
-		$this->model         = $this->getModel();
+		$model         = $this->getModel();
+
+		$app = Factory::getApplication();
+
+		$data = $app->input->post->get('jform', '', 'array');
+
+		$params = ComponentHelper::getParams('com_mediacat');
+
+		if (empty($data['media_type']) || $data['media_type'] == 'image')
+		{
+			$this->activepath = '/images';
+			$this->media_type = 'image';
+			$folder = $params->get('image_path');
+		}
+		else
+		{
+			$this->activepath = '/files';
+			$this->media_type = 'file';
+			$folder = $params->get('file_path');
+		}
+
+		$this->folders = $model->getFolders($folder);
 
 		$this->prepareToolbar();
 
@@ -82,7 +104,7 @@ class HtmlView extends BaseHtmlView
 		$user = Factory::getUser();
 
 		// Set the title
-		ToolbarHelper::title(Text::_('COM_MEDIACAT_TITLE_BAR_FOLDERS'), 'images mediamanager');
+		ToolbarHelper::title(Text::_('COM_MEDIACAT_TITLE_BAR_FOLDERS'), 'folder mediacat');
 
 		$layout = new FileLayout('toolbar.indexer', JPATH_COMPONENT_ADMINISTRATOR . '/layouts');
 		$toolbar->appendButton('Custom', $layout->render([]), 'archive');

@@ -152,7 +152,7 @@ function mediacatSelectFolder(element) {
 	var id = parts[1];
 	var folder = document.getElementById('folder-' + id);
 	var value = folder.innerText;
-	var activepath = document.getElementById('activepath');
+	var activepath = document.getElementById('jform_activepath');
 	activepath.value = value;
 	var mediaIndexer = document.getElementById('mediacatIndexer');
 	var mediaCreateFolder = document.getElementById('mediacatCreateFolder');
@@ -171,17 +171,62 @@ function mediacatUnselectFolder(element) {
 	mediaTrash.setAttribute('disabled', true);
 }
 
-function mediacatIndexer() {
-	var activepath = document.getElementById('activepath');
-	if (confirm('Index Folder in ' + activepath.value)) {
-		
+async function doIndex(folder) {
+	var form = document.getElementById('adminForm');
+	var task = document.getElementById('task');
+	var activepath = document.getElementById('jform_activepath');
+	
+	task.value = 'folders.indexer';
+	activepath.value = folder;
+	
+	var results = document.getElementById('results');
+	let response = await fetch(form.action, {
+			method: form.method,
+			body: new FormData(form)
+	});
+	if (!response.ok) {
+		throw new Error(`HTTP error! status: ${response.status}`);
 	} else {
-		
+		let result = await response.json();
+		// show the results?
+		var br = document.createElement("br");
+		var text = document.createTextNode(result);
+		results.appendChild(br);
+		results.appendChild(text);
+	}
+}
+
+async function myFetch() {
+	var form = document.getElementById('adminForm');
+	var task = document.getElementById('task');
+	task.value = 'folders.getTree';
+	var results = document.getElementById('results');
+	let response = await fetch(form.action, {
+			method: form.method,
+			body: new FormData(form)
+	});
+	if (!response.ok) {
+		throw new Error(`HTTP error! status: ${response.status}`);
+	} else {
+		let folders = await response.json();
+		// show the tree?
+		results.innerHTML = folders.join("<br />\n");
+		//document.form.appendChild(what);
+		folders.forEach (element => doIndex(element));
+	}
+}
+
+function mediacatIndexer() {
+	var activepath = document.getElementById('jform_activepath');
+	if (confirm('Index Folder in ' + activepath.value)) {
+		doIndex(activepath.value);
+	} else {
+		alert('Test = ' + activepath.value);
 	}
 }
 
 function mediacatCreateFolder() {
-	var activepath = document.getElementById('activepath');
+	var activepath = document.getElementById('jform_activepath');
 	var task = document.getElementById('task');
 	var form = document.getElementById('adminForm');
 	var newfoldername = prompt('Create Folder in ' + activepath.value);
@@ -212,9 +257,12 @@ function mediacatCreateFolder() {
 }
 
 function mediacatTrash() {
-	var activepath = document.getElementById('activepath');
+	var activepath = document.getElementById('jform_activepath');
 	if (confirm('Trash Folder in ' + activepath.value)) {
-		
+		var task = document.getElementById('task');
+		var form = document.getElementById('adminForm');
+		task.value = 'folders.gettree';
+		form.submit();
 	} else {
 		
 	}

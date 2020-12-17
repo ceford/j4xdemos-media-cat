@@ -66,7 +66,7 @@ class HtmlView extends BaseHtmlView
 		$userId     = $user->id;
 		$isNew      = ($this->item->id == 0);
 
-		ToolbarHelper::title($isNew ? Text::_('COM_MEDIACAT_FILE_NEW') : Text::_('COM_MEDIACAT_FILE_EDIT'), 'address-book mediacat');
+		ToolbarHelper::title($isNew ? Text::_('COM_MEDIACAT_FILE_NEW') : Text::_('COM_MEDIACAT_FILE_EDIT'), 'file mediacat');
 
 		ToolbarHelper::apply('file.apply');
 		ToolbarHelper::save('file.save');

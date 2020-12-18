@@ -31,11 +31,11 @@ $mthelper = new MimetypesHelper;
 $mimeTypes = $mthelper->getMimetypes($params->get('file_upload_extensions'));
 
 ?>
-	<form action="" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data">
+<form action="" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data">
 	<div class="row">
 		<div class="col">
 		<?php echo HTMLHelper::_('uitab.startTabSet', 'myTab', array('active' => 'photo_1')); ?>
-			<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'info', 'Info'); ?>
+			<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'info', Text::_('COM_MEDIACAT_IMAGE_EDIT_TAB_INFO')); ?>
 				<div style="max-width:800px;">
 
 				<h3>Changes</h3>
@@ -156,7 +156,7 @@ $mimeTypes = $mthelper->getMimetypes($params->get('file_upload_extensions'));
 					<div class="control-group">
 						<div class="control-label">
 							<label id="jform_id-lbl" for="jform_id">
-							ID
+								<?php echo Text::_('JGLOBAL_FIELD_ID_LABEL'); ?>
 							</label>
 						</div>
 						<div class="controls">

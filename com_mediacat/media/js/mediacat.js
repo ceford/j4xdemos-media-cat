@@ -194,6 +194,7 @@ async function doIndex(folder) {
 		results.appendChild(br);
 		results.appendChild(text);
 	}
+	task.value = '';
 }
 
 async function myFetch() {
@@ -261,9 +262,11 @@ function mediacatTrash() {
 	if (confirm('Trash Folder in ' + activepath.value)) {
 		var task = document.getElementById('task');
 		var form = document.getElementById('adminForm');
-		task.value = 'folders.gettree';
-		form.submit();
+		task.value = 'folder.trash';
+		//form.submit();
+		alert('This feature is not implemented');
 	} else {
 		
 	}
+	task.value = '';
 }

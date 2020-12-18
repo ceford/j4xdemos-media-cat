@@ -190,7 +190,6 @@ class FileModel extends AdminModel
 
 		if (!isset($data['id']) && empty($file['uploadfile']['name']))
 		{
-			var_dump($file['uploadfile']);die;
 			// a file is required but a file has not been selected
 			$app->enqueueMessage(Text::_('COM_MEDIACAT_ERROR_FILE_NOT_SELECTED'), 'error');
 			return false;
@@ -202,7 +201,7 @@ class FileModel extends AdminModel
 		if ($file['uploadfile']['size'] > ($params->get('file_upload_maxsize')*1024*1024))
 		{
 			$app->enqueueMessage(Text::_('COM_MEDIACAT_ERROR_WARNFILETOOLARGE'), 'error');
-			unlink($file['uploadfile']['tmp_name']);
+			File::delete($file['uploadfile']['tmp_name']);
 			return false;
 		}
 
@@ -214,7 +213,7 @@ class FileModel extends AdminModel
 		if (empty($allowed))
 		{
 			$app->enqueueMessage(Text::_('COM_MEDIACAT_ERROR_NOT_AN_ALLOWED_TYPE'), 'error');
-			unlink($file['uploadfile']['tmp_name']);
+			File::delete($file['uploadfile']['tmp_name']);
 			return false;
 		}
 

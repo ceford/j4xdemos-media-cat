@@ -12,7 +12,7 @@ namespace J4xdemos\Component\Mediacat\Administrator\Helper;
 \defined('JPATH_PLATFORM') or die;
 
 /**
- * Medicat component helper.
+ * Mediacat component helper.
  *
  * @since  4.0
  */

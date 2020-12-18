@@ -15,7 +15,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 
 /**
- * Medicat component helper.
+ * Mediacat component helper.
  *
  * @since  4.0
  */

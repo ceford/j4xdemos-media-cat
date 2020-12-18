@@ -23,8 +23,7 @@ $fileBaseUrl = Uri::root(true);
 
 /** @var Joomla\CMS\WebAsset\WebAssetManager $wa */
 $wa = $this->document->getWebAssetManager();
-$wa->useScript('keepalive')
-	->useStyle('com_mediacat.mediacat')
+$wa->useStyle('com_mediacat.mediacat')
 	->useScript('com_mediacat.mediacat');
 
 $listOrder  = $this->escape($this->state->get('list.ordering'));

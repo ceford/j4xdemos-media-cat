@@ -61,28 +61,24 @@ class HtmlView extends BaseHtmlView
 		$model         = $this->getModel();
 
 		$app = Factory::getApplication();
-
 		$data = $app->input->post->get('jform', '', 'array');
-
 		$params = ComponentHelper::getParams('com_mediacat');
 
 		if (empty($data['media_type']) || $data['media_type'] == 'image')
 		{
-			$this->activepath = '/images';
+			$this->activepath = '/' . $params->get('image_path');
 			$this->media_type = 'image';
 			$folder = $params->get('image_path');
 		}
 		else
 		{
-			$this->activepath = '/files';
+			$this->activepath = '/' . $params->get('file_path');
 			$this->media_type = 'file';
 			$folder = $params->get('file_path');
 		}
 
 		$this->folders = $model->getFolders($folder);
-
 		$this->prepareToolbar();
-
 		$this->currentPath = Factory::getApplication()->input->getString('path');
 
 		parent::display($tpl);

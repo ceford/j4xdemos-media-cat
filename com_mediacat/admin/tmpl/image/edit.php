@@ -23,8 +23,8 @@ use J4xdemos\Component\Mediacat\Administrator\Helper\MimetypesHelper;
 
 $wa = $this->document->getWebAssetManager();
 $wa->useScript('keepalive')
-->useStyle('com_mediacat.mediacat')
-->useScript('com_mediacat.mediacat');
+	->useStyle('com_mediacat.mediacat')
+	->useScript('com_mediacat.mediacat');
 
 $params = ComponentHelper::getParams('com_mediacat');
 
@@ -37,7 +37,7 @@ $mimeTypes = $mthelper->getMimetypes($params->get('image_upload_extensions'));
 	<div class="row">
 		<div class="col">
 		<?php echo HTMLHelper::_('uitab.startTabSet', 'myTab', array('active' => 'photo_1')); ?>
-			<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'info', 'Info'); ?>
+			<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'info', Text::_('COM_MEDIACAT_IMAGE_EDIT_TAB_INFO')); ?>
 				<div style="max-width:800px;">
 
 				<h3>Photograph Sizes</h3>
@@ -56,7 +56,7 @@ $mimeTypes = $mthelper->getMimetypes($params->get('image_upload_extensions'));
 				</div>
 			<?php echo HTMLHelper::_('uitab.endTab'); ?>
 
-			<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'photo', 'Image'); ?>
+			<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'photo', Text::_('COM_MEDIACAT_IMAGE_EDIT_TAB_IMAGE')); ?>
 
 			<div class="row">
 				<div class="col-12 col-lg-6">
@@ -167,7 +167,7 @@ $mimeTypes = $mthelper->getMimetypes($params->get('image_upload_extensions'));
 					<div class="control-group">
 						<div class="control-label">
 							<label id="jform_id-lbl" for="jform_id">
-							ID
+							<?php echo Text::_('JGLOBAL_FIELD_ID_LABEL'); ?>
 							</label>
 						</div>
 						<div class="controls">
@@ -186,7 +186,7 @@ $mimeTypes = $mthelper->getMimetypes($params->get('image_upload_extensions'));
 					/>
 					<?php else : ?>
 					<div style="width: 300px; height:225px;background-color:#eee; text-align:center;">
-						<p>No image yet!</p>
+						<p><?php echo Text::_('COM_MEDIACAT_IMAGE_UPLOAD_NOT_YET'); ?></p>
 					</div>
 					<?php endif; ?>
 				</div>

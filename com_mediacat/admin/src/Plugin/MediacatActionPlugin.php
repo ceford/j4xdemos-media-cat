@@ -20,7 +20,7 @@ use Joomla\CMS\Plugin\CMSPlugin;
  *
  * @since  4.0.0
  */
-class MediaActionPlugin extends CMSPlugin
+class MediacatActionPlugin extends CMSPlugin
 {
 	/**
 	 * Load the language file on instantiation.
@@ -54,7 +54,7 @@ class MediaActionPlugin extends CMSPlugin
 		$this->loadJs();
 
 		// The file with the params for the edit view
-		$paramsFile = JPATH_PLUGINS . '/media-action/' . $this->_name . '/form/' . $this->_name . '.xml';
+		$paramsFile = JPATH_PLUGINS . '/mediacat-action/' . $this->_name . '/form/' . $this->_name . '.xml';
 
 		// When the file exists, load it into the form
 		if (file_exists($paramsFile))
@@ -74,7 +74,7 @@ class MediaActionPlugin extends CMSPlugin
 	{
 		HTMLHelper::_(
 			'script',
-			'plg_media-action_' . $this->_name . '/' . $this->_name . '.js',
+			'plg_mediacat-action_' . $this->_name . '/' . $this->_name . '.js',
 			['version' => 'auto', 'relative' => true]
 		);
 	}
@@ -90,7 +90,7 @@ class MediaActionPlugin extends CMSPlugin
 	{
 		HTMLHelper::_(
 			'stylesheet',
-			'plg_media-action_' . $this->_name . '/' . $this->_name . '.css',
+			'plg_mediacat-action_' . $this->_name . '/' . $this->_name . '.css',
 			['version' => 'auto', 'relative' => true]
 		);
 	}

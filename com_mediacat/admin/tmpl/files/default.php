@@ -23,8 +23,7 @@ $fileBaseUrl = Uri::root(true);
 
 /** @var Joomla\CMS\WebAsset\WebAssetManager $wa */
 $wa = $this->document->getWebAssetManager();
-$wa->useScript('keepalive')
-	->useStyle('com_mediacat.mediacat')
+$wa->useStyle('com_mediacat.mediacat')
 	->registerAndUseStyle('com_mediacat.file-icon-vectors', 'media/com_mediacat/css/file-icon-vectors.min.css')
 	->useScript('com_mediacat.mediacat');
 

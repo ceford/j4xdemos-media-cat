@@ -14,49 +14,59 @@ $path = '';
 $current = $this->state->get('filter.activepath');
 $subs = [];
 $dirs = explode('/', $current);
+$params = ComponentHelper::getParams('com_mediacat');
 
-foreach ($dirs as $dir) {
-	if (empty($dir)) {
+foreach ($dirs as $dir)
+{
+	if (empty($dir))
+	{
 		continue;
 	}
 	$path .= '/' . $dir;
-	foreach (new DirectoryIterator($root . $path) as $fileInfo) {
-		if($fileInfo->isDot()) continue;
-		if ($fileInfo->isDir()) {
+	foreach (new DirectoryIterator($root . $path) as $fileInfo)
+	{
+		if($fileInfo->isDot())
+		{
+			continue;
+		}
+		if ($fileInfo->isDir())
+		{
 			$subs[] = $path . '/' . $fileInfo->getFilename();
 		}
 	}
 }
 
 asort($subs);
+
 /*
- * /images/banners
- * /images/headers
- * /images/sampledata
- * /images/sampledata/cassiopeia
- * /images/sampledata/fruitshop
- * /images/sampledata/parks
- * /images/sampledata/parks/animals
- * /images/sampledata/parks/landscape
- * /images/tests
+ * /files/odt
+ * /files/pdf
+ * /files/png
+ * /files/webp
  */
 
-array_unshift($subs, '/files');
+// so push the file path onto the fron of the list
+array_unshift($subs, '/' . $params->get('file_path'));
 
-foreach ($subs as $sub) {
+foreach ($subs as $sub)
+{
 	// make an array
 	$members = explode('/', substr($sub, 1));
 	$space = count($members) -1;
 	$active = ($sub == $current) ? ' active' : '';
 	echo '<div class="cat-folder indent-' . $space . $active . '" data-link="'. $sub .'">';
-	if (!$active) {
+	if (!$active)
+	{
 		echo '<a href="#" onclick="setFolder(\''.$sub.'\');return false;">';
 		echo '<span class="icon-folder"></span> ';
-	} else {
+	}
+	else
+	{
 		echo '<span class="icon-folder-open"></span> ';
 	}
 	echo array_pop($members);
-	if (!$active) {
+	if (!$active)
+	{
 		echo '</a>';
 	}
 	echo '</div>' . "\n";

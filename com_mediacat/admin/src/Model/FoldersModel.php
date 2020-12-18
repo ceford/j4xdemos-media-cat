@@ -51,6 +51,7 @@ class FoldersModel extends ListModel
 
 		$new = 0;
 		$old = 0;
+		$dud = 0;
 
 		foreach ($items as $item)
 		{
@@ -82,12 +83,17 @@ class FoldersModel extends ListModel
 			{
 				$new++;
 			}
-			else {
+			else if ($result == 'old')
+			{
 				$old++;
+			}
+			else
+			{
+				$dud++;
 			}
 		}
 
-		return array('Folder = ' . $folder, ' New = ' . $new, ' Old = ' . $old);
+		return array('Folder = ' . $folder, ' New = ' . $new, ' Old = ' . $old, ' Dud = ' . $dud);
 	}
 
 	protected function saveImageData($file)
@@ -115,11 +121,14 @@ class FoldersModel extends ListModel
 
 		// if yes then update it
 		$query = $db->getQuery(true);
-		if ($id) {
+		if ($id)
+		{
 			$query->update('#__mediacat_images');
 			$query->where('id = ' . $id);
 			$result = 'old';
-		} else {
+		}
+		else
+		{
 			$query->insert('#__mediacat_images');
 			$result = 'new';
 		}
@@ -142,14 +151,62 @@ class FoldersModel extends ListModel
 		catch (\RuntimeException $e)
 		{
 			// skip this one
-			var_dump($query->__tostring()); die;
+			return 'dud';
 		}
 		return $result;
 	}
 
 	protected function saveFileData($file)
 	{
+		$root = JPATH_SITE;
+		$size = filesize($root . $file);
 
+		// get the file name and extension
+		$filename = substr($file, strrpos($file, '/') + 1);
+		$extension = substr($filename, strrpos($filename, '.') + 1);
+
+		// takes 5x longer to hash - needs time saving ploy if file has not changed
+		//$hash = hash('md5', $file);
+
+		$db = Factory::getDbo();
+		$query = $db->getQuery(true);
+		// does the record exist
+		$query->select('id');
+		$query->from('#__mediacat_files');
+		$query->where('file_path = ' . $db->quote($file));
+		$db->setQuery($query);
+		$id = $db->loadResult();
+
+		// if yes then update it
+		$query = $db->getQuery(true);
+		if ($id)
+		{
+			$query->update('#__mediacat_files');
+			$query->where('id = ' . $id);
+			$result = 'old';
+		}
+		else
+		{
+			$query->insert('#__mediacat_files');
+			$result = 'new';
+		}
+		$query->set('file_path = ' . $db->quote($file));
+		$query->set('file_name = ' . $db->quote($filename));
+		$query->set('extension = ' . $db->quote($extension));
+		$query->set('size = ' . $db->quote($size));
+		//$query->set('hash = ' . $db->quote($hash));
+
+		$db->setQuery($query);
+		try
+		{
+			$db->execute();
+		}
+		catch (\RuntimeException $e)
+		{
+			// skip this one
+			return 'dud';
+		}
+		return $result;
 	}
 
 	public function getFolders($folder)
@@ -164,24 +221,27 @@ class FoldersModel extends ListModel
 		$rootlen = strlen($root);
 		$folders[] = '/' . $folder;
 
-		try {
-		$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path),
-				RecursiveIteratorIterator::SELF_FIRST);
-		foreach($objects as $name => $object)
+		try
 		{
-			if (!is_dir($name))
+			$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path),
+				RecursiveIteratorIterator::SELF_FIRST);
+			foreach($objects as $name => $object)
 			{
-				continue;
+				if (!is_dir($name))
+				{
+					continue;
+				}
+				$fileName = $object->getFilename();
+				if ($fileName == '.' || $fileName == '..')
+				{
+					continue;
+				}
+				$folders[] = substr($name, $rootlen);
 			}
-			$fileName = $object->getFilename();
-			if ($fileName == '.' || $fileName == '..')
-			{
-				continue;
-			}
-			$folders[] = substr($name, $rootlen);
+			sort($folders);
 		}
-		sort($folders);
-		} catch (\Exception $e) {
+		catch (\Exception $e)
+		{
 			Factory::getApplication()->enqueueMessage('Bad path = ' . $path, 'warning');
 		}
 		return $folders;

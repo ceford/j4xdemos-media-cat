@@ -11,7 +11,7 @@ namespace J4xdemos\Component\Mediacat\Administrator\Provider;
 
 \defined('_JEXEC') or die;
 
-use Joomla\Component\Media\Administrator\Adapter\AdapterInterface;
+use J4xDeoms\Component\Mediacat\Administrator\Adapter\AdapterInterface;
 
 /**
  * Media Adapter Manager

@@ -29,6 +29,7 @@ foreach ($dirs as $dir) {
 }
 
 asort($subs);
+
 /*
  * /images/banners
  * /images/headers
@@ -41,22 +42,28 @@ asort($subs);
  * /images/tests
  */
 
-array_unshift($subs, '/images');
+// so puch the image path onto the fron of the list
+array_unshift($subs, '/' . $params->get('image_path'));
 
-foreach ($subs as $sub) {
-	// make an array 
+foreach ($subs as $sub)
+{
+	// make an array
 	$members = explode('/', substr($sub, 1));
 	$space = count($members) -1;
 	$active = ($sub == $current) ? ' active' : '';
 	echo '<div class="cat-folder indent-' . $space . $active . '" data-link="'. $sub .'">';
-	if (!$active) {
+	if (!$active)
+	{
 		echo '<a href="#" onclick="setFolder(\''.$sub.'\');return false;">';
 		echo '<span class="icon-folder"></span> ';
-	} else {
+	}
+	else
+	{
 		echo '<span class="icon-folder-open"></span> ';
 	}
 	echo array_pop($members);
-	if (!$active) {
+	if (!$active)
+	{
 		echo '</a>';
 	}
 	echo '</div>' . "\n";

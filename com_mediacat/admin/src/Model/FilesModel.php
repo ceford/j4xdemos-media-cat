@@ -59,7 +59,7 @@ class FilesModel extends ListModel
 		$query = $db->getQuery(true);
 		$query->select('*');
 		$query->from('#__mediacat_files AS a');
-		$query->where('file_path LIKE ' . $db->quote($current . '%'));
+		$query->where('folder_path LIKE ' . $db->quote($current . '%'));
 		// Add the list ordering clause.
 		$orderCol  = $this->state->get('list.ordering', 'a.id');
 		$orderDirn = $this->state->get('list.direction', 'ASC');

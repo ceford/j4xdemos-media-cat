@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Help for Media Cat Folders</title>
+<style>
+html {
+	font-family: sans-serif;
+	margin: .5rem;
+	line-height: 1.15;
+}
+body {
+	font-family: Arial,Helvetica,Sans Serif;
+	font-size: 1rem;
+	font-weight: 400;
+	line-height: 1.4;
+	color: #212529;
+	text-align: left;
+}
+h1 {
+	font-size: 2rem;
+}
+h1, h2, h3 {
+	margin-top: 0;
+	margin-bottom: .5rem;
+}
+p {
+	margin-top: 0;
+	margin-bottom: 1rem;
+}
+</style>
+</head>
+<body>
+
+<h1>Media Cat Folders</h1>
+
+<p>This page shows the list of folders in use for storing either Images or Files. 
+Select from the drop-down list to switch. The list is displayed on the left of the screen,
+or near the top on narrow screens.</p>
+
+<p>Select a Folder Tree item to perform one of the following actions:</p>
+
+<dl>
+
+<dt>Indexer</dt>
+<dd>
+This action processes all of the files in the selected folder and inserts or updates
+a record in the database. It may take quite a long time. Perhaps several seconds for
+1000 images.
+</dd>
+
+<dt>Hasher</dt>
+<dd>
+This action processes all of the files in the selected folder and updates the file hash
+field in the database record. It may take quite a long time. Perhaps several seconds for
+1000 images.
+</dd>
+
+<dt>Create New Folder</dt>
+<dd>
+This action prompts for a new folder name and creates the folder. All characters except 
+alphanumers and minus (-) are replace by <strong>-</strong> (minus). You will be asked 
+to confirm that the file name is acceptable. Please use minus characters
+to separate words.
+</dd>
+
+<dt>Trash</dt>
+<dd>
+This action ... moves the file to a trash folder from where it can be retrieved or deleted
+as necessary. Currently not implemented.
+</dd>
+
+</dl>
+
+</body>
+</html>

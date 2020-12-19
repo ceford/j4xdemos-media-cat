@@ -8,6 +8,8 @@
  */
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Component\ComponentHelper;
+
 $root = JPATH_SITE;
 $path = '';
 //$current = 'images/sampledata/parks/animals';

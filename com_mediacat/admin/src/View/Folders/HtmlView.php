@@ -105,6 +105,9 @@ class HtmlView extends BaseHtmlView
 		$layout = new FileLayout('toolbar.indexer', JPATH_COMPONENT_ADMINISTRATOR . '/layouts');
 		$toolbar->appendButton('Custom', $layout->render([]), 'archive');
 
+		$layout = new FileLayout('toolbar.hasher', JPATH_COMPONENT_ADMINISTRATOR . '/layouts');
+		$toolbar->appendButton('Custom', $layout->render([]), 'hashtag');
+
 		// Add the upload and create folder buttons
 		if ($user->authorise('core.create', 'com_mediacat'))
 		{
@@ -132,7 +135,7 @@ class HtmlView extends BaseHtmlView
 
 		if ($tmpl !== 'component')
 		{
-			ToolbarHelper::help('JHELP_CONTENT_MEDIA_MANAGER');
+			ToolbarHelper::help('folders', true);
 		}
 	}
 }

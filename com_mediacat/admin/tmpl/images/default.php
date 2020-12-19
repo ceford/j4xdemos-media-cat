@@ -73,11 +73,13 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 						</thead>
 						<tbody>
 							<?php foreach ($this->items as $i => $item) :
-								$imageurl = substr($item->file_path, 1);
+							$imageurl = substr($item->folder_path, 1) . '/' . $item->file_name;
 							?>
 								<tr>
-									<td rowspan="2" class="image-cropped preview cursor-zoom" style="background-image: url('<?php echo $fileBaseUrl . $item->file_path; ?>');"
-									onclick="mediacatAction('zoom',<?php echo "'{$imageurl}'";?>)"></td>
+									<td rowspan="2" class="image-cropped preview cursor-zoom"
+									style="background-image: url('<?php echo $fileBaseUrl . $item->folder_path . '/' . $item->file_name; ?>');"
+									onclick="mediacatAction('zoom',<?php echo "'{$imageurl}'";?>)">
+									</td>
 									<td class="break-word">
 										<a href="index.php?option=com_mediacat&view=image&layout=edit&id=<?php echo $item->id; ?>">
 											<?php echo $item->file_name; ?>

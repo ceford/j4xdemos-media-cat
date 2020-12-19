@@ -211,19 +211,20 @@ class ImageModel extends AdminModel
 		if ($file['uploadfile']['size'] > ($params->get('image_upload_maxsize')*1024*1024))
 		{
 			$app->enqueueMessage(Text::_('COM_MEDIACAT_ERROR_WARNFILETOOLARGE'), 'error');
-			unlink($file['uploadfile']['tmp_name']);
+			File::delete($file['uploadfile']['tmp_name']);
 			return false;
 		}
 
 		$mime = $file['uploadfile']['type'];
 
 		// check that mimtype has an extension in the allowed list
-		$allowed = $this->checkInAllowedImageExtensions($mime, $params);
+		$mimeHelper = new MimetypesHelper;
+		$allowed = $mimeHelper->checkInAllowedExtensions($mime, $params, 'image');
 
 		if (empty($allowed))
 		{
 			$app->enqueueMessage(Text::_('COM_MEDIACAT_ERROR_NOT_AN_ALLOWED_TYPE'), 'error');
-			unlink($file['uploadfile']['tmp_name']);
+			File::delete($file['uploadfile']['tmp_name']);
 			return false;
 		}
 
@@ -255,127 +256,23 @@ class ImageModel extends AdminModel
 		File::delete($tmp_name);
 
 		// add the file information to the data
-		$activePath = $app->getUserState('com_mediacat.images.activepath');
-		$data['file_path'] = $activePath . '/' . $data['file_name'];
-		$file_path = JPATH_SITE . $data['file_path'];
+		$data['folder_path'] = $activePath;
 
-		list ($width, $height, $type, $wandhstring) = getimagesize($file_path);
-		$size = filesize($file_path);
-		$hash = hash('md5', $file_path);
+		if ($mime != 'image/svg+xml')
+		{
+			list ($width, $height, $type, $wandhstring) = getimagesize($new_path);
+			$data['width'] = $width;
+			$data['height'] = $height;
+		}
+		else{
+			$data['width'] = 100;
+			$data['height'] = 100;
+		}
+		$size = filesize($new_path);
+		$hash = hash('md5', $new_path);
 		$data['extension'] = substr($data['file_name'], strrpos($data['file_name'], '.') + 1);
-		$data['width'] = $width;
-		$data['height'] = $height;
 		$data['size'] = $size;
 		$data['hash'] = $hash;
 		return true;
-	}
-
-	/**
-	 * Check the Image Mime type is in the allowed extensions list
-	 *
-	 * @param   string   $mimetype     The mimetype of the uploaded image
-	 *
-	 * @return  bool    true if the mime type is in the allowed list, otherwise false
-	 *
-	 * @since   4.0
-	 */
-	protected function checkInAllowedImageExtensions($mime, $params)
-	{
-		$mthelper = new MimetypesHelper;
-		$extensions = $mthelper->getExtensions($mime);
-
-		$allowed_extensions = explode(',',$params->get('image_upload_extensions'));
-		// check whether $extensions is in allowed extensions
-		$result = array_intersect($allowed_extensions, $extensions);
-		// return extensions that match the mimetype
-		return count($result);
-	}
-	/**
-	 * Get the Image Mime type
-	 *
-	 * @param   string   $file     The link to the file to be checked
-	 * @param   boolean  $isImage  True if the passed file is an image else false
-	 *
-	 * @return  mixed    the mime type detected false on error
-	 *
-	 * @since   3.7.2
-	 */
-	protected function getImageMimeType($file)
-	{
-		// If we can't detect anything mime is false
-		$mime = false;
-
-		try
-		{
-			if (\function_exists('exif_imagetype'))
-			{
-				$mime = image_type_to_mime_type(exif_imagetype($file));
-			}
-			elseif (\function_exists('getimagesize'))
-			{
-				$imagesize = getimagesize($file);
-				$mime      = $imagesize['mime'] ?? false;
-			}
-			elseif (\function_exists('mime_content_type'))
-			{
-				// We have mime magic.
-				$mime = mime_content_type($file);
-			}
-			elseif (\function_exists('finfo_open'))
-			{
-				// We have fileinfo
-				$finfo = finfo_open(FILEINFO_MIME_TYPE);
-				$mime  = finfo_file($finfo, $file);
-				finfo_close($finfo);
-			}
-		}
-		catch (\Exception $e)
-		{
-			// If we have any kind of error here => false;
-			return false;
-		}
-
-		// We have a mime here
-		return $mime;
-	}
-
-	/**
-	 * Get the Image Mime type
-	 *
-	 * @param   string   $file     The link to the file to be checked
-	 * @param   boolean  $isImage  True if the passed file is an image else false
-	 *
-	 * @return  mixed    the mime type detected false on error
-	 *
-	 * @since   3.7.2
-	 */
-	protected function getFileMimeType($file)
-	{
-		// If we can't detect anything mime is false
-		$mime = false;
-
-		try
-		{
-			if (\function_exists('mime_content_type'))
-			{
-				// We have mime magic.
-				$mime = mime_content_type($file);
-			}
-			elseif (\function_exists('finfo_open'))
-			{
-				// We have fileinfo
-				$finfo = finfo_open(FILEINFO_MIME_TYPE);
-				$mime  = finfo_file($finfo, $file);
-				finfo_close($finfo);
-			}
-		}
-		catch (\Exception $e)
-		{
-			// If we have any kind of error here => false;
-			return false;
-		}
-
-		// We have a mime here
-		return $mime;
 	}
 }

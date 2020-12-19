@@ -34,17 +34,8 @@ $mimeTypes = $mthelper->getMimetypes($params->get('file_upload_extensions'));
 <form action="" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data">
 	<div class="row">
 		<div class="col">
-		<?php echo HTMLHelper::_('uitab.startTabSet', 'myTab', array('active' => 'photo_1')); ?>
-			<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'info', Text::_('COM_MEDIACAT_IMAGE_EDIT_TAB_INFO')); ?>
-				<div style="max-width:800px;">
 
-				<h3>Changes</h3>
-
-				<p>You can change a caption without changing a photogrph. You can change a photograph without changing
-				the caption. Or you can change both at the same time. There is no need to delete a photograph.
-				A new upload will overwrite the previous photograph.</p>
-				</div>
-			<?php echo HTMLHelper::_('uitab.endTab'); ?>
+		<?php echo HTMLHelper::_('uitab.startTabSet', 'myTab', array('active' => 'file')); ?>
 
 			<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'file', Text::_('COM_MEDIACAT_FILE')); ?>
 
@@ -168,6 +159,7 @@ $mimeTypes = $mthelper->getMimetypes($params->get('file_upload_extensions'));
 			</div>
 
 			<?php echo HTMLHelper::_('uitab.endTab'); ?>
+
 		<?php echo HTMLHelper::_('uitab.endTabSet'); ?>
 		</div>
 	</div>

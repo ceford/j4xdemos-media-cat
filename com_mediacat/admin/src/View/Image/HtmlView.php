@@ -82,6 +82,8 @@ class HtmlView extends BaseHtmlView
 	 */
 	protected function addToolbar()
 	{
+		$tmpl = Factory::getApplication()->input->getCmd('tmpl');
+
 		Factory::getApplication()->input->set('hidemainmenu', true);
 
 		$user       = Factory::getUser();
@@ -92,9 +94,21 @@ class HtmlView extends BaseHtmlView
 
 		ToolbarHelper::apply('image.apply');
 		ToolbarHelper::save('image.save');
-		ToolbarHelper::cancel('image.cancel');
+
+		if (empty($isNew))
+		{
+			ToolbarHelper::cancel('file.cancel', 'JTOOLBAR_CLOSE');
+		}
+		else
+		{
+			ToolbarHelper::cancel('file.cancel');
+		}
 
 		ToolbarHelper::divider();
-		ToolbarHelper::help('JHELP_COMPONENTS_MEDIACAT_IMAGE_EDIT');
+
+		if ($tmpl !== 'component')
+		{
+			ToolbarHelper::help('image', true);
+		}
 	}
 }

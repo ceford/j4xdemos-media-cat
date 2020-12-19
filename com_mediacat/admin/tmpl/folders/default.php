@@ -65,5 +65,6 @@ $media_type_options = array('image' => Text::_('COM_MEDIACAT_FIELDSET_IMAGES_LAB
 
 	<div class="col-12 col-sm-6" id="results"
 		style="max-height: 75vh; min-height: 75vh; overflow-y:scroll; border: 1px solid black;">
+		<h3><?php echo Text::_('COM_MEDIACAT_ACTION_RESULTS'); ?></h3>
 	</div>
 </div>

@@ -36,25 +36,7 @@ $mimeTypes = $mthelper->getMimetypes($params->get('image_upload_extensions'));
 <form action="" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data">
 	<div class="row">
 		<div class="col">
-		<?php echo HTMLHelper::_('uitab.startTabSet', 'myTab', array('active' => 'photo_1')); ?>
-			<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'info', Text::_('COM_MEDIACAT_IMAGE_EDIT_TAB_INFO')); ?>
-				<div style="max-width:800px;">
-
-				<h3>Photograph Sizes</h3>
-
-				<p>It is best to prepare photographs for import - crop and resize for use on the web. Original photographs can be
-				enormous and will take a long time to upload. Photographs larger than 8Mb will be rejected after
-				upload.</p>
-
-				<p>The most suitable photographs have an aspect ratio of 4x3 (width x height).</p>
-
-				<h3>Changes</h3>
-
-				<p>You can change a caption without changing a photogrph. You can change a photograph without changing
-				the caption. Or you can change both at the same time. There is no need to delete a photograph.
-				A new upload will overwrite the previous photograph.</p>
-				</div>
-			<?php echo HTMLHelper::_('uitab.endTab'); ?>
+		<?php echo HTMLHelper::_('uitab.startTabSet', 'myTab', array('active' => 'photo')); ?>
 
 			<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'photo', Text::_('COM_MEDIACAT_IMAGE_EDIT_TAB_IMAGE')); ?>
 
@@ -181,7 +163,7 @@ $mimeTypes = $mthelper->getMimetypes($params->get('image_upload_extensions'));
 				<div class="col-12 col-md-6 col-lg-3">
 
 					<?php if (isset($this->item->id)) : ?>
-					<img src="<?php echo JURI::root(true) . $this->item->file_path; ?>"
+					<img src="<?php echo JURI::root(true) . $this->item->folder_path . '/' . $this->item->file_name; ?>"
 						class="cover"
 					/>
 					<?php else : ?>
@@ -193,6 +175,7 @@ $mimeTypes = $mthelper->getMimetypes($params->get('image_upload_extensions'));
 			</div>
 
 			<?php echo HTMLHelper::_('uitab.endTab'); ?>
+
 		<?php echo HTMLHelper::_('uitab.endTabSet'); ?>
 		</div>
 	</div>

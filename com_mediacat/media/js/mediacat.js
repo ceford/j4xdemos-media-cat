@@ -154,21 +154,51 @@ function mediacatSelectFolder(element) {
 	var value = folder.innerText;
 	var activepath = document.getElementById('jform_activepath');
 	activepath.value = value;
+	var mediaHasher = document.getElementById('mediacatHasher');
 	var mediaIndexer = document.getElementById('mediacatIndexer');
 	var mediaCreateFolder = document.getElementById('mediacatCreateFolder');
 	var mediaTrash = document.getElementById('mediacatTrash');
+	mediaHasher.removeAttribute('disabled');
 	mediaIndexer.removeAttribute('disabled');
 	mediaCreateFolder.removeAttribute('disabled');
 	mediaTrash.removeAttribute('disabled');
 }
 
 function mediacatUnselectFolder(element) {
+	var mediaHasher = document.getElementById('mediacatHasher');
 	var mediaIndexer = document.getElementById('mediacatIndexer');
 	var mediaCreateFolder = document.getElementById('mediacatCreateFolder');
 	var mediaTrash = document.getElementById('mediacatTrash');
+	mediaHasher.setAttribute('disabled', true);
 	mediaIndexer.setAttribute('disabled', true);
 	mediaCreateFolder.setAttribute('disabled', true);
 	mediaTrash.setAttribute('disabled', true);
+}
+
+async function doHash(folder) {
+	var form = document.getElementById('adminForm');
+	var task = document.getElementById('task');
+	var activepath = document.getElementById('jform_activepath');
+	
+	task.value = 'folders.hasher';
+	activepath.value = folder;
+	
+	var results = document.getElementById('results');
+	let response = await fetch(form.action, {
+			method: form.method,
+			body: new FormData(form)
+	});
+	if (!response.ok) {
+		throw new Error(`HTTP error! status: ${response.status}`);
+	} else {
+		let result = await response.json();
+		// show the results?
+		var br = document.createElement("br");
+		var text = document.createTextNode(result);
+		results.appendChild(br);
+		results.appendChild(text);
+	}
+	task.value = '';
 }
 
 async function doIndex(folder) {
@@ -214,6 +244,13 @@ async function myFetch() {
 		results.innerHTML = folders.join("<br />\n");
 		//document.form.appendChild(what);
 		folders.forEach (element => doIndex(element));
+	}
+}
+
+function mediacatHasher() {
+	var activepath = document.getElementById('jform_activepath');
+	if (confirm('Hash items in Folder in ' + activepath.value)) {
+		doHash(activepath.value);
 	}
 }
 

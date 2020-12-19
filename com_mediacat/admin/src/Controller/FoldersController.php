@@ -45,6 +45,26 @@ class FoldersController extends BaseController
 	 *
 	 *  return a json encoded message
 	 */
+	public function hasher()
+	{
+		// Check for request forgeries.
+		$this->checkToken();
+		$app = Factory::getApplication();
+		$jform = $this->input->get('jform', '', 'array');
+		$folder = $jform['activepath'];
+		$media_type = $jform['media_type'];
+		$model = $this->getModel();
+		$result = $model->getHashes($media_type, $folder);
+		echo json_encode($result);//$folder . ' = ' . $result);
+		// not finished
+		jexit();
+	}
+
+	/*
+	 * index all of the files in a given folder
+	 *
+	 *  return a json encoded message
+	 */
 	public function indexer()
 	{
 		// Check for request forgeries.

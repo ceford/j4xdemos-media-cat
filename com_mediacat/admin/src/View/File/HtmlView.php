@@ -60,6 +60,8 @@ class HtmlView extends BaseHtmlView
 	 */
 	protected function addToolbar()
 	{
+		$tmpl = Factory::getApplication()->input->getCmd('tmpl');
+
 		Factory::getApplication()->input->set('hidemainmenu', true);
 
 		$user       = Factory::getUser();
@@ -70,10 +72,20 @@ class HtmlView extends BaseHtmlView
 
 		ToolbarHelper::apply('file.apply');
 		ToolbarHelper::save('file.save');
-		ToolbarHelper::cancel('file.cancel');
+		if (empty($isNew))
+		{
+			ToolbarHelper::cancel('file.cancel', 'JTOOLBAR_CLOSE');
+		}
+		else
+		{
+			ToolbarHelper::cancel('file.cancel');
+		}
 
 		ToolbarHelper::divider();
-		ToolbarHelper::help('JHELP_COMPONENTS_MEDIACAT_FILE_EDIT');
 
+		if ($tmpl !== 'component')
+		{
+			ToolbarHelper::help('file', true);
+		}
 	}
 }

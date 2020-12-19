@@ -208,6 +208,7 @@ class FileModel extends AdminModel
 		$mime = $file['uploadfile']['type'];
 
 		// check that mimtype has an extension in the allowed list
+		$mimeHelper = new MimetypesHelper;
 		$allowed = $mimeHelper->checkInAllowedExtensions($mime, $params, 'file');
 
 		if (empty($allowed))
@@ -233,16 +234,11 @@ class FileModel extends AdminModel
 		File::delete($tmp_name);
 
 		// add the file information to the data
-		$activePath = $app->getUserState('com_mediacat.files.activepath');
-		$data['file_path'] = $activePath . '/' . $data['file_name'];
-		$file_path = JPATH_SITE . $data['file_path'];
+		$data['folder_path'] = $activePath;
 
-		list ($width, $height, $type, $wandhstring) = getimagesize($file_path);
-		$size = filesize($file_path);
-		$hash = hash('md5', $file_path);
+		$size = filesize($new_path);
+		$hash = hash('md5', $new_path);
 		$data['extension'] = substr($data['file_name'], strrpos($data['file_name'], '.') + 1);
-		$data['width'] = $width;
-		$data['height'] = $height;
 		$data['size'] = $size;
 		$data['hash'] = $hash;
 		return true;

@@ -28,6 +28,80 @@ use \RecursiveDirectoryIterator;
 class FoldersModel extends ListModel
 {
 	/*
+	 * Create hashes for all files in one folder using the catalogue
+	 *
+	 * $folder string relative to site root
+	 * $media_type string either 'images' or 'files'
+	 *
+	 * return a list of catalogued files
+	 */
+	public function getHashes($media_type, $folder)
+	{
+		if (empty($folder))
+		{
+			return array ('That', 'went', 'wrong');
+		}
+
+		$params = ComponentHelper::getParams('com_mediacat');
+		$table = '#__mediacat_' . $params->get($media_type . '_path');
+
+		$db = Factory::getDbo();
+		$query = $db->getQuery(true);
+		// does the record exist
+		$query->select('*');
+		$query->from($table);
+
+		$query->where('folder_path = ' . $db->quote($folder));
+		$db->setQuery($query);
+		$items = $db->loadObjectList();
+
+		$new = 0;
+		$old = 0;
+		$dud = 0;
+
+		foreach ($items as $item)
+		{
+			$file = JPATH_SITE . $item->folder_path . '/' . $item->file_name;
+
+			if (file_exists($file))
+			{
+				$hash = hash('md5', $file);
+			}
+			else
+			{
+				$hash = '';
+			}
+			if (!empty($hash))
+			{
+				// has the hash changed
+				if ($hash == $item->hash)
+				{
+					$old++;
+				}
+				else
+				{
+					$query = $db->getQuery(true);
+					$query->update($table);
+					$query->set('hash = ' . $db->quote($hash));
+					$query->where('id = ' . $item->id);
+					$db->setquery($query);
+					$result = $db->execute();
+					if (!empty($result))
+					{
+						$new++;
+					}
+				}
+			}
+			else
+			{
+				$dud++;
+			}
+		}
+		return array('Folder = ' . $folder, ' New = ' . $new, ' Old = ' . $old . ', Missing = ' . $dud);
+	}
+
+
+	/*
 	 * Get a list of all files in one folder and catalogue them
 	 *
 	 * $folder string relative to site root
@@ -75,9 +149,9 @@ class FoldersModel extends ListModel
 			// save data as image or file
 			if ($media_type == 'image')
 			{
-				$result = $this->saveImageData($folder . '/' . $item);
+				$result = $this->saveImageData($folder, $item);
 			} else {
-				$result = $this->saveFileData($folder . '/' . $item);
+				$result = $this->saveFileData($folder, $item);
 			}
 			if ($result == 'new')
 			{
@@ -96,15 +170,26 @@ class FoldersModel extends ListModel
 		return array('Folder = ' . $folder, ' New = ' . $new, ' Old = ' . $old, ' Dud = ' . $dud);
 	}
 
-	protected function saveImageData($file)
+	protected function saveImageData($folder, $filename)
 	{
 		$root = JPATH_SITE;
 
-		list($width, $height, $type, $wandhstring) = getimagesize($root. $file);
-		$size = filesize($root . $file);
+		$mh = new MimetypesHelper;
+		$mime = $mh->getFileMimeType($root . $folder . '/' . $filename);
+		// is it an svg
+		if ($mime != 'image/svg+xml')
+		{
+			list($width, $height, $type, $wandhstring) = getimagesize($root. $folder. '/' . $filename);
+		}
+		else
+		{
+			$width = 100;
+			$height = 100;
+		}
+
+		$size = filesize($root . $folder . '/' . $filename);
 
 		// get the file name and extension
-		$filename = substr($file, strrpos($file, '/') + 1);
 		$extension = substr($filename, strrpos($filename, '.') + 1);
 
 		// takes 5x longer to hash - needs time saving ploy if file has not changed
@@ -115,11 +200,10 @@ class FoldersModel extends ListModel
 		// does the record exist
 		$query->select('id');
 		$query->from('#__mediacat_images');
-		$query->where('file_path = ' . $db->quote($file));
+		$query->where('folder_path = ' . $db->quote($folder));
+		$query->where('file_name = ' . $db->quote($filename));
 		$db->setQuery($query);
 		$id = $db->loadResult();
-
-		// if yes then update it
 		$query = $db->getQuery(true);
 		if ($id)
 		{
@@ -132,14 +216,11 @@ class FoldersModel extends ListModel
 			$query->insert('#__mediacat_images');
 			$result = 'new';
 		}
-		$query->set('file_path = ' . $db->quote($file));
+		$query->set('folder_path = ' . $db->quote($folder));
 		$query->set('file_name = ' . $db->quote($filename));
 		$query->set('extension = ' . $db->quote($extension));
-		if ($extension != 'svg')
-		{
-			$query->set('width = ' . $db->quote($width));
-			$query->set('height = ' . $db->quote($height));
-		}
+		$query->set('width = ' . $db->quote($width));
+		$query->set('height = ' . $db->quote($height));
 		$query->set('size = ' . $db->quote($size));
 		//$query->set('hash = ' . $db->quote($hash));
 
@@ -156,13 +237,12 @@ class FoldersModel extends ListModel
 		return $result;
 	}
 
-	protected function saveFileData($file)
+	protected function saveFileData($folder, $filename)
 	{
 		$root = JPATH_SITE;
-		$size = filesize($root . $file);
+		$size = filesize($root . $folder . '/' . $file);
 
 		// get the file name and extension
-		$filename = substr($file, strrpos($file, '/') + 1);
 		$extension = substr($filename, strrpos($filename, '.') + 1);
 
 		// takes 5x longer to hash - needs time saving ploy if file has not changed
@@ -173,7 +253,8 @@ class FoldersModel extends ListModel
 		// does the record exist
 		$query->select('id');
 		$query->from('#__mediacat_files');
-		$query->where('file_path = ' . $db->quote($file));
+		$query->where('folder_path = ' . $db->quote($folder));
+		$query->where('file_name = ' . $db->quote($filename));
 		$db->setQuery($query);
 		$id = $db->loadResult();
 
@@ -190,7 +271,7 @@ class FoldersModel extends ListModel
 			$query->insert('#__mediacat_files');
 			$result = 'new';
 		}
-		$query->set('file_path = ' . $db->quote($file));
+		$query->set('folder_path = ' . $db->quote($folder));
 		$query->set('file_name = ' . $db->quote($filename));
 		$query->set('extension = ' . $db->quote($extension));
 		$query->set('size = ' . $db->quote($size));

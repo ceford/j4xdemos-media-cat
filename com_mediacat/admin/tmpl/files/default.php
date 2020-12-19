@@ -72,11 +72,11 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 						</thead>
 						<tbody>
 							<?php foreach ($this->items as $i => $item) :
-								$imageurl = substr($item->file_path, 1);
+								$imageurl = substr($item->folder_path, 1) . '/' . $item->file_name;
 							?>
 								<tr>
 									<td rowspan="2" class="">
-										<a href="<?php echo $fileBaseUrl . $item->file_path; ?>">
+										<a href="<?php echo $fileBaseUrl . $item->folder_path . '/' . $item->file_name; ?>">
 											<span class="fiv-cla fiv-icon-<?php echo $item->extension; ?>"></span>
 										</a>
 									</td>

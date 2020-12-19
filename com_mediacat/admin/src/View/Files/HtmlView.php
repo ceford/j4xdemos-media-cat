@@ -128,6 +128,8 @@ class HtmlView extends BaseHtmlView
 	 */
 	protected function addToolbar(): void
 	{
+		$tmpl = Factory::getApplication()->input->getCmd('tmpl');
+
 		//$canDo = ContentHelper::getActions('com_mediacat');
 		$user  = Factory::getUser();
 
@@ -146,6 +148,9 @@ class HtmlView extends BaseHtmlView
 			$toolbar->preferences('com_mediacat');
 		}
 
-		$toolbar->help('JHELP_COMPONENTS_MEDIACAT_FILES');
+		if ($tmpl !== 'component')
+		{
+			ToolbarHelper::help('files', true);
+		}
 	}
 }

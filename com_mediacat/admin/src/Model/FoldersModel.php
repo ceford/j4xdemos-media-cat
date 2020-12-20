@@ -240,7 +240,7 @@ class FoldersModel extends ListModel
 	protected function saveFileData($folder, $filename)
 	{
 		$root = JPATH_SITE;
-		$size = filesize($root . $folder . '/' . $file);
+		$size = filesize($root . $folder . '/' . $filename);
 
 		// get the file name and extension
 		$extension = substr($filename, strrpos($filename, '.') + 1);

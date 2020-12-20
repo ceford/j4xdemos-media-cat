@@ -1,37 +1,3 @@
-/**
-* PLEASE DO NOT MODIFY THIS FILE. WORK ON THE ES6 VERSION.
-* OTHERWISE YOUR CHANGES WILL BE REPLACED ON THE NEXT BUILD.
-**/
-
-/**
- * @copyright  (C) 2020 Open Source Matters, Inc. <https://www.joomla.org>
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
- */
-(function (document) {
-  'use strict';
-
-  var onClick = function onClick() {
-    var form = document.getElementById('adminForm');
-    document.getElementById('filter-search').value = '';
-    form.submit();
-  };
-
-  var onBoot = function onBoot() {
-    var form = document.getElementById('adminForm');
-    var element = form.querySelector('button[type="reset"]');
-
-    if (element) {
-      element.addEventListener('click', onClick);
-    }
-
-    document.removeEventListener('DOMContentLoaded', onBoot);
-  };
-
-  document.addEventListener('DOMContentLoaded', onBoot);
-
-
-})(document);
-	
 function setFolder(newPath) {
 	var folderPath = document.getElementById('filter_activepath');
 	folderPath.value = newPath;
@@ -249,17 +215,15 @@ async function myFetch() {
 
 function mediacatHasher() {
 	var activepath = document.getElementById('jform_activepath');
-	if (confirm('Hash items in Folder in ' + activepath.value)) {
+	if (confirm('Hash items in Folder ' + activepath.value)) {
 		doHash(activepath.value);
 	}
 }
 
 function mediacatIndexer() {
 	var activepath = document.getElementById('jform_activepath');
-	if (confirm('Index Folder in ' + activepath.value)) {
+	if (confirm('Index items in Folder ' + activepath.value)) {
 		doIndex(activepath.value);
-	} else {
-		alert('Test = ' + activepath.value);
 	}
 }
 

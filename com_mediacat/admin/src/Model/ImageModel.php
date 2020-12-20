@@ -205,6 +205,16 @@ class ImageModel extends AdminModel
 			return false;
 		}
 
+		$activePath = $app->getUserState('com_mediacat.images.activepath');
+		$new_path = JPATH_SITE . $activePath . '/' . $data['file_name'];
+
+		// check that we are not overwriting an existing file with a new file
+		if (!isset($data['id']) && File::exists($new_path))
+		{
+			$app->enqueueMessage(Text::_('COM_MEDIACAT_ERROR_FILE_EXISTS'), 'error');
+			return false;
+		}
+
 		$params = ComponentHelper::getParams('com_mediacat');
 
 		// check size
@@ -243,9 +253,6 @@ class ImageModel extends AdminModel
 			// Pass it to the sanitizer and get it back clean
 			file_put_contents($tmp_name, $sanitizer->sanitize($dirtySVG));
 		}
-
-		$activePath = $app->getUserState('com_mediacat.images.activepath');
-		$new_path = JPATH_SITE . $activePath . '/' . $data['file_name'];
 
 		if (!File::upload($tmp_name, $new_path))
 		{

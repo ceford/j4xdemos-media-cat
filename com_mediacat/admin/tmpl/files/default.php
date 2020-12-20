@@ -40,18 +40,18 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 				// Search tools bar
 				echo LayoutHelper::render('joomla.searchtools.default', ['view' => $this]);
 				?>
-				<?php if (empty($this->items)) : ?>
-					<div class="alert alert-info">
-						<span class="icon-info-circle" aria-hidden="true"></span><span class="sr-only"><?php echo Text::_('INFO'); ?></span>
-						<?php echo Text::_('JGLOBAL_NO_MATCHING_RESULTS'); ?>
-					</div>
-				<?php else : ?>
 				<div class="row">
 					<div class="col-12 col-md-3">
 					<h3><?php echo Text::_('COM_MEDIACAT_FOLDER_TREE'); ?></h3>
 					<?php require 'tree.php'; ?>
 					</div>
 					<div class="col-12 col-md-9">
+					<?php if (empty($this->items)) : ?>
+					<div class="alert alert-info">
+						<span class="icon-info-circle" aria-hidden="true"></span><span class="sr-only"><?php echo Text::_('INFO'); ?></span>
+						<?php echo Text::_('JGLOBAL_NO_MATCHING_RESULTS'); ?>
+					</div>
+					<?php else : ?>
 					<table class="table" id="articleList">
 						<caption id="captionTable" class="sr-only">
 							<?php echo Text::_('COM_MEDIACAT_FILES_TABLE_CAPTION'); ?>,
@@ -61,10 +61,18 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 						<thead>
 							<tr>
 								<td><?php echo Text::_('COM_MEDIACAT_ICON'); ?></td>
-								<td><?php echo Text::_('COM_MEDIACAT_MEDIA_NAME'); ?></td>
-								<td><?php echo Text::_('COM_MEDIACAT_MEDIA_EXTENSION'); ?></td>
-								<td><?php echo Text::_('COM_MEDIACAT_MEDIA_DATE_CREATED'); ?></td>
-								<td><?php echo Text::_('COM_MEDIACAT_MEDIA_SIZE'); ?></td>
+								<td>
+									<?php echo HTMLHelper::_('searchtools.sort', 'COM_MEDIACAT_MEDIA_NAME', 'a.file_name', $listDirn, $listOrder); ?>
+								</td>
+								<td>
+									<?php echo HTMLHelper::_('searchtools.sort', 'COM_MEDIACAT_MEDIA_EXTENSION', 'a.extension', $listDirn, $listOrder); ?>
+								</td>
+								<td>
+									<?php echo HTMLHelper::_('searchtools.sort', 'COM_MEDIACAT_MEDIA_DATE_CREATED', 'a.date_created', $listDirn, $listOrder); ?>
+								</td>
+								<td>
+									<?php echo HTMLHelper::_('searchtools.sort', 'COM_MEDIACAT_MEDIA_SIZE', 'a.size', $listDirn, $listOrder); ?>
+								</td>
 								<th scope="col" class="w-5 d-none d-md-table-cell">
 									<?php echo HTMLHelper::_('searchtools.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
 								</th>
@@ -113,10 +121,10 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 
 					<?php // Load the pagination. ?>
 					<?php echo $this->pagination->getListFooter(); ?>
+					<?php endif; ?>
 					</div>
 				</div>
 
-				<?php endif; ?>
 
 				<input type="hidden" name="task" value="">
 				<input type="hidden" name="boxchecked" value="0">

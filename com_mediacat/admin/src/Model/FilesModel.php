@@ -39,6 +39,10 @@ class FilesModel extends ListModel
 			$config['filter_fields'] = array(
 				'id', 'a.id',
 				'state', 'a.state',
+				'file_name', 'a.file_name',
+				'extension', 'a.extension',
+				'date_created', 'a.date_created',
+				'size', 'a.size',
 			);
 		}
 
@@ -54,15 +58,32 @@ class FilesModel extends ListModel
 	 */
 	protected function getListQuery()
 	{
-		$current = $this->getState('filter.activepath');
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
+
 		$query->select('*');
 		$query->from('#__mediacat_files AS a');
-		$query->where('folder_path LIKE ' . $db->quote($current . '%'));
+
+		$current = $this->getState('filter.activepath');
+		$depth = $this->getState('filter.depth');
+		if (empty($depth) || $depth == 'tree')
+		{
+			$query->where('folder_path LIKE ' . $db->quote($current . '%'));
+		}
+		else
+		{
+			$query->where('folder_path = ' . $db->quote($current));
+		}
+
+		$extension = $this->getState('filter.extension');
+		if (!empty($extension))
+		{
+			$query->where('extension = ' . $db->quote($extension));
+		}
+
 		// Add the list ordering clause.
 		$orderCol  = $this->state->get('list.ordering', 'a.id');
-		$orderDirn = $this->state->get('list.direction', 'ASC');
+		$orderDirn = $this->state->get('list.direction', 'DESC');
 		$ordering = $db->escape($orderCol) . ' ' . $db->escape($orderDirn);
 		$query->order($ordering);
 
@@ -117,7 +138,7 @@ class FilesModel extends ListModel
 	 *
 	 * @since   1.6
 	 */
-	protected function populateState($ordering = 'a.id', $direction = 'asc')
+	protected function populateState($ordering = 'a.id', $direction = 'desc')
 	{
 		// Load the parameters.
 		$this->setState('params', ComponentHelper::getParams('com_mediacat'));
@@ -128,6 +149,10 @@ class FilesModel extends ListModel
 		$activepath = $this->getUserStateFromRequest($this->context . '.filter.activepath', 'filter_activepath', '/files');
 		$this->setState('filter.activepath', $activepath);
 		Factory::getApplication()->setUserState('com_mediacat.files.activepath', $activepath);
+
+		$depth = $this->getUserStateFromRequest($this->context . '.filter.depth', 'filter_depth', 'tree');
+		$this->setState('filter.depth', $depth);
+
 		// List state information.
 		parent::populateState($ordering, $direction);
 	}

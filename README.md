@@ -1,6 +1,6 @@
 # Joomla 4x Component - Media Cat
 
-A component to manage media - Image files and Document files.
+A component to manage media: Image files and Document files.
 
 ### Prerequisites
 
@@ -12,11 +12,13 @@ Download the zip file and install it in Joomla 4.
 
 ### Documentation
 
-After installation Administrator menu has Media Cat item with three sub-menu items: Images, Files and Folders. Images is the obvious choice - but there are no images to display. Go to the Folders page and select Index from the Actions drop-down. If you have a small number of images, say less than 1000, it should index them in a few seconds. Larger numbers may time out - use the Index Selected Folder to get a feel for how it works.
+After installation, the Administrator menu has a Media Cat item with three sub-items: Images, Files and Folders. Images is the obvious choice - but there are no images to display. Go to the Folders page and select Index from the Actions drop-down. If you have a small number of images, say less than 1000, it should index all of them them in a few seconds. Larger numbers may time out. In that case use the Index Selected Folder option to get a feel for how it works.
 
 The indexer makes database entries for each image. Go back to the Images page to see the result. There is some documentation in the Help pages for each screen.
 
-This is essentially Alpha 1. The Trash functions have not been implemented so the only items that can be deleted are empty folders. 
+This is essentially Alpha 1. The Trash functions have not been implemented so the only items that can be deleted are empty folders. The Search functions have not been implemented either.
+
+Two database tables are created on install, #__mediacat_images and #__mediacat_files. They are not removed on uninstallation. Two site root folders are also created: files and trash. They are not remove on uninstallation either.
 
 ## Author
 

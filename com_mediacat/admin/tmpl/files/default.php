@@ -17,6 +17,7 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Session\Session;
 use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Uri\Uri;
+use J4xdemos\Component\Mediacat\Administrator\Helper\JsHelper;
 
 $params = ComponentHelper::getParams('com_mediacat');
 $fileBaseUrl = Uri::root(true);
@@ -26,6 +27,9 @@ $wa = $this->document->getWebAssetManager();
 $wa->useStyle('com_mediacat.mediacat')
 	->registerAndUseStyle('com_mediacat.file-icon-vectors', 'media/com_mediacat/css/file-icon-vectors.min.css')
 	->useScript('com_mediacat.mediacat');
+
+// Populate the language
+JsHelper::getJstext();
 
 $listOrder  = $this->escape($this->state->get('list.ordering'));
 $listDirn   = $this->escape($this->state->get('list.direction'));
@@ -49,7 +53,7 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 					<?php if (empty($this->items)) : ?>
 					<div class="alert alert-info">
 						<span class="icon-info-circle" aria-hidden="true"></span><span class="sr-only"><?php echo Text::_('INFO'); ?></span>
-						<?php echo Text::_('JGLOBAL_NO_MATCHING_RESULTS'); ?>
+						<?php echo Text::_('JGLOBAL_NO_MATCHING_RESULTS') . Text::_('COM_MEDIACAT_SELECT_FOLDERS_INDEXER'); ?>
 					</div>
 					<?php else : ?>
 					<table class="table" id="articleList">

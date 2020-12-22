@@ -31,13 +31,40 @@ class FoldersController extends BaseController
 	public function getTree()
 	{
 		$this->checkToken();
-		$app = Factory::getApplication();
-		$folder = $app->input->get('activepath', '/images', 'path');
-		$media_type = $app->input->get('media_type');
+		$jform = $this->input->get('jform', '', 'array');
+		$folder = $jform['activepath'];
 		$model = $this->getModel();
-		$result = $model->getFolders($result);
-		echo json_encode($filename);
+		$result = $model->getFolders($folder);
+		echo json_encode($result);
 		jexit();
+
+	}
+
+	/*
+	 * delete a folder if it is empty
+	 *
+	 *  return a json encoded message
+	 */
+	public function deleteifempty()
+	{
+		// Check for request forgeries.
+		$this->checkToken();
+		$app = Factory::getApplication();
+		$jform = $this->input->get('jform', '', 'array');
+		$folder = $jform['activepath'];
+
+		$nfiles = count(scandir(JPATH_SITE . $folder)) - 2;
+
+		if (!empty($nfiles))
+		{
+			$app->enqueueMessage(Text::sprintf('COM_MEDIACAT_WARNING_FOLDER_NOT_DELETED', $folder, $nfiles), 'warning');
+		}
+		else
+		{
+			Folder::delete(JPATH_SITE . $folder);
+			$app->enqueueMessage(Text::_('COM_MEDIACAT_WARNING_FOLDER_DELETED') . ' ' . $folder, 'success');
+		}
+		$this->setRedirect('index.php?option=com_mediacat&view=folders');
 	}
 
 	/*
@@ -49,7 +76,6 @@ class FoldersController extends BaseController
 	{
 		// Check for request forgeries.
 		$this->checkToken();
-		$app = Factory::getApplication();
 		$jform = $this->input->get('jform', '', 'array');
 		$folder = $jform['activepath'];
 		$media_type = $jform['media_type'];
@@ -69,7 +95,6 @@ class FoldersController extends BaseController
 	{
 		// Check for request forgeries.
 		$this->checkToken();
-		$app = Factory::getApplication();
 		$jform = $this->input->get('jform', '', 'array');
 		$folder = $jform['activepath'];
 		$media_type = $jform['media_type'];

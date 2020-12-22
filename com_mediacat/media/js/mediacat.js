@@ -8,8 +8,8 @@ function setFolder(newPath) {
 function mediacatAction(element, url) {
 	var paths = Joomla.getOptions(["system.paths"], 'No good');
 	var root = paths.root;
-	var rootFull = paths.rootFull;		
-	var modal = document.getElementById('collapseModal'); 
+	var rootFull = paths.rootFull;
+	var modal = document.getElementById('collapseModal');
 	var title = document.getElementsByClassName('modal-title')[0];
 	var body = document.getElementsByClassName('modal-body')[0];
 	if (element === 'zoom') {
@@ -21,7 +21,7 @@ function mediacatAction(element, url) {
 	switch (selected) {
 		case 'zoom':
 			var tag = '<img src="'+root+'/'+url+'" class="cover">';
-			title.innerText = 'Image Zoom';
+			title.innerText = Joomla.Text._('COM_MEDIACAT_JS_IMAGE_ZOOM');
 			body.classList.add("text-center");
 			body.innerHTML = tag;
 			modal.open();
@@ -34,7 +34,8 @@ function mediacatAction(element, url) {
 		break;
 		case 'share':
 			// get a link to share
-			var share = '<input class="form-control" type="text" value="' + rootFull + url + '" onclick="this.select();document.execCommand(\'copy\');" /> Click to Copy';
+			var share = '<input class="form-control" type="text" value="' + rootFull + url + '" onclick="this.select();document.execCommand(\'copy\');" />' + Joomla.Text._('COM_MEDIACAT_JS_CLICK_TO_COPY');
+			title.innerText = Joomla.Text._('COM_MEDIACAT_JS_SHARE_LINK');
 			body.innerHTML = share;
 			modal.open();
 		break;
@@ -45,6 +46,7 @@ function mediacatAction(element, url) {
 			var alt = document.getElementById('alt-' + id).innerText;
 			var value = '<img src="'+root+'/'+url+'" width="'+width+'" height="'+height+'" alt="'+alt+'" class="cover">';
 			var share = '<input class="form-control" type="text" value=\'' + value + '\' onclick="this.select();document.execCommand(\'copy\');" /> Click to Copy';
+			title.innerText = Joomla.Text._('COM_MEDIACAT_JS_IMAGE_TAG');
 			body.innerHTML = share;
 			modal.open();
 		break;
@@ -59,6 +61,7 @@ function mediacatAction(element, url) {
 			value += '<figcaption>' + figure + '</figcaption>';
 			value += '</figure>';
 			var share = '<input class="form-control" type="text" value=\'' + value + '\' onclick="this.select();document.execCommand(\'copy\');" /> Click to Copy';
+			title.innerText = Joomla.Text._('COM_MEDIACAT_JS_FIGURE_TAG');
 			body.innerHTML = share;
 			modal.open();
 		break;
@@ -72,6 +75,7 @@ function mediacatAction(element, url) {
 			value += '<img src="' + url + '">';
 			value += '</picture>';
 			var share = '<input class="form-control" type="text" value=\'' + value + '\' onclick="this.select();document.execCommand(\'copy\');" /> Click to Copy';
+			title.innerText = Joomla.Text._('COM_MEDIACAT_JS_PICTURE_TAG');
 			body.innerHTML = share;
 			modal.open();
 		break;
@@ -90,7 +94,7 @@ function updateFilename(element) {
 	// if id is empty we need a file
 	if (!id) {
 		if (!uploadfile) {
-			alert('Please select a file to upload');
+			alert(Joomla.Text._('COM_MEDIACAT_JS_PLEASE_SELECT_FILE'));
 			return;
 		} else if (!filename.value) {
 			var parts = uploadfile.split('.');
@@ -120,16 +124,9 @@ function mediacatSelectFolder(element) {
 	var value = folder.innerText;
 	var activepath = document.getElementById('jform_activepath');
 	activepath.value = value;
-	var mediaHasher = document.getElementById('mediacatHasher');
-	var mediaIndexer = document.getElementById('mediacatIndexer');
-	var mediaCreateFolder = document.getElementById('mediacatCreateFolder');
-	var mediaTrash = document.getElementById('mediacatTrash');
-	mediaHasher.removeAttribute('disabled');
-	mediaIndexer.removeAttribute('disabled');
-	mediaCreateFolder.removeAttribute('disabled');
-	mediaTrash.removeAttribute('disabled');
 }
 
+// disused
 function mediacatUnselectFolder(element) {
 	var mediaHasher = document.getElementById('mediacatHasher');
 	var mediaIndexer = document.getElementById('mediacatIndexer');
@@ -145,24 +142,28 @@ async function doHash(folder) {
 	var form = document.getElementById('adminForm');
 	var task = document.getElementById('task');
 	var activepath = document.getElementById('jform_activepath');
-	
+	var br = document.createElement("br");
+	var hr = document.createElement("hr");
+	var results = document.getElementById('results');
+
 	task.value = 'folders.hasher';
 	activepath.value = folder;
 	
-	var results = document.getElementById('results');
 	let response = await fetch(form.action, {
 			method: form.method,
 			body: new FormData(form)
 	});
 	if (!response.ok) {
-		throw new Error(`HTTP error! status: ${response.status}`);
+		throw new Error (Joomla.Text._('COM_MEDIACAT_JS_ERROR_STATUS') + `${response.status}`);
 	} else {
 		let result = await response.json();
-		// show the results?
-		var br = document.createElement("br");
-		var text = document.createTextNode(result);
+		results.appendChild(hr);
+		var path = result.shift();
+		var updates = result.join(',');
+		results.appendChild(document.createTextNode(path));
 		results.appendChild(br);
-		results.appendChild(text);
+		results.appendChild(document.createTextNode(updates));
+		results.scrollIntoView(false);
 	}
 	task.value = '';
 }
@@ -171,60 +172,104 @@ async function doIndex(folder) {
 	var form = document.getElementById('adminForm');
 	var task = document.getElementById('task');
 	var activepath = document.getElementById('jform_activepath');
+	var results = document.getElementById('results');
+	var hr = document.createElement("hr");
+	var br = document.createElement("br");
 	
 	task.value = 'folders.indexer';
 	activepath.value = folder;
 	
-	var results = document.getElementById('results');
 	let response = await fetch(form.action, {
 			method: form.method,
 			body: new FormData(form)
 	});
 	if (!response.ok) {
-		throw new Error(`HTTP error! status: ${response.status}`);
+		throw new Error (Joomla.Text._('COM_MEDIACAT_JS_ERROR_STATUS') + `${response.status}`);
 	} else {
 		let result = await response.json();
 		// show the results?
-		var br = document.createElement("br");
-		var text = document.createTextNode(result);
+		results.appendChild(hr);
+		var path = result.shift();
+		var updates = result.join(',');
+		results.appendChild(document.createTextNode(path));
 		results.appendChild(br);
-		results.appendChild(text);
+		results.appendChild(document.createTextNode(updates));
+		results.scrollIntoView(false);
 	}
 	task.value = '';
 }
 
-async function myFetch() {
+async function indexAll() {
 	var form = document.getElementById('adminForm');
 	var task = document.getElementById('task');
-	task.value = 'folders.getTree';
+	var activepath = document.getElementById('jform_activepath');
 	var results = document.getElementById('results');
+	var hr = document.createElement("hr");
+
+	task.value = 'folders.getTree';
+
 	let response = await fetch(form.action, {
 			method: form.method,
 			body: new FormData(form)
 	});
 	if (!response.ok) {
-		throw new Error(`HTTP error! status: ${response.status}`);
+		throw new Error(Joomla.Text._('COM_MEDIACAT_JS_ERROR_STATUS') + `${response.status}`);
 	} else {
 		let folders = await response.json();
-		// show the tree?
-		results.innerHTML = folders.join("<br />\n");
-		//document.form.appendChild(what);
+		var nFolders = folders.length;
+		var text = Joomla.Text._('COM_MEDIACAT_JS_NFOLDERS_TO_PROCESS') + nFolders + '\n';
+		var message = document.createTextNode(text);
+		results.appendChild(hr);
+		results.appendChild(message);
 		folders.forEach (element => doIndex(element));
 	}
 }
 
-function mediacatHasher() {
+function mediacatDeleteIfEmpty() {
 	var activepath = document.getElementById('jform_activepath');
-	if (confirm('Hash items in Folder ' + activepath.value)) {
+	if (confirm(Joomla.Text._('COM_MEDIACAT_JS_DELETE_IF_EMPTY') + activepath.value)) {
+		var task = document.getElementById('task');
+		var form = document.getElementById('adminForm');
+		task.value = 'folders.deleteifempty';
+		form.submit();
+	}
+	task.value = '';
+}
+
+function mediacatHashOne() {
+	var activepath = document.getElementById('jform_activepath');
+	if (confirm(Joomla.Text._('COM_MEDIACAT_JS_HASH_FOLDER') + activepath.value)) {
 		doHash(activepath.value);
 	}
 }
 
-function mediacatIndexer() {
+function mediacatHashAll() {
+	if (!confirm(Joomla.Text._('COM_MEDIACAT_JS_HASH_ALL'))) {
+		return;
+	}
 	var activepath = document.getElementById('jform_activepath');
-	if (confirm('Index items in Folder ' + activepath.value)) {
+	var current = activepath.value;
+	document.getElementById('rb-0').checked = true;
+	activepath.value = current.split('/', 2).join('/');
+	doHash(activepath.value);
+}
+
+function mediacatIndexOne() {
+	var activepath = document.getElementById('jform_activepath');
+	if (confirm(Joomla.Text._('COM_MEDIACAT_JS_INDEX_FOLDER') + activepath.value)) {
 		doIndex(activepath.value);
 	}
+}
+
+function mediacatIndexAll() {
+	if (!confirm(Joomla.Text._('COM_MEDIACAT_JS_INDEX_ALL'))) {
+		return;
+	}
+	var activepath = document.getElementById('jform_activepath');
+	var current = activepath.value;
+	document.getElementById('rb-0').checked = true;
+	activepath.value = current.split('/', 2).join('/');
+	indexAll();
 }
 
 function mediacatCreateFolder() {
@@ -236,19 +281,19 @@ function mediacatCreateFolder() {
 		// make sure the foldername is acceptable
 		newfoldername = newfoldername.trim();
 		if (!newfoldername) {
-			alert('Folder name is empty!')
+			alert(Joomla.Text._('COM_MEDIACAT_JS_FOLDER_NAME_EMPTY'))
 			return;
 		}
 		// without full stops
 		if (newfoldername.indexOf('.') >= 0) {
-			alert('Folder name may not contain a full stop!');
+			alert(Joomla.Text._('COM_MEDIACAT_JS_FOLDER_NAME_NO_STOP'));
 			return;
 		}
 		// and replace spaces and underlines with -
 		let regexp = /_| /gi;
 		newfoldername = newfoldername.replace(regexp, '-');
 		// now ask if this is ok
-		ok = confirm('Is this OK: ' + newfoldername);
+		ok = confirm(Joomla.Text._('COM_MEDIACAT_JS_FOLDER_NAME_IS_OK') + newfoldername);
 		if (ok) {
 			task.value = 'folders.newfolder';
 			document.getElementById('newfoldername').value = newfoldername;
@@ -256,11 +301,12 @@ function mediacatCreateFolder() {
 			form.submit();
 		}
 	}
+	task.value = '';
 }
 
 function mediacatTrash() {
 	var activepath = document.getElementById('jform_activepath');
-	if (confirm('Trash Folder in ' + activepath.value)) {
+	if (confirm(Joomla.Text._('COM_MEDIACAT_JS_FOLDER_TRASH_ITEMS') + activepath.value)) {
 		var task = document.getElementById('task');
 		var form = document.getElementById('adminForm');
 		task.value = 'folder.trash';

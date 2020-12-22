@@ -297,10 +297,10 @@ class FoldersModel extends ListModel
 		{
 			return array ('That', 'went', 'wrong');
 		}
-		$path = JPATH_SITE . '/' . $folder;
+		$path = JPATH_SITE . $folder;
 		$root = JPATH_SITE;
 		$rootlen = strlen($root);
-		$folders[] = '/' . $folder;
+		$folders[] = $folder;
 
 		try
 		{

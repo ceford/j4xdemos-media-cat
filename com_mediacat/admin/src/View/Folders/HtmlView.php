@@ -61,20 +61,32 @@ class HtmlView extends BaseHtmlView
 		$model         = $this->getModel();
 
 		$app = Factory::getApplication();
-		$data = $app->input->post->get('jform', '', 'array');
 		$params = ComponentHelper::getParams('com_mediacat');
 
-		if (empty($data['media_type']) || $data['media_type'] == 'image')
+		$jform = $app->input->get('jform', '', 'array');
+
+		if (empty($jform))
+		{
+			$media_type = $app->getUserState('com_mediacat.folders.media_type', 'image');
+		}
+		else
+		{
+			$media_type = $jform['media_type'];
+		}
+
+		$app->setUserState('com_mediacat.folders.media_type', $media_type);
+
+		if ($media_type == 'image')
 		{
 			$this->activepath = '/' . $params->get('image_path');
 			$this->media_type = 'image';
-			$folder = $params->get('image_path');
+			$folder = '/' . $params->get('image_path');
 		}
 		else
 		{
 			$this->activepath = '/' . $params->get('file_path');
 			$this->media_type = 'file';
-			$folder = $params->get('file_path');
+			$folder = '/' . $params->get('file_path');
 		}
 
 		$this->folders = $model->getFolders($folder);
@@ -102,11 +114,29 @@ class HtmlView extends BaseHtmlView
 		// Set the title
 		ToolbarHelper::title(Text::_('COM_MEDIACAT_TITLE_BAR_FOLDERS'), 'folder mediacat');
 
-		$layout = new FileLayout('toolbar.indexer', JPATH_COMPONENT_ADMINISTRATOR . '/layouts');
-		$toolbar->appendButton('Custom', $layout->render([]), 'archive');
 
-		$layout = new FileLayout('toolbar.hasher', JPATH_COMPONENT_ADMINISTRATOR . '/layouts');
-		$toolbar->appendButton('Custom', $layout->render([]), 'hashtag');
+		$dropdown = $toolbar->dropdownButton('status-group')
+		->text('JTOOLBAR_CHANGE_STATUS')
+		->toggleSplit(false)
+		->icon('icon-ellipsis-h')
+		->buttonClass('btn btn-action');
+
+		$childBar = $dropdown->getChildToolbar();
+
+		$layout = new FileLayout('toolbar.index-one', JPATH_COMPONENT_ADMINISTRATOR . '/layouts');
+		$childBar->appendButton('Custom', $layout->render([]), 'archive');
+
+		$layout = new FileLayout('toolbar.index-all', JPATH_COMPONENT_ADMINISTRATOR . '/layouts');
+		$childBar->appendButton('Custom', $layout->render([]), 'archive');
+
+		$layout = new FileLayout('toolbar.hash-one', JPATH_COMPONENT_ADMINISTRATOR . '/layouts');
+		$childBar->appendButton('Custom', $layout->render([]), 'hashtag');
+
+		$layout = new FileLayout('toolbar.hash-all', JPATH_COMPONENT_ADMINISTRATOR . '/layouts');
+		$childBar->appendButton('Custom', $layout->render([]), 'hashtag');
+
+		$layout = new FileLayout('toolbar.delete-if-empty', JPATH_COMPONENT_ADMINISTRATOR . '/layouts');
+		$childBar->appendButton('Custom', $layout->render([]), 'times');
 
 		// Add the upload and create folder buttons
 		if ($user->authorise('core.create', 'com_mediacat'))

@@ -69,6 +69,21 @@
 
 	</fieldset>
 
+	<fieldset
+		name="trash"
+		label="COM_MEDIACAT_FIELDSET_TRASH_LABEL">
+
+		<field
+			name="trash_path"
+			type="text"
+			label="COM_MEDIACAT_FIELD_PATH_TRASH_FOLDER_LABEL"
+			description="COM_MEDIACAT_FIELD_PATH_TRASH_FOLDER_DESC"
+			size="50"
+			default="trash"
+		/>
+
+	</fieldset>
+
 
 	<fieldset
 		name="permissions"

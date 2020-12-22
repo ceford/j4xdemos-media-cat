@@ -18,6 +18,23 @@
 		<folder>js</folder>
 	</media>
 
+	<install>
+		<sql>
+			<file driver="mysql" charset="utf8">sql/mediacat.install.sql</file>
+		</sql>
+	</install>
+	<uninstall>
+		<sql>
+		</sql>
+	</uninstall>
+	<update>
+		<schemas>
+			<schemapath type="mysql">sql/updates/mysql</schemapath>
+		</schemas>
+	</update>
+	
+	<scriptfile>script.php</scriptfile>
+		
 	<administration>
 		<files folder="admin">
 			<filename>access.xml</filename>
@@ -27,6 +44,7 @@
 			<folder>layouts</folder>
 			<folder>language</folder>
 			<folder>services</folder>
+			<folder>sql</folder>
 			<folder>src</folder>
 			<folder>tmpl</folder>
 		</files>

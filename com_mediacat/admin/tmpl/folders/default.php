@@ -16,12 +16,18 @@ use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Session\Session;
 use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Uri\Uri;
+use J4xdemos\Component\Mediacat\Administrator\Helper\JsHelper;
 
 $params = ComponentHelper::getParams('com_mediacat');
+$active_path = '/' . $params->get($this->media_type . '_path');
 
 /** @var Joomla\CMS\WebAsset\WebAssetManager $wa */
 $wa = $this->document->getWebAssetManager();
 $wa->useScript('com_mediacat.mediacat');
+
+// Populate the language
+//$this->loadTemplate('texts');
+JsHelper::getJstext();
 
 $media_type_options = array('image' => Text::_('COM_MEDIACAT_FIELDSET_IMAGES_LABEL') , 'file' => Text::_('COM_MEDIACAT_FIELDSET_FILES_LABEL'));
 
@@ -48,11 +54,11 @@ $media_type_options = array('image' => Text::_('COM_MEDIACAT_FIELDSET_IMAGES_LAB
 
 		<?php foreach ($this->folders as $i => $folder) : ?>
 			<label for="rb-<?php echo $i; ?>"><span class="sr-only"><?php echo Text::_('JSELECT'); ?> /files</span></label>
-			<input type="radio" name="rb[]" id="rb-<?php echo $i; ?>" onclick="mediacatSelectFolder(this);">
+			<input type="radio" name="rb[]" id="rb-<?php echo $i; ?>" onclick="mediacatSelectFolder(this);"<?php echo $i == 0 ? ' checked="checked"' : ''; ?>>
 			<span id="folder-<?php echo $i; ?>"><?php echo $folder; ?></span><br />
 		<?php endforeach; ?>
-		<input type="radio" name="rb[]" onclick="mediacatUnselectFolder(this);">
-		<?php echo Text::_('COM_MEDIACAT_SELECT_NONE'); ?>
+
+		<br />
 
 		<input type="hidden" name="task" id="task" value="">
 		<input type="hidden" name="boxchecked" value="0">
@@ -63,8 +69,13 @@ $media_type_options = array('image' => Text::_('COM_MEDIACAT_FIELDSET_IMAGES_LAB
 		</form>
 	</div>
 
-	<div class="col-12 col-sm-6" id="results"
+	<div class="col-12 col-sm-6"
 		style="max-height: 75vh; min-height: 75vh; overflow-y:scroll; border: 1px solid black;">
 		<h3><?php echo Text::_('COM_MEDIACAT_ACTION_RESULTS'); ?></h3>
+		<p>Folders may be processed in random order! Please wait for the job to complete!</p>
+
+		<div id="results">
+
+		</div>
 	</div>
 </div>

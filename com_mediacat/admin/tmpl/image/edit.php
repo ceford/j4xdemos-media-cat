@@ -18,8 +18,8 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\GenericDataException;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
 use Joomla\CMS\Toolbar\ToolbarHelper;
+use J4xdemos\Component\Mediacat\Administrator\Helper\JsHelper;
 use J4xdemos\Component\Mediacat\Administrator\Helper\MimetypesHelper;
-
 
 $wa = $this->document->getWebAssetManager();
 $wa->useScript('keepalive')
@@ -30,6 +30,9 @@ $params = ComponentHelper::getParams('com_mediacat');
 
 $mthelper = new MimetypesHelper;
 $mimeTypes = $mthelper->getMimetypes($params->get('image_upload_extensions'));
+
+// Populate the language
+JsHelper::getJstext();
 
 ?>
 
@@ -84,7 +87,7 @@ $mimeTypes = $mthelper->getMimetypes($params->get('image_upload_extensions'));
 							}
 							?>
 							<input type="text" required="required" name="jform[alt]" id="jform_alt" class="form-control"
-							value="<?php echo $alt; ?>" onkeyup="updateFilename(this)"/>
+							value="<?php echo $alt; ?>" onchange="updateFilename(this)"/>
 							<div id="jform[alt]-desc">
 								<small class="form-text text-muted">
 									<?php echo Text::_('COM_MEDIACAT_IMAGE_ALT_DESC'); ?>

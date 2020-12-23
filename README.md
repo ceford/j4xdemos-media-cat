@@ -12,7 +12,7 @@ Download the zip file and install it in Joomla 4.
 
 ### Documentation
 
-After installation, the Administrator menu has a Media Cat item with three sub-items: Images, Files and Folders. Images is the obvious choice - but there are no images to display. Go to the Folders page and select Index from the Actions drop-down. If you have a small number of images, say less than 1000, it should index all of them them in a few seconds. Larger numbers may time out. In that case use the Index Selected Folder option to get a feel for how it works.
+After installation, the Administrator menu has a Media Cat item with three sub-items: Images, Files and Folders. Images is the obvious choice - but there are no images to display. Go to the Folders page and select Index from the Actions drop-down. If you have a small number of images, say less than 1000, it should index all of them in a few seconds. Larger numbers may time out. In that case use the Index Selected Folder option to get a feel for how it works.
 
 The indexer makes database entries for each image. Go back to the Images page to see the result. There is some documentation in the Help pages for each screen.
 

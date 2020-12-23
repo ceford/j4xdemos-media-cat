@@ -17,6 +17,7 @@ use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Session\Session;
 use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Uri\Uri;
+use J4xdemos\Component\Mediacat\Administrator\Helper\JsHelper;
 use J4xdemos\Component\Mediacat\Administrator\Helper\MimetypesHelper;
 
 /** @var Joomla\CMS\WebAsset\WebAssetManager $wa */
@@ -29,6 +30,9 @@ $params = ComponentHelper::getParams('com_mediacat');
 
 $mthelper = new MimetypesHelper;
 $mimeTypes = $mthelper->getMimetypes($params->get('file_upload_extensions'));
+
+// Populate the language
+JsHelper::getJstext();
 
 ?>
 <form action="" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data">
@@ -82,7 +86,7 @@ $mimeTypes = $mthelper->getMimetypes($params->get('file_upload_extensions'));
 							}
 							?>
 							<input type="text" required="required" name="jform[alt]" id="jform_alt" class="form-control"
-							value="<?php echo $alt; ?>" onkeyup="updateFilename(this)"/>
+							value="<?php echo $alt; ?>" onchange="updateFilename(this)"/>
 							<div id="jform[alt]-desc">
 								<small class="form-text text-muted">
 									<?php echo Text::_('COM_MEDIACAT_FILE_UPLOAD_SHORT_DESCRIPTION_DESC'); ?>

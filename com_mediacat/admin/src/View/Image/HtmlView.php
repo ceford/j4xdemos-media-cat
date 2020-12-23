@@ -97,11 +97,11 @@ class HtmlView extends BaseHtmlView
 
 		if (empty($isNew))
 		{
-			ToolbarHelper::cancel('file.cancel', 'JTOOLBAR_CLOSE');
+			ToolbarHelper::cancel('image.cancel', 'JTOOLBAR_CLOSE');
 		}
 		else
 		{
-			ToolbarHelper::cancel('file.cancel');
+			ToolbarHelper::cancel('image.cancel');
 		}
 
 		ToolbarHelper::divider();

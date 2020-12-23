@@ -86,7 +86,7 @@ JsHelper::getJstext();
 							}
 							?>
 							<input type="text" required="required" name="jform[alt]" id="jform_alt" class="form-control"
-							value="<?php echo $alt; ?>" onchange="updateFilename(this)"/>
+							value="<?php echo $alt; ?>" />
 							<div id="jform[alt]-desc">
 								<small class="form-text text-muted">
 									<?php echo Text::_('COM_MEDIACAT_FILE_UPLOAD_SHORT_DESCRIPTION_DESC'); ?>

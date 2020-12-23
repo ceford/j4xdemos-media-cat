@@ -1,9 +1,19 @@
+var test4jformalt = document.getElementById("jform_alt");
+if (test4jformalt) {
+	document.getElementById("jform_alt").onkeyup = function() {
+		updateFilename();
+	}
+	document.getElementById("jform_alt").onchange = function() {
+		updateFilename();
+	}
+}
+
 function setFolder(newPath) {
 	var folderPath = document.getElementById('filter_activepath');
 	folderPath.value = newPath;
 	var form = document.getElementById('adminForm');
 	form.submit();
-};
+}
 
 function mediacatAction(element, url) {
 	var paths = Joomla.getOptions(["system.paths"], 'No good');
@@ -87,7 +97,7 @@ function mediacatAction(element, url) {
 	return true;
 }
 
-function updateFilename(element) {
+function updateFilename() {
 	var id = document.getElementById('jform_id').value;
 	var uploadfile = document.getElementById('jform_uploadfile').value;
 	var filename = document.getElementById('jform_file_name');
@@ -103,9 +113,9 @@ function updateFilename(element) {
 		}
 	}
 	// only allow alphanumeric characters in filename
-	var dirty = element.value;
+	var dirty = document.getElementById('jform_alt').value;
 	var clean = dirty.replace(/[^0-9a-zA-Z\ ]/g, '');
-	element.value = clean;
+	jform_alt.value = clean;
 	// if there is an id - don't change the filename
 	if (id) {
 		return;

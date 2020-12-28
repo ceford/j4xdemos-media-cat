@@ -17,25 +17,24 @@
 			onchange="this.form.submit();"
 			>
 			<option value="0">JOPTION_SELECT_PUBLISHED</option>
-			<option value="1">JPUBLISHED</option>
 			<option value="-2">JTRASHED</option>
 			<option value="-3">COM_MEDIACAT_FILTER_OPTION_DELETED</option>
 		</field>
 
 		<field
-			name="depth"
+			name="media_type"
 			type="list"
-			label="COM_MEDIACAT_FILTER_DEPTH"
+			label="COM_MEDIACAT_MEDIA_TYPE"
 			onchange="this.form.submit();"
 			>
-			<option value="">COM_MEDIACAT_FILTER_OPTION_DEPTH_SELECT</option>
-			<option value="folder">COM_MEDIACAT_FILTER_OPTION_DEPTH_FOLDER</option>
-			<option value="tree">COM_MEDIACAT_FILTER_OPTION_DEPTH_TREE</option>
+			<option value="">COM_MEDIACAT_FILTER_OPTION_SELECT_TYPE</option>
+			<option value="image">COM_MEDIACAT_FILTER_OPTION_IMAGE</option>
+			<option value="file">COM_MEDIACAT_FILTER_OPTION_FILE</option>
 		</field>
 
 		<field
 			name="extension"
-			type="imageextensions"
+			type="allextensions"
 			label="COM_MEDIACAT_FILTER_EXTENSION"
 			onchange="this.form.submit();"
 			>
@@ -61,6 +60,10 @@
 			<option value="a.file_name DESC">COM_MEDIACAT_MEDIA_FILE_NAME_DESC</option>
 			<option value="a.date_created ASC">COM_MEDIACAT_MEDIA_DATE_CREATED_ASC</option>
 			<option value="a.date_created DESC">COM_MEDIACAT_MEDIA_DATE_CREATED_DESC</option>
+			<option value="a.date_trashed ASC">COM_MEDIACAT_MEDIA_DATE_CREATED_ASC</option>
+			<option value="a.date_trashed DESC">COM_MEDIACAT_MEDIA_DATE_CREATED_DESC</option>
+			<option value="a.date_deleted ASC">COM_MEDIACAT_MEDIA_DATE_CREATED_ASC</option>
+			<option value="a.date_deleted DESC">COM_MEDIACAT_MEDIA_DATE_CREATED_DESC</option>
 			<option value="a.size ASC">COM_MEDIACAT_MEDIA_SIZE_ASC</option>
 			<option value="a.size DESC">COM_MEDIACAT_MEDIA_SIZE_DESC</option>
 		</field>

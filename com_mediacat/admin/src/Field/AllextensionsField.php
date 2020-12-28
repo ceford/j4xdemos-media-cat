@@ -20,7 +20,7 @@ use Joomla\CMS\Language\Text;
  *
  * @since  1.6
  */
-class FileextensionsField extends FormField
+class AllextensionsField extends FormField
 {
 	/**
 	 * The form field type.
@@ -28,7 +28,7 @@ class FileextensionsField extends FormField
 	 * @var    string
 	 * @since  1.6
 	 */
-	protected $type = 'Fileextensions';
+	protected $type = 'Allextensions';
 
 	/**
 	 * Method to get the field input markup for image extensions.
@@ -41,7 +41,9 @@ class FileextensionsField extends FormField
 	{
 		// get the list of allowed image extensions
 		$params = ComponentHelper::getParams('com_mediacat');
-		$extensions = $params->get('file_upload_extensions');
+		$extensions = $params->get('image_upload_extensions');
+		$extensions .= ',' . $params->get('file_upload_extensions');
+
 		$html = '
 			<select id="filter_extension" name="filter[extension]" class="custom-select" onchange="this.form.submit();">
 			<option value="" selected="selected">' . Text::_('COM_MEDIACAT_SELECT_EXTENSION') . '</option>';

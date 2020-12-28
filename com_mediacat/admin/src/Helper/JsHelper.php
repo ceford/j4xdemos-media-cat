@@ -25,6 +25,7 @@ Class JsHelper
 	{
 		Text::script('COM_MEDIACAT_JS_CLICK_TO_COPY', true);
 		Text::script('COM_MEDIACAT_JS_DELETE_IF_EMPTY', true);
+		Text::script('COM_MEDIACAT_JS_DELETE_ITEM', true);
 		Text::script('COM_MEDIACAT_JS_FIGURE_TAG', true);
 		Text::script('COM_MEDIACAT_JS_ERROR_STATUS', true);
 		Text::script('COM_MEDIACAT_JS_FOLDER_NAME_EMPTY', true);
@@ -40,7 +41,9 @@ Class JsHelper
 		Text::script('COM_MEDIACAT_JS_NFOLDERS_TO_PROCESS', true);
 		Text::script('COM_MEDIACAT_JS_PICTURE_TAG', true);
 		Text::script('COM_MEDIACAT_JS_PLEASE_SELECT_FILE', true);
+		Text::script('COM_MEDIACAT_JS_RESTORE_ITEM', true);
 		Text::script('COM_MEDIACAT_JS_SHARE_LINK', true);
+		Text::script('COM_MEDIACAT_JS_TRASH_ITEM', true);
 
 		Text::script('ERROR', true);
 		Text::script('JACTION_CREATE', true);

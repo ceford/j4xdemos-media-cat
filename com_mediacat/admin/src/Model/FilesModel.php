@@ -42,6 +42,7 @@ class FilesModel extends ListModel
 				'file_name', 'a.file_name',
 				'extension', 'a.extension',
 				'date_created', 'a.date_created',
+				'date_updated', 'a.date_updated',
 				'size', 'a.size',
 			);
 		}
@@ -63,6 +64,16 @@ class FilesModel extends ListModel
 
 		$query->select('*');
 		$query->from('#__mediacat_files AS a');
+
+		$state = $this->getState('filter.state');
+		if (!empty($state))
+		{
+			$query->where('a.state = ' . $state);
+		}
+		else
+		{
+			$query->where('a.state = 1');
+		}
 
 		$current = $this->getState('filter.activepath');
 		$depth = $this->getState('filter.depth');
@@ -106,6 +117,10 @@ class FilesModel extends ListModel
 	protected function getStoreId($id = '')
 	{
 		// Compile the store id.
+		$id .= ':' . $this->getState('filter.search');
+		$id .= ':' . $this->getState('filter.state');
+		$id .= ':' . $this->getState('filter.depth');
+		$id .= ':' . $this->getState('filter.extension');
 
 		return parent::getStoreId($id);
 	}
@@ -141,7 +156,10 @@ class FilesModel extends ListModel
 	protected function populateState($ordering = 'a.id', $direction = 'desc')
 	{
 		// Load the parameters.
-		$this->setState('params', ComponentHelper::getParams('com_mediacat'));
+		//$this->setState('params', ComponentHelper::getParams('com_mediacat'));
+
+		$state = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '1');
+		$this->setState('filter.state', $state);
 
 		$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
 		$this->setState('filter.search', $search);
@@ -152,6 +170,9 @@ class FilesModel extends ListModel
 
 		$depth = $this->getUserStateFromRequest($this->context . '.filter.depth', 'filter_depth', 'tree');
 		$this->setState('filter.depth', $depth);
+
+		$extension = $this->getUserStateFromRequest($this->context . '.filter.extension', 'filter_extension', '');
+		$this->setState('filter.extension', $extension);
 
 		// List state information.
 		parent::populateState($ordering, $direction);

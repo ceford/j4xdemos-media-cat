@@ -21,5 +21,4 @@ use Joomla\CMS\MVC\Controller\FormController;
 class FileController extends FormController
 {
 	protected $text_prefix = 'COM_MEDIACAT_FILE';
-
 }

@@ -22,7 +22,7 @@ use Joomla\Database\ParameterType;
  *
  * @since  1.6
  */
-class ImagesModel extends ListModel
+class TrashModel extends ListModel
 {
 	/**
 	 * Constructor.
@@ -37,12 +37,15 @@ class ImagesModel extends ListModel
 		if (empty($config['filter_fields']))
 		{
 			$config['filter_fields'] = array(
-				'id', 'a.id',
-				'state', 'a.state',
-				'file_name', 'a.file_name',
-				'extension', 'a.extension',
-				'date_created', 'a.date_created',
-				'size', 'a.size',
+					'id', 'a.id',
+					'state', 'a.state',
+					'file_name', 'a.file_name',
+					'extension', 'a.extension',
+					'date_created', 'a.date_created',
+					'date_trashed', 'a.date_trashed',
+					'date_deleted', 'a.date_deleted',
+					'size', 'a.size',
+					'trash_id', 'a.trash_id',
 			);
 		}
 
@@ -62,7 +65,7 @@ class ImagesModel extends ListModel
 		$query = $db->getQuery(true);
 
 		$query->select('*');
-		$query->from('#__mediacat_images AS a');
+		$query->from('#__mediacat_trash AS a');
 
 		$state = $this->getState('filter.state');
 		if (!empty($state))
@@ -71,18 +74,13 @@ class ImagesModel extends ListModel
 		}
 		else
 		{
-			$query->where('a.state = 1');
+			$query->where('a.state = -2');
 		}
 
-		$current = $this->getState('filter.activepath');
-		$depth = $this->getState('filter.depth');
-		if (empty($depth) || $depth == 'tree')
+		$media_type = $this->getState('filter.media_type');
+		if (!empty($media_type))
 		{
-			$query->where('folder_path LIKE ' . $db->quote($current . '%'));
-		}
-		else
-		{
-			$query->where('folder_path = ' . $db->quote($current));
+			$query->where('media_type = ' . $db->quote($media_type));
 		}
 
 		$extension = $this->getState('filter.extension');
@@ -96,7 +94,6 @@ class ImagesModel extends ListModel
 		$orderDirn = $this->state->get('list.direction', 'DESC');
 		$ordering = $db->escape($orderCol) . ' ' . $db->escape($orderDirn);
 		$query->order($ordering);
-
 		return $query;
 	}
 
@@ -120,6 +117,7 @@ class ImagesModel extends ListModel
 		$id .= ':' . $this->getState('filter.state');
 		$id .= ':' . $this->getState('filter.depth');
 		$id .= ':' . $this->getState('filter.extension');
+		$id .= ':' . $this->getState('filter.media_type');
 
 		return parent::getStoreId($id);
 	}
@@ -154,26 +152,18 @@ class ImagesModel extends ListModel
 	 */
 	protected function populateState($ordering = 'a.id', $direction = 'desc')
 	{
-		// Load the parameters.
-		//$this->setState('params', ComponentHelper::getParams('com_mediacat'));
+		$mediatype = $this->getUserStateFromRequest($this->context . '.filter.media_type', 'filter_media_type', '');
+		$this->setState('filter.mediatype', $mediatype);
 
-		$state = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '1');
+		$extension = $this->getUserStateFromRequest($this->context . '.filter.extension', 'filter_extension', '');
+		$this->setState('filter.extension', $extension);
+
+		$state = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '-2');
 		$this->setState('filter.state', $state);
 
 		$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
 		$this->setState('filter.search', $search);
 
-		$activepath = $this->getUserStateFromRequest($this->context . '.filter.activepath', 'filter_activepath', '/images');
-		$this->setState('filter.activepath', $activepath);
-		Factory::getApplication()->setUserState('com_mediacat.images.activepath', $activepath);
-
-		$depth = $this->getUserStateFromRequest($this->context . '.filter.depth', 'filter_depth', 'tree');
-		$this->setState('filter.depth', $depth);
-
-		$extension = $this->getUserStateFromRequest($this->context . '.filter.extension', 'filter_extension', '');
-		$this->setState('filter.extension', $extension);
-
-		// List state information.
 		parent::populateState($ordering, $direction);
 	}
 }

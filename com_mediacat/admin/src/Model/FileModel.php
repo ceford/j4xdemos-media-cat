@@ -195,7 +195,7 @@ class FileModel extends AdminModel
 			return false;
 		}
 
-		$activePath = $app->getUserState('com_mediacat.images.activepath');
+		$activePath = $app->getUserState('com_mediacat.files.activepath');
 		$new_path = JPATH_SITE . $activePath . '/' . $data['file_name'];
 
 		// check that we are not overwriting an existing file with a new file
@@ -232,7 +232,8 @@ class FileModel extends AdminModel
 
 		$tmp_name = $file['uploadfile']['tmp_name'];
 
-		if (!File::upload($tmp_name, $new_path))
+		// copy because /tmp may be owned by root/wheel
+		if (!File::copy($tmp_name, $new_path))
 		{
 			$app->enqueueMessage(Text::_('COM_MEDIACAT_ERROR_NOT_UPLOADED'), 'error');
 			File::delete($tmp_name);

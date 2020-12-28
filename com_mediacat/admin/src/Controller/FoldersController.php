@@ -37,7 +37,6 @@ class FoldersController extends BaseController
 		$result = $model->getFolders($folder);
 		echo json_encode($result);
 		jexit();
-
 	}
 
 	/*

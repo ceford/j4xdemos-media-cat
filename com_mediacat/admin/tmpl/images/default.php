@@ -25,6 +25,7 @@ $fileBaseUrl = Uri::root(true);
 /** @var Joomla\CMS\WebAsset\WebAssetManager $wa */
 $wa = $this->document->getWebAssetManager();
 $wa->useStyle('com_mediacat.mediacat')
+	->registerAndUseStyle('com_mediacat.file-icon-vectors', 'media/com_mediacat/css/file-icon-vectors.min.css')
 	->useScript('com_mediacat.mediacat');
 
 // Populate the language
@@ -85,18 +86,41 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 						</thead>
 						<tbody>
 							<?php foreach ($this->items as $i => $item) :
-							$imageurl = substr($item->folder_path, 1) . '/' . $item->file_name;
+							$zoomurl = '';
+							if ($this->state->get('filter.state') >= 0)
+							{
+								$zoomurl = $item->folder_path . '/' . $item->file_name;
+							}
+							else if ($this->state->get('filter.state') == -2)
+							{
+								$zoomurl = $params->get('trash_path') . $item->folder_path . '/' . $item->id . '-' . $item->file_name;
+							}
+							$imageurl = $fileBaseUrl . '/' . $zoomurl;
 							?>
 								<tr>
+									<?php if ($this->state->get('filter.state') > -3) : ?>
 									<td rowspan="2" class="image-cropped preview cursor-zoom"
-									style="background-image: url('<?php echo $fileBaseUrl . $item->folder_path . '/' . $item->file_name; ?>');"
-									onclick="mediacatAction('zoom',<?php echo "'{$imageurl}'";?>)">
+									style="background-image: url('<?php echo $imageurl; ?>');"
+									onclick="mediacatAction('zoom',<?php echo "'{$zoomurl}'";?>)">
 									</td>
+									<?php else : ?>
+									<td rowspan="2">
+										<span class="fiv-cla fiv-icon-<?php echo $item->extension; ?>"></span>
+									</td>
+									<?php endif; ?>
+
+									<?php if ($this->state->get('filter.state') == 1) : ?>
 									<td class="break-word">
 										<a href="index.php?option=com_mediacat&view=image&layout=edit&id=<?php echo $item->id; ?>">
 											<?php echo $item->file_name; ?>
 										</a>
 									</td>
+									<?php else : ?>
+									<td class="break-word">
+										<?php echo $item->file_name; ?>
+									</td>
+									<?php endif; ?>
+
 									<td><?php echo $item->extension; ?></td>
 									<td><?php echo $item->date_created; ?></td>
 									<td id="width-<?php echo $item->id; ?>"><?php echo $item->width; ?></td>
@@ -108,6 +132,7 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 								</tr>
 								<tr>
 									<td>
+										<?php if ($this->state->get('filter.state') >= 0) : ?>
 										<select id="actionlist_<?php echo $item->id; ?>" class="custom-select"
 											onChange="mediacatAction(this, '<?php echo $imageurl; ?>')">
 											<option value=""><?php echo Text::_('COM_MEDIACAT_ACTIONS'); ?></option>
@@ -115,9 +140,16 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 											<option value="image"><?php echo Text::_('COM_MEDIACAT_ACTIONS_IMAGE_TAG'); ?></option>
 											<option value="figure"><?php echo Text::_('COM_MEDIACAT_ACTIONS_FIGURE_TAG'); ?></option>
 											<option value="picture"><?php echo Text::_('COM_MEDIACAT_ACTIONS_PICTURE_TAG'); ?></option>
-											<option value="edit"><?php echo Text::_('COM_MEDIACAT_ACTIONS_EDIT'); ?></option>
 											<option value="trash"><?php echo Text::_('JTRASH'); ?></option>
 										</select>
+										<?php elseif ($this->state->get('filter.state') == -2) : ?>
+										<select id="actionlist_<?php echo $item->id; ?>" class="custom-select"
+											onChange="mediacatAction(this, '')">
+											<option value=""><?php echo Text::_('COM_MEDIACAT_ACTIONS'); ?></option>
+											<option value="restore"><?php echo Text::_('COM_MEDIACAT_ACTIONS_RESTORE'); ?></option>
+											<option value="delete"><?php echo Text::_('COM_MEDIACAT_ACTIONS_DELETE'); ?></option>
+										</select>
+										<?php endif; ?>
 									</td>
 									<td id="id="alt-<?php echo $item->id; ?>" colspan="6">
 										Alt = <span id="alt-<?php echo $item->id; ?>"><?php echo $item->alt; ?></span><br>
@@ -134,7 +166,9 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 					</div>
 				</div>
 
-				<input type="hidden" name="task" value="">
+				<input type="hidden" name="jform[action_id]" id="jform_action_id" value="">
+				<input type="hidden" name="jform[mediatype]" id="jform_mediatype" value="image">
+				<input type="hidden" name="task" id="task" value="">
 				<input type="hidden" name="boxchecked" value="0">
 				<input type="hidden" name="filter[activepath]" id="filter_activepath" value="<?php echo $this->state->get('filter.activepath')?>">
 				<?php echo HTMLHelper::_('form.token'); ?>

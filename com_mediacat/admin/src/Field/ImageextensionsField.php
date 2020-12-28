@@ -46,6 +46,7 @@ class ImageextensionsField extends FormField
 			<select id="filter_extension" name="filter[extension]" class="custom-select" onchange="this.form.submit();">
 			<option value="" selected="selected">' . Text::_('COM_MEDIACAT_SELECT_EXTENSION') . '</option>';
 		$items = explode(',', $extensions);
+		asort($items);
 		foreach ($items as $item)
 		{
 			if ($item == $this->value)

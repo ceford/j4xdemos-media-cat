@@ -90,7 +90,34 @@ function mediacatAction(element, url) {
 			modal.open();
 		break;
 		case 'trash':
-			alert('This feature is not implemented');
+			if (confirm(Joomla.Text._('COM_MEDIACAT_JS_TRASH_ITEM') + id)) {
+				var action_id = document.getElementById('jform_action_id');
+				var task = document.getElementById('task');
+				var form = document.getElementById('adminForm');
+				action_id.value = id;
+				task.value = 'trash.trash';
+				form.submit();
+			}
+		break;
+		case 'restore':
+			if (confirm(Joomla.Text._('COM_MEDIACAT_JS_RESTORE_ITEM'))) {
+				var action_id = document.getElementById('jform_action_id');
+				var task = document.getElementById('task');
+				var form = document.getElementById('adminForm');
+				action_id.value = id;
+				task.value = 'trash.restore';
+				form.submit();
+			}
+		break;
+		case 'delete':
+			if (confirm(Joomla.Text._('COM_MEDIACAT_JS_DELETE_ITEM'))) {
+				var action_id = document.getElementById('jform_action_id');
+				var task = document.getElementById('task');
+				var form = document.getElementById('adminForm');
+				action_id.value = id;
+				task.value = 'trash.delete';
+				form.submit();
+			}
 		break;
 	}
 	element.value ='';
@@ -112,14 +139,14 @@ function updateFilename() {
 			filename.value = ext;
 		}
 	}
-	// only allow alphanumeric characters in filename
-	var dirty = document.getElementById('jform_alt').value;
-	var clean = dirty.replace(/[^0-9a-zA-Z\ ]/g, '');
-	jform_alt.value = clean;
 	// if there is an id - don't change the filename
 	if (id) {
 		return;
 	}
+	// only allow alphanumeric characters in filename
+	var dirty = document.getElementById('jform_alt').value;
+	var clean = dirty.replace(/[^0-9a-zA-Z\ ]/g, '-');
+	jform_alt.value = clean;
 	// keep the extension
 	var parts = filename.value.split('.');
 	var ext = parts.pop();

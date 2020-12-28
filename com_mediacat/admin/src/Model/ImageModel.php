@@ -254,7 +254,8 @@ class ImageModel extends AdminModel
 			file_put_contents($tmp_name, $sanitizer->sanitize($dirtySVG));
 		}
 
-		if (!File::upload($tmp_name, $new_path))
+		// copy because /tmp may be owned by root/wheel
+		if (!File::copy($tmp_name, $new_path))
 		{
 			$app->enqueueMessage(Text::_('COM_MEDIACAT_ERROR_NOT_UPLOADED'), 'error');
 			File::delete($tmp_name);

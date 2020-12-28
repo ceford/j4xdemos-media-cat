@@ -72,7 +72,16 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_MEDIACAT_MEDIA_EXTENSION', 'a.extension', $listDirn, $listOrder); ?>
 								</td>
 								<td>
-									<?php echo HTMLHelper::_('searchtools.sort', 'COM_MEDIACAT_MEDIA_DATE_CREATED', 'a.date_created', $listDirn, $listOrder); ?>
+									<?php
+										if ($this->state->get('filter.state') == 1)
+										{
+											echo HTMLHelper::_('searchtools.sort', 'COM_MEDIACAT_MEDIA_DATE_CREATED', 'a.date_created', $listDirn, $listOrder);
+										}
+										else
+										{
+											echo HTMLHelper::_('searchtools.sort', 'COM_MEDIACAT_MEDIA_DATE_TRASHED', 'a.date_updated', $listDirn, $listOrder);
+										}
+									?>
 								</td>
 								<td>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_MEDIACAT_MEDIA_SIZE', 'a.size', $listDirn, $listOrder); ?>
@@ -85,6 +94,7 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 						<tbody>
 							<?php foreach ($this->items as $i => $item) :
 								$imageurl = substr($item->folder_path, 1) . '/' . $item->file_name;
+								$viewtrash = "location.replace('index.php?option=com_mediacat&view=trash&media=files&id=" . $item->id . "')";
 							?>
 								<tr>
 									<td rowspan="2" class="">
@@ -98,7 +108,11 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 										</a>
 									</td>
 									<td><?php echo $item->extension; ?></td>
+									<?php if ($this->state->get('filter.state') == 1) : ?>
 									<td><?php echo $item->date_created; ?></td>
+									<?php else : ?>
+									<td><?php echo $item->date_updated; ?></td>
+									<?php endif; ?>
 									<td><?php echo $item->size; ?></td>
 									<td class="d-none d-md-table-cell">
 										<?php echo $item->id; ?>
@@ -106,6 +120,7 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 								</tr>
 								<tr>
 									<td>
+										<?php if ($this->state->get('filter.state') >= 0) : ?>
 										<select id="actionlist_<?php echo $item->id; ?>" class="custom-select"
 											onChange="mediacatAction(this, '<?php echo $imageurl; ?>')">
 											<option value=""><?php echo Text::_('COM_MEDIACAT_ACTIONS'); ?></option>
@@ -113,6 +128,14 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 											<option value="link"><?php echo Text::_('COM_MEDIACAT_ACTIONS_LINK'); ?></option>
 											<option value="trash"><?php echo Text::_('JTRASH'); ?></option>
 										</select>
+										<?php else : ?>
+										<select id="actionlist_<?php echo $item->id; ?>" class="custom-select"
+											onChange="mediacatAction(this, '')">
+											<option value=""><?php echo Text::_('COM_MEDIACAT_ACTIONS'); ?></option>
+											<option value="restore"><?php echo Text::_('COM_MEDIACAT_ACTIONS_RESTORE'); ?></option>
+											<option value="delete"><?php echo Text::_('COM_MEDIACAT_ACTIONS_DELETE'); ?></option>
+										</select>
+										<?php endif; ?>
 									</td>
 									<td id="id="alt-<?php echo $item->id; ?>" colspan="4">
 										Alt = <span id="alt-<?php echo $item->id; ?>"><?php echo $item->alt; ?></span><br>
@@ -130,7 +153,9 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 				</div>
 
 
-				<input type="hidden" name="task" value="">
+				<input type="hidden" name="jform[action_id]" id="jform_action_id" value="">
+				<input type="hidden" name="jform[mediatype]" id="jform_mediatype" value="file">
+				<input type="hidden" name="task" id="task" value="">
 				<input type="hidden" name="boxchecked" value="0">
 				<input type="hidden" name="filter[activepath]" id="filter_activepath" value="<?php echo $this->state->get('filter.activepath')?>">
 				<?php echo HTMLHelper::_('form.token'); ?>

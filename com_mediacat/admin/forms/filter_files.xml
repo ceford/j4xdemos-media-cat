@@ -11,12 +11,15 @@
 		/>
 
 		<field
-			name="published"
-			type="status"
+			name="state"
+			type="list"
 			label="JSTATUS"
 			onchange="this.form.submit();"
 			>
-			<option value="">JOPTION_SELECT_PUBLISHED</option>
+			<option value="0">JOPTION_SELECT_PUBLISHED</option>
+			<option value="1">JPUBLISHED</option>
+			<option value="-2">JTRASHED</option>
+			<option value="-3">COM_MEDIACAT_FILTER_OPTION_DELETED</option>
 		</field>
 
 		<field

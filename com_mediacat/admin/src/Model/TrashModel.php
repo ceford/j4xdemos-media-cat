@@ -152,8 +152,8 @@ class TrashModel extends ListModel
 	 */
 	protected function populateState($ordering = 'a.id', $direction = 'desc')
 	{
-		$mediatype = $this->getUserStateFromRequest($this->context . '.filter.media_type', 'filter_media_type', '');
-		$this->setState('filter.mediatype', $mediatype);
+		$media_type = $this->getUserStateFromRequest($this->context . '.filter.media_type', 'filter_media_type', '');
+		$this->setState('filter.media_type', $media_type);
 
 		$extension = $this->getUserStateFromRequest($this->context . '.filter.extension', 'filter_extension', '');
 		$this->setState('filter.extension', $extension);

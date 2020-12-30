@@ -30,6 +30,6 @@ class FileTable extends Table
 	 */
 	public function __construct(DatabaseDriver $db)
 	{
-		parent::__construct('#__mediacat_files', 'id', $db);
+		parent::__construct('#__mediacat', 'id', $db);
 	}
 }

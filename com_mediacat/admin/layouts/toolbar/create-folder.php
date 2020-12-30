@@ -11,10 +11,12 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Language\Text;
 
+$view = $this->options->get('view');
+
 ?>
 <joomla-toolbar-button>
 	<button id="mediacatCreateFolder" class="btn btn-info"
-	onclick="mediacatCreateFolder();">
+	onclick="mediacatCreateFolder('<?php echo $view; ?>');">
 		<span class="icon-folder icon-fw" aria-hidden="true"></span>
 		<?php echo Text::_('COM_MEDIACAT_CREATE_NEW_FOLDER'); ?>
 	</button>

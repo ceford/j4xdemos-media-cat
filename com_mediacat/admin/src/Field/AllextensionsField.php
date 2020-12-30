@@ -59,7 +59,7 @@ class AllextensionsField extends FormField
 			{
 				$selected = '"';
 			}
-			$html .= '<option value="' . $item . $selected. '">' . $item  . '</option>' . "\n";
+			$html .= '<option value="' . $item . $selected. '>' . $item  . '</option>' . "\n";
 		}
 		$html .= "</select>\n";
 		return $html;

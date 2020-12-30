@@ -17,9 +17,10 @@ use Joomla\CMS\MVC\Controller\AdminController;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\Input\Input;
 use Joomla\Utilities\ArrayHelper;
+use J4xdemos\Component\Mediacat\Administrator\Helper\FolderHelper;
 
 /**
- * Banners list controller class.
+ * Images list controller class.
  *
  * @since  1.6
  */
@@ -63,5 +64,18 @@ class ImagesController extends AdminController
 	public function getModel($name = 'Mediacat', $prefix = 'Administrator', $config = array('ignore_request' => true))
 	{
 		return parent::getModel($name, $prefix, $config);
+	}
+
+	/*
+	 * Create a new folder from data in the adminForm
+	 *
+	 *  redirect to the folders view
+	 */
+	public function newfolder()
+	{
+		// Check for request forgeries.
+		$this->checkToken();
+		FolderHelper::make();
+		$this->setRedirect('index.php?option=com_mediacat&view=images');
 	}
 }

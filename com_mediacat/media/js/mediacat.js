@@ -89,33 +89,63 @@ function mediacatAction(element, url) {
 			body.innerHTML = share;
 			modal.open();
 		break;
-		case 'trash':
+		case 'trashimage':
 			if (confirm(Joomla.Text._('COM_MEDIACAT_JS_TRASH_ITEM') + id)) {
 				var action_id = document.getElementById('jform_action_id');
 				var task = document.getElementById('task');
 				var form = document.getElementById('adminForm');
 				action_id.value = id;
-				task.value = 'trash.trash';
+				task.value = 'image.trash';
 				form.submit();
 			}
 		break;
-		case 'restore':
+		case 'trashfile':
+			if (confirm(Joomla.Text._('COM_MEDIACAT_JS_TRASH_ITEM') + id)) {
+				var action_id = document.getElementById('jform_action_id');
+				var task = document.getElementById('task');
+				var form = document.getElementById('adminForm');
+				action_id.value = id;
+				task.value = 'file.trash';
+				form.submit();
+			}
+		break;
+		case 'restoreimage':
 			if (confirm(Joomla.Text._('COM_MEDIACAT_JS_RESTORE_ITEM'))) {
 				var action_id = document.getElementById('jform_action_id');
 				var task = document.getElementById('task');
 				var form = document.getElementById('adminForm');
 				action_id.value = id;
-				task.value = 'trash.restore';
+				task.value = 'image.restore';
 				form.submit();
 			}
 		break;
-		case 'delete':
+		case 'restorefile':
+			if (confirm(Joomla.Text._('COM_MEDIACAT_JS_RESTORE_ITEM'))) {
+				var action_id = document.getElementById('jform_action_id');
+				var task = document.getElementById('task');
+				var form = document.getElementById('adminForm');
+				action_id.value = id;
+				task.value = 'file.restore';
+				form.submit();
+			}
+		break;
+		case 'deleteimage':
 			if (confirm(Joomla.Text._('COM_MEDIACAT_JS_DELETE_ITEM'))) {
 				var action_id = document.getElementById('jform_action_id');
 				var task = document.getElementById('task');
 				var form = document.getElementById('adminForm');
 				action_id.value = id;
-				task.value = 'trash.delete';
+				task.value = 'image.delete';
+				form.submit();
+			}
+		break;
+		case 'deletefile':
+			if (confirm(Joomla.Text._('COM_MEDIACAT_JS_DELETE_ITEM'))) {
+				var action_id = document.getElementById('jform_action_id');
+				var task = document.getElementById('task');
+				var form = document.getElementById('adminForm');
+				action_id.value = id;
+				task.value = 'file.delete';
 				form.submit();
 			}
 		break;
@@ -163,18 +193,6 @@ function mediacatSelectFolder(element) {
 	activepath.value = value;
 }
 
-// disused
-function mediacatUnselectFolder(element) {
-	var mediaHasher = document.getElementById('mediacatHasher');
-	var mediaIndexer = document.getElementById('mediacatIndexer');
-	var mediaCreateFolder = document.getElementById('mediacatCreateFolder');
-	var mediaTrash = document.getElementById('mediacatTrash');
-	mediaHasher.setAttribute('disabled', true);
-	mediaIndexer.setAttribute('disabled', true);
-	mediaCreateFolder.setAttribute('disabled', true);
-	mediaTrash.setAttribute('disabled', true);
-}
-
 async function doHash(folder) {
 	var form = document.getElementById('adminForm');
 	var task = document.getElementById('task');
@@ -212,7 +230,7 @@ async function doIndex(folder) {
 	var results = document.getElementById('results');
 	var hr = document.createElement("hr");
 	var br = document.createElement("br");
-	
+
 	task.value = 'folders.indexer';
 	activepath.value = folder;
 	
@@ -309,7 +327,7 @@ function mediacatIndexAll() {
 	indexAll();
 }
 
-function mediacatCreateFolder() {
+function mediacatCreateFolder(view) {
 	var activepath = document.getElementById('jform_activepath');
 	var task = document.getElementById('task');
 	var form = document.getElementById('adminForm');
@@ -332,8 +350,8 @@ function mediacatCreateFolder() {
 		// now ask if this is ok
 		ok = confirm(Joomla.Text._('COM_MEDIACAT_JS_FOLDER_NAME_IS_OK') + newfoldername);
 		if (ok) {
-			task.value = 'folders.newfolder';
-			document.getElementById('newfoldername').value = newfoldername;
+			task.value = view + '.newfolder';
+			document.getElementById('jform_newfoldername').value = newfoldername;
 			document.getElementById('adminForm')
 			form.submit();
 		}

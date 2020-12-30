@@ -168,6 +168,7 @@ JsHelper::getJstext();
 		</div>
 	</div>
 	<input type="hidden" name="task" value="" />
+	<input type="hidden" name="jform[media_type]" id="jform_media_type" value="file" />
 	<?php echo HTMLHelper::_('form.token'); ?>
 </form>
 

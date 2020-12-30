@@ -19,9 +19,23 @@ foreach ($dirs as $dir) {
 	if (empty($dir)) {
 		continue;
 	}
+	// skip if dir begins with .
+	if (strpos($dir, '.') === 0)
+	{
+		continue;
+	}
 	$path .= '/' . $dir;
+
 	foreach (new DirectoryIterator($root . $path) as $fileInfo) {
-		if($fileInfo->isDot()) continue;
+		if($fileInfo->isDot())
+		{
+			continue;
+		}
+		// skip if dir begins with .
+		if (strpos($fileInfo->getFilename(), '.') === 0)
+		{
+			continue;
+		}
 		if ($fileInfo->isDir()) {
 			$subs[] = $path . '/' . $fileInfo->getFilename();
 		}

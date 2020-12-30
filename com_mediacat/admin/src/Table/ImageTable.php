@@ -30,6 +30,6 @@ class ImageTable extends Table
 	 */
 	public function __construct(DatabaseDriver $db)
 	{
-		parent::__construct('#__mediacat_images', 'id', $db);
+		parent::__construct('#__mediacat', 'id', $db);
 	}
 }

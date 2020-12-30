@@ -72,7 +72,20 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_MEDIACAT_MEDIA_EXTENSION', 'a.extension', $listDirn, $listOrder); ?>
 								</td>
 								<td>
-									<?php echo HTMLHelper::_('searchtools.sort', 'COM_MEDIACAT_MEDIA_DATE_CREATED', 'a.date_created', $listDirn, $listOrder); ?>
+									<?php
+										if ($this->state->get('filter.state') == 1)
+										{
+											echo HTMLHelper::_('searchtools.sort', 'COM_MEDIACAT_MEDIA_DATE_CREATED', 'a.date_created', $listDirn, $listOrder);
+										}
+										else if ($this->state->get('filter.state') == -2)
+										{
+											echo HTMLHelper::_('searchtools.sort', 'COM_MEDIACAT_MEDIA_DATE_TRASHED', 'a.date_trashed', $listDirn, $listOrder);
+										}
+										else
+										{
+											echo HTMLHelper::_('searchtools.sort', 'COM_MEDIACAT_MEDIA_DATE_DELETED', 'a.date_deleted', $listDirn, $listOrder);
+										}
+									?>
 								</td>
 								<td><?php echo Text::_('COM_MEDIACAT_MEDIA_WIDTH'); ?></td>
 								<td><?php echo Text::_('COM_MEDIACAT_MEDIA_HEIGHT'); ?></td>
@@ -122,7 +135,24 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 									<?php endif; ?>
 
 									<td><?php echo $item->extension; ?></td>
-									<td><?php echo $item->date_created; ?></td>
+
+									<td>
+									<?php
+										if ($this->state->get('filter.state') == 1)
+										{
+											echo $item->date_created;
+										}
+										else if ($this->state->get('filter.state') == -2)
+										{
+											echo $item->date_trashed;
+										}
+										else
+										{
+											echo $item->date_deleted;
+										}
+									?>
+									</td>
+
 									<td id="width-<?php echo $item->id; ?>"><?php echo $item->width; ?></td>
 									<td id="height-<?php echo $item->id; ?>"><?php echo $item->height; ?></td>
 									<td><?php echo $item->size; ?></td>
@@ -140,18 +170,18 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 											<option value="image"><?php echo Text::_('COM_MEDIACAT_ACTIONS_IMAGE_TAG'); ?></option>
 											<option value="figure"><?php echo Text::_('COM_MEDIACAT_ACTIONS_FIGURE_TAG'); ?></option>
 											<option value="picture"><?php echo Text::_('COM_MEDIACAT_ACTIONS_PICTURE_TAG'); ?></option>
-											<option value="trash"><?php echo Text::_('JTRASH'); ?></option>
+											<option value="trashimage"><?php echo Text::_('JTRASH'); ?></option>
 										</select>
 										<?php elseif ($this->state->get('filter.state') == -2) : ?>
 										<select id="actionlist_<?php echo $item->id; ?>" class="custom-select"
 											onChange="mediacatAction(this, '')">
 											<option value=""><?php echo Text::_('COM_MEDIACAT_ACTIONS'); ?></option>
-											<option value="restore"><?php echo Text::_('COM_MEDIACAT_ACTIONS_RESTORE'); ?></option>
-											<option value="delete"><?php echo Text::_('COM_MEDIACAT_ACTIONS_DELETE'); ?></option>
+											<option value="restoreimage"><?php echo Text::_('COM_MEDIACAT_ACTIONS_RESTORE'); ?></option>
+											<option value="deleteimage"><?php echo Text::_('COM_MEDIACAT_ACTIONS_DELETE'); ?></option>
 										</select>
 										<?php endif; ?>
 									</td>
-									<td id="id="alt-<?php echo $item->id; ?>" colspan="6">
+									<td id="alt-<?php echo $item->id; ?>" colspan="6">
 										Alt = <span id="alt-<?php echo $item->id; ?>"><?php echo $item->alt; ?></span><br>
 										Caption = <span id="caption-<?php echo $item->id; ?>"><?php echo $item->caption; ?></span>
 									</td>
@@ -167,10 +197,11 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 				</div>
 
 				<input type="hidden" name="jform[action_id]" id="jform_action_id" value="">
-				<input type="hidden" name="jform[mediatype]" id="jform_mediatype" value="image">
+				<input type="hidden" name="jform[media_type]" id="jform_media_type" value="image">
 				<input type="hidden" name="task" id="task" value="">
 				<input type="hidden" name="boxchecked" value="0">
-				<input type="hidden" name="filter[activepath]" id="filter_activepath" value="<?php echo $this->state->get('filter.activepath')?>">
+				<input type="hidden" name="jform[activepath]" id="jform_activepath" value="<?php echo $this->state->get('filter.activepath')?>">
+				<input type="hidden" name="jform[newfoldername]" id="jform_newfoldername" value="">
 				<?php echo HTMLHelper::_('form.token'); ?>
 			</div>
 		</div>

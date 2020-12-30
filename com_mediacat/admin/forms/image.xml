@@ -59,6 +59,12 @@
 			readonly="true"
 		/>
 
+		<field
+			name="media_type"
+			type="hidden"
+			default="image"
+		/>
+
 	</fieldset>
 
 </form>

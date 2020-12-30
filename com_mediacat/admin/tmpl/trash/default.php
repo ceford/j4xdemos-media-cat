@@ -156,7 +156,7 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 
 
 				<input type="hidden" name="jform[id]" id="jform_id" value="<?php echo $this->id; ?>">
-				<input type="hidden" name="jform[mediatype]" id="jform_mediatype" value="<?php echo $this->media; ?>">
+				<input type="hidden" name="jform[media_type]" id="jform_media_type" value="<?php echo $this->media; ?>">
 				<input type="hidden" name="jform[version]" id="jform_version" value="">
 				<input type="hidden" name="task" id="task" value="">
 				<input type="hidden" name="boxchecked" value="0">

@@ -138,22 +138,11 @@ class HtmlView extends BaseHtmlView
 		$layout = new FileLayout('toolbar.delete-if-empty', JPATH_COMPONENT_ADMINISTRATOR . '/layouts');
 		$childBar->appendButton('Custom', $layout->render([]), 'times');
 
-		// Add the upload and create folder buttons
 		if ($user->authorise('core.create', 'com_mediacat'))
 		{
 			// Add the create folder button
-			$layout = new FileLayout('toolbar.create-folder', JPATH_COMPONENT_ADMINISTRATOR . '/layouts');
-
+			$layout = new FileLayout('toolbar.create-folder', JPATH_COMPONENT_ADMINISTRATOR . '/layouts', array('view' => 'folders'));
 			$toolbar->appendButton('Custom', $layout->render([]), 'new');
-		}
-
-		// Add a delete button
-		if ($user->authorise('core.delete', 'com_mediacat'))
-		{
-			// Instantiate a new FileLayout instance and render the layout
-			$layout = new FileLayout('toolbar.trash');
-
-			$toolbar->appendButton('Custom', $layout->render([]), 'trash');
 		}
 
 		// Add the preferences button

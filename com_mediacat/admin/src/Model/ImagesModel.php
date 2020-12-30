@@ -41,6 +41,7 @@ class ImagesModel extends ListModel
 				'state', 'a.state',
 				'file_name', 'a.file_name',
 				'extension', 'a.extension',
+				'depth',
 				'date_created', 'a.date_created',
 				'size', 'a.size',
 			);
@@ -62,7 +63,7 @@ class ImagesModel extends ListModel
 		$query = $db->getQuery(true);
 
 		$query->select('*');
-		$query->from('#__mediacat_images AS a');
+		$query->from('#__mediacat AS a');
 
 		$state = $this->getState('filter.state');
 		if (!empty($state))
@@ -157,8 +158,8 @@ class ImagesModel extends ListModel
 		// Load the parameters.
 		//$this->setState('params', ComponentHelper::getParams('com_mediacat'));
 
-		$state = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '1');
-		$this->setState('filter.state', $state);
+		//$state = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '1');
+		//$this->setState('filter.state', $state);
 
 		$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
 		$this->setState('filter.search', $search);
@@ -167,7 +168,7 @@ class ImagesModel extends ListModel
 		$this->setState('filter.activepath', $activepath);
 		Factory::getApplication()->setUserState('com_mediacat.images.activepath', $activepath);
 
-		$depth = $this->getUserStateFromRequest($this->context . '.filter.depth', 'filter_depth', 'tree');
+		$depth = $this->getUserStateFromRequest($this->context . '.filter.depth', 'filter_depth', '');
 		$this->setState('filter.depth', $depth);
 
 		$extension = $this->getUserStateFromRequest($this->context . '.filter.extension', 'filter_extension', '');

@@ -17,12 +17,12 @@ use Joomla\CMS\Form\Form;
 use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Layout\FileLayout;
 use Joomla\CMS\MVC\View\GenericDataException;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
 use Joomla\CMS\Pagination\Pagination;
 use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
-use Joomla\Component\Banners\Administrator\Model\BannersModel;
 use Joomla\Registry\Registry;
 
 /**
@@ -139,6 +139,14 @@ class HtmlView extends BaseHtmlView
 		ToolbarHelper::title(Text::_('COM_MEDIACAT_FILES'), 'file mediacat');
 
 		$toolbar->addNew('file.add');
+
+		// Add the New folder button
+		if ($user->authorise('core.create', 'com_mediacat'))
+		{
+			// Add the create folder button
+			$layout = new FileLayout('toolbar.create-folder', JPATH_COMPONENT_ADMINISTRATOR . '/layouts', array('view' => 'files'));
+			$toolbar->appendButton('Custom', $layout->render([]), 'new');
+		}
 
 		$nRecords = $this->pagination->total;
 		ToolbarHelper::custom('','info', '', $nRecords . ' ' . Text::_('COM_MEDIACAT_TOOLBAR_BUTTON_RECORDS'), true);

@@ -35,8 +35,8 @@ class TrashController extends FormController
 
 		$jform = $this->input->get('jform', '', 'array');
 		$id = $jform['action_id'];
-		$mediatype = $jform['mediatype'];
-		if ($mediatype == 'file')
+		$media_type = $jform['media_type'];
+		if ($media_type == 'file')
 		{
 			$view = 'files';
 		}
@@ -48,7 +48,7 @@ class TrashController extends FormController
 		$item_record = $this->getRecord($id, $view);
 
 		// get the record from the trash table
-		$trash_record = $this->getTrashRecord($id, $mediatype);
+		$trash_record = $this->getTrashRecord($id, $media_type);
 
 		$trash_path = JPATH_SITE . '/' . $params->get('trash_path') . $item_record->folder_path;
 		$source  = $trash_path . '/' . $id . '-' . $item_record->file_name;
@@ -78,8 +78,8 @@ class TrashController extends FormController
 
 		$jform = $this->input->get('jform', '', 'array');
 		$id = $jform['action_id'];
-		$mediatype = $jform['mediatype'];
-		if ($mediatype == 'file')
+		$media_type = $jform['media_type'];
+		if ($media_type == 'file')
 		{
 			$view = 'files';
 		}
@@ -118,8 +118,8 @@ class TrashController extends FormController
 
 		$jform = $this->input->get('jform', '', 'array');
 		$id = $jform['action_id'];
-		$mediatype = $jform['mediatype'];
-		if ($mediatype == 'file')
+		$media_type = $jform['media_type'];
+		if ($media_type == 'file')
 		{
 			$view = 'files';
 		}
@@ -134,7 +134,7 @@ class TrashController extends FormController
 		$original_record = $this->getRecord($id, $view);
 
 		// make an entry in the trash table
-		$trash_record = $this->setRecord($original_record->id, $view, $mediatype);
+		$trash_record = $this->setRecord($original_record->id, $view, $media_type);
 
 		// move the item to the trash folder
 		// insert the trash record in the path before the file name
@@ -184,14 +184,14 @@ class TrashController extends FormController
 		return $db->loadObject();
 	}
 
-	protected function getTrashRecord($id, $mediatype)
+	protected function getTrashRecord($id, $media_type)
 	{
 		$db = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('*')
 		->from($db->quoteName('#__mediacat_trash'))
 		->where('id = ' . $id)
-		->where('media_type = ' . $db->quote($mediatype));
+		->where('media_type = ' . $db->quote($media_type));
 		$db->setQuery($query);
 		return $db->loadObject();
 	}
@@ -218,7 +218,7 @@ class TrashController extends FormController
 		$db->execute();
 	}
 
-	protected function setRecord($id, $view, $mediatype)
+	protected function setRecord($id, $view, $media_type)
 	{
 		$db = Factory::getDbo();
 		$query = $db->getQuery(true);
@@ -235,7 +235,7 @@ class TrashController extends FormController
 		{
 			$query->set($key . ' = ' . $db->quote($value));
 		}
-		$query->set('media_type = '. $db->quote($mediatype));
+		$query->set('media_type = '. $db->quote($media_type));
 		$db->setQuery($query);
 		$db->execute();
 

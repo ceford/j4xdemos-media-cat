@@ -62,7 +62,7 @@ $media_type_options = array('image' => Text::_('COM_MEDIACAT_FIELDSET_IMAGES_LAB
 
 		<input type="hidden" name="task" id="task" value="">
 		<input type="hidden" name="boxchecked" value="0">
-		<input type="hidden" name="jform[activepath]" id="jform_activepath" value="<?php echo $this->activepath; ?>">
+		<input type="hidden" name="filter[activepath]" id="filter_activepath" value="<?php echo $this->activepath; ?>">
 		<input type="hidden" name="jform[newfoldername]" id="jform_newfoldername" value="">
 		<?php echo HTMLHelper::_('form.token'); ?>
 

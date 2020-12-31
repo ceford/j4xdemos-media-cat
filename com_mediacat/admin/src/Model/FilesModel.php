@@ -93,6 +93,25 @@ class FilesModel extends ListModel
 			$query->where('extension = ' . $db->quote($extension));
 		}
 
+		// Filter by search in title
+		if ($search = $this->getState('filter.search'))
+		{
+			if (stripos($search, 'id:') === 0)
+			{
+				$search = (int) substr($search, 3);
+				$query->where($db->quoteName('a.id') . ' = :search')
+				->bind(':search', $search, ParameterType::INTEGER);
+			}
+			else
+			{
+				$search = '%' . str_replace(' ', '%', trim($search)) . '%';
+				$query->where('(' . $db->quoteName('a.file_name') . ' LIKE :search1 OR ' .
+					$db->quoteName('a.alt') . ' LIKE :search2 OR ' .
+					$db->quoteName('a.caption') . ' LIKE :search3)')
+					->bind([':search1', ':search2', ':search3'], $search);
+			}
+		}
+
 		// Add the list ordering clause.
 		$orderCol  = $this->state->get('list.ordering', 'a.id');
 		$orderDirn = $this->state->get('list.direction', 'DESC');
@@ -165,7 +184,7 @@ class FilesModel extends ListModel
 		$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
 		$this->setState('filter.search', $search);
 
-		$activepath = $this->getUserStateFromRequest($this->context . '.filter.activepath', 'filter_activepath', '/files');
+		$activepath = $this->getUserStateFromRequest($this->context . '.filter.activepath', 'jform_activepath', '/files');
 		$this->setState('filter.activepath', $activepath);
 		Factory::getApplication()->setUserState('com_mediacat.files.activepath', $activepath);
 

@@ -140,12 +140,22 @@ class HtmlView extends BaseHtmlView
 
 		$toolbar->addNew('image.add');
 
-		// Add the New folder button
 		if ($user->authorise('core.create', 'com_mediacat'))
 		{
+			$dropdown = $toolbar->dropdownButton('folders')
+			->text('COM_MEDIACAT_FOLDERS')
+			->toggleSplit(false)
+			->icon('icon-folder')
+			->buttonClass('btn btn-action');
+
+			$childBar = $dropdown->getChildToolbar();
+
 			// Add the create folder button
 			$layout = new FileLayout('toolbar.create-folder', JPATH_COMPONENT_ADMINISTRATOR . '/layouts', array('view' => 'images'));
-			$toolbar->appendButton('Custom', $layout->render([]), 'new');
+			$childBar->appendButton('Custom', $layout->render([]), 'icon-folder-plus');
+
+			$layout = new FileLayout('toolbar.delete-if-empty', JPATH_COMPONENT_ADMINISTRATOR . '/layouts', array('view' => 'images'));
+			$childBar->appendButton('Custom', $layout->render([]), 'icon-folder-minus');
 		}
 
 		$nRecords = $this->pagination->total;

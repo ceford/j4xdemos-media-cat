@@ -12,6 +12,7 @@ namespace J4xdemos\Component\Mediacat\Administrator\Controller;
 \defined('_JEXEC') or die;
 
 use Joomla\CMS\Application\CmsApplication;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\AdminController;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
@@ -44,6 +45,28 @@ class FilesController extends AdminController
 		// Check for request forgeries.
 		$this->checkToken();
 		FolderHelper::make();
+		$this->setRedirect('index.php?option=com_mediacat&view=files');
+	}
+
+	/*
+	 * Create a new folder from data in the adminForm
+	 *
+	 *  redirect to the folders view
+	 */
+	public function deleteifempty()
+	{
+		// Check for request forgeries.
+		$this->checkToken();
+		FolderHelper::deleteifempty();
+
+		// just deletedd the active branch so move up one
+		$app = Factory::getApplication();
+		$activepath = $app->getUserState('com_mediacat.files.filter.activepath');
+		$parts = explode('/', $activepath);
+		array_pop($parts);
+		$newactivepath = implode('/', $parts);
+		$app->setUserState('com_mediacat.files.filter.activepath', $newactivepath);
+
 		$this->setRedirect('index.php?option=com_mediacat&view=files');
 	}
 }

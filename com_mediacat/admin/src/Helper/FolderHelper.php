@@ -23,6 +23,25 @@ use Joomla\CMS\Language\Text;
 
 Class FolderHelper
 {
+	public static function deleteifempty()
+	{
+		$app = Factory::getApplication();
+		// get the path where the new folder is required
+		$filters = $app->input->get("filter", '', 'array');
+		$folder = $filters['activepath'];
+		$nfiles = count(scandir(JPATH_SITE . $folder)) - 2;
+
+		if (!empty($nfiles))
+		{
+			$app->enqueueMessage(Text::sprintf('COM_MEDIACAT_WARNING_FOLDER_NOT_DELETED', $folder, $nfiles), 'warning');
+		}
+		else
+		{
+			Folder::delete(JPATH_SITE . $folder);
+			$app->enqueueMessage(Text::_('COM_MEDIACAT_WARNING_FOLDER_DELETED') . ' ' . $folder, 'success');
+		}
+	}
+
 	public static function make()
 	{
 		$app = Factory::getApplication();
@@ -37,23 +56,100 @@ Class FolderHelper
 		}
 		else
 		{
-			$full_path = JPATH_SITE . $activepath . '/' . $newfoldername;
+			$full_path = JPATH_SITE . $newfoldername;
 			if (Folder::exists($full_path))
 			{
-				$app->enqueueMessage(Text::_('COM_MEDIACAT_WARNING_FOLDER_EXISTS') . ' ' . $full_path, 'warning');
+				$app->enqueueMessage(Text::_('COM_MEDIACAT_WARNING_FOLDER_EXISTS') . ' ' . $newfoldername, 'warning');
 			}
 			else
 			{
 				$result = Folder::create($full_path);
 				if ($result)
 				{
-					$app->enqueueMessage(Text::_('COM_MEDIACAT_SUCCESS_FOLDER_CREATED') . ' ' . $full_path, 'success');
+					$app->enqueueMessage(Text::_('COM_MEDIACAT_SUCCESS_FOLDER_CREATED') . ' ' . $newfoldername, 'success');
 				}
 				else
 				{
-					$app->enqueueMessage(Text::_('COM_MEDIACAT_ERROR_FOLDER_NOT_CREATED') . ' ' . $full_path, 'danger');
+					$app->enqueueMessage(Text::_('COM_MEDIACAT_ERROR_FOLDER_NOT_CREATED') . ' ' . $newfoldername, 'danger');
 				}
 			}
 		}
+	}
+
+	public static function tree($activepath)
+	{
+		$root = JPATH_SITE;
+		$path = '';
+
+		$dirs = explode('/', $activepath);
+		array_shift($dirs);
+		$subs[] = '/' . $dirs[0];
+
+		foreach ($dirs as $dir)
+		{
+			if (empty($dir))
+			{
+				continue;
+			}
+			// skip if dir begins with .
+			if (strpos($dir, '.') === 0)
+			{
+				continue;
+			}
+			$path .= '/' . $dir;
+
+			foreach (new \DirectoryIterator($root . $path) as $fileInfo)
+			{
+				if($fileInfo->isDot())
+				{
+					continue;
+				}
+				// skip if dir begins with .
+				if (strpos($fileInfo->getFilename(), '.') === 0)
+				{
+					continue;
+				}
+				if ($fileInfo->isDir())
+				{
+					$subs[] = $path . '/' . $fileInfo->getFilename();
+				}
+			}
+		}
+
+		asort($subs);
+		/* example:
+		 * /files
+		 * /files/odt
+		 * /files/pdf
+		 * /files/png
+		 * /files/webp
+		 */
+
+		$html = '';
+
+		foreach ($subs as $sub)
+		{
+			// make an array
+			$members = explode('/', substr($sub, 1));
+			$space = count($members) -1;
+			$active = ($sub == $activepath) ? ' active' : '';
+			$html .= '<div class="cat-folder indent-' . $space . $active . '" data-link="'. $sub .'">';
+			if (!$active)
+			{
+				$html .= '<a href="#" onclick="setFolder(\''.$sub.'\');return false;">';
+				$html .= '<span class="icon-folder"></span> ';
+			}
+			else
+			{
+				$html .= '<span class="icon-folder-open"></span> ';
+			}
+			$html .= array_pop($members);
+			if (!$active)
+			{
+				$html .= '</a>';
+			}
+			$html .= '</div>' . "\n";
+		}
+		return $html;
 	}
 }

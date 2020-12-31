@@ -17,6 +17,7 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Session\Session;
 use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Uri\Uri;
+use J4xdemos\Component\Mediacat\Administrator\Helper\FolderHelper;
 use J4xdemos\Component\Mediacat\Administrator\Helper\JsHelper;
 
 $params = ComponentHelper::getParams('com_mediacat');
@@ -47,7 +48,7 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 				<div class="row">
 					<div class="col-12 col-md-3">
 					<h3><?php echo Text::_('COM_MEDIACAT_FOLDER_TREE'); ?></h3>
-					<?php require 'tree.php'; ?>
+					<?php echo FolderHelper::tree($this->state->get('filter.activepath')); ?>
 					</div>
 					<div class="col-12 col-md-9">
 					<?php if (empty($this->items)) : ?>
@@ -73,17 +74,17 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 								</td>
 								<td>
 									<?php
-										if ($this->state->get('filter.state') == 1)
-										{
-											echo HTMLHelper::_('searchtools.sort', 'COM_MEDIACAT_MEDIA_DATE_CREATED', 'a.date_created', $listDirn, $listOrder);
-										}
-										else if ($this->state->get('filter.state') == -2)
+										if ($this->state->get('filter.state') == -2)
 										{
 											echo HTMLHelper::_('searchtools.sort', 'COM_MEDIACAT_MEDIA_DATE_TRASHED', 'a.date_trashed', $listDirn, $listOrder);
 										}
-										else
+										else if ($this->state->get('filter.state') == -3)
 										{
 											echo HTMLHelper::_('searchtools.sort', 'COM_MEDIACAT_MEDIA_DATE_DELETED', 'a.date_deleted', $listDirn, $listOrder);
+										}
+										else
+										{
+											echo HTMLHelper::_('searchtools.sort', 'COM_MEDIACAT_MEDIA_DATE_CREATED', 'a.date_created', $listDirn, $listOrder);
 										}
 									?>
 								</td>
@@ -98,20 +99,21 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 							</tr>
 						</thead>
 						<tbody>
-							<?php foreach ($this->items as $i => $item) :
-							$zoomurl = '';
-							if ($this->state->get('filter.state') >= 0)
-							{
-								$zoomurl = $item->folder_path . '/' . $item->file_name;
-							}
-							else if ($this->state->get('filter.state') == -2)
-							{
-								$zoomurl = $params->get('trash_path') . $item->folder_path . '/' . $item->id . '-' . $item->file_name;
-							}
-							$imageurl = $fileBaseUrl . '/' . $zoomurl;
+							<?php
+								foreach ($this->items as $i => $item) :
+								$zoomurl = '';
+								if ($this->state->get('filter.state') >= 0)
+								{
+									$zoomurl = $item->folder_path . '/' . $item->file_name;
+								}
+								else if ($this->state->get('filter.state') == -2)
+								{
+									$zoomurl = $params->get('trash_path') . $item->folder_path . '/' . $item->id . '-' . $item->file_name;
+								}
+								$imageurl = $fileBaseUrl . '/' . $zoomurl;
 							?>
 								<tr>
-									<?php if ($this->state->get('filter.state') > -3) : ?>
+									<?php if ($this->state->get('filter.state') != -3) : ?>
 									<td rowspan="2" class="image-cropped preview cursor-zoom"
 									style="background-image: url('<?php echo $imageurl; ?>');"
 									onclick="mediacatAction('zoom',<?php echo "'{$zoomurl}'";?>)">
@@ -122,33 +124,31 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 									</td>
 									<?php endif; ?>
 
-									<?php if ($this->state->get('filter.state') == 1) : ?>
 									<td class="break-word">
+									<?php if ($this->state->get('filter.state') < 0) : ?>
+										<?php echo $item->file_name; ?>
+									<?php else : ?>
 										<a href="index.php?option=com_mediacat&view=image&layout=edit&id=<?php echo $item->id; ?>">
 											<?php echo $item->file_name; ?>
 										</a>
-									</td>
-									<?php else : ?>
-									<td class="break-word">
-										<?php echo $item->file_name; ?>
-									</td>
 									<?php endif; ?>
+									</td>
 
 									<td><?php echo $item->extension; ?></td>
 
 									<td>
 									<?php
-										if ($this->state->get('filter.state') == 1)
-										{
-											echo $item->date_created;
-										}
-										else if ($this->state->get('filter.state') == -2)
+										if ($this->state->get('filter.state') == -2)
 										{
 											echo $item->date_trashed;
 										}
-										else
+										else if ($this->state->get('filter.state') == -3)
 										{
 											echo $item->date_deleted;
+										}
+										else
+										{
+											echo $item->date_created;
 										}
 									?>
 									</td>
@@ -182,8 +182,8 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 										<?php endif; ?>
 									</td>
 									<td id="alt-<?php echo $item->id; ?>" colspan="6">
-										Alt = <span id="alt-<?php echo $item->id; ?>"><?php echo $item->alt; ?></span><br>
-										Caption = <span id="caption-<?php echo $item->id; ?>"><?php echo $item->caption; ?></span>
+										<?php echo Text::_('COM_MEDIACAT_IMAGE_ALT_LABEL'); ?> = <span id="alt-<?php echo $item->id; ?>"><?php echo $item->alt; ?></span><br>
+										<?php echo Text::_('COM_MEDIACAT_IMAGE_CAPTION_LABEL'); ?> = <span id="caption-<?php echo $item->id; ?>"><?php echo $item->caption; ?></span>
 									</td>
 								</tr>
 							<?php endforeach; ?>
@@ -200,7 +200,7 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 				<input type="hidden" name="jform[media_type]" id="jform_media_type" value="image">
 				<input type="hidden" name="task" id="task" value="">
 				<input type="hidden" name="boxchecked" value="0">
-				<input type="hidden" name="jform[activepath]" id="jform_activepath" value="<?php echo $this->state->get('filter.activepath')?>">
+				<input type="hidden" name="filter[activepath]" id="filter_activepath" value="<?php echo $this->state->get('filter.activepath')?>">
 				<input type="hidden" name="jform[newfoldername]" id="jform_newfoldername" value="">
 				<?php echo HTMLHelper::_('form.token'); ?>
 			</div>

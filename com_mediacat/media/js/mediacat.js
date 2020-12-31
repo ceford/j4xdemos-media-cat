@@ -189,14 +189,14 @@ function mediacatSelectFolder(element) {
 	var id = parts[1];
 	var folder = document.getElementById('folder-' + id);
 	var value = folder.innerText;
-	var activepath = document.getElementById('jform_activepath');
+	var activepath = document.getElementById('filter_activepath');
 	activepath.value = value;
 }
 
 async function doHash(folder) {
 	var form = document.getElementById('adminForm');
 	var task = document.getElementById('task');
-	var activepath = document.getElementById('jform_activepath');
+	var activepath = document.getElementById('filter_activepath');
 	var br = document.createElement("br");
 	var hr = document.createElement("hr");
 	var results = document.getElementById('results');
@@ -226,7 +226,7 @@ async function doHash(folder) {
 async function doIndex(folder) {
 	var form = document.getElementById('adminForm');
 	var task = document.getElementById('task');
-	var activepath = document.getElementById('jform_activepath');
+	var activepath = document.getElementById('filter_activepath');
 	var results = document.getElementById('results');
 	var hr = document.createElement("hr");
 	var br = document.createElement("br");
@@ -257,7 +257,7 @@ async function doIndex(folder) {
 async function indexAll() {
 	var form = document.getElementById('adminForm');
 	var task = document.getElementById('task');
-	var activepath = document.getElementById('jform_activepath');
+	var activepath = document.getElementById('filter_activepath');
 	var results = document.getElementById('results');
 	var hr = document.createElement("hr");
 
@@ -280,19 +280,19 @@ async function indexAll() {
 	}
 }
 
-function mediacatDeleteIfEmpty() {
-	var activepath = document.getElementById('jform_activepath');
+function mediacatDeleteIfEmpty(view) {
+	var activepath = document.getElementById('filter_activepath');
 	if (confirm(Joomla.Text._('COM_MEDIACAT_JS_DELETE_IF_EMPTY') + activepath.value)) {
 		var task = document.getElementById('task');
 		var form = document.getElementById('adminForm');
-		task.value = 'folders.deleteifempty';
+		task.value = view + '.deleteifempty';
 		form.submit();
 	}
 	task.value = '';
 }
 
 function mediacatHashOne() {
-	var activepath = document.getElementById('jform_activepath');
+	var activepath = document.getElementById('filter_activepath');
 	if (confirm(Joomla.Text._('COM_MEDIACAT_JS_HASH_FOLDER') + activepath.value)) {
 		doHash(activepath.value);
 	}
@@ -302,7 +302,7 @@ function mediacatHashAll() {
 	if (!confirm(Joomla.Text._('COM_MEDIACAT_JS_HASH_ALL'))) {
 		return;
 	}
-	var activepath = document.getElementById('jform_activepath');
+	var activepath = document.getElementById('filter_activepath');
 	var current = activepath.value;
 	document.getElementById('rb-0').checked = true;
 	activepath.value = current.split('/', 2).join('/');
@@ -310,7 +310,7 @@ function mediacatHashAll() {
 }
 
 function mediacatIndexOne() {
-	var activepath = document.getElementById('jform_activepath');
+	var activepath = document.getElementById('filter_activepath');
 	if (confirm(Joomla.Text._('COM_MEDIACAT_JS_INDEX_FOLDER') + activepath.value)) {
 		doIndex(activepath.value);
 	}
@@ -320,7 +320,7 @@ function mediacatIndexAll() {
 	if (!confirm(Joomla.Text._('COM_MEDIACAT_JS_INDEX_ALL'))) {
 		return;
 	}
-	var activepath = document.getElementById('jform_activepath');
+	var activepath = document.getElementById('filter_activepath');
 	var current = activepath.value;
 	document.getElementById('rb-0').checked = true;
 	activepath.value = current.split('/', 2).join('/');
@@ -328,13 +328,13 @@ function mediacatIndexAll() {
 }
 
 function mediacatCreateFolder(view) {
-	var activepath = document.getElementById('jform_activepath');
+	var activepath = document.getElementById('filter_activepath');
 	var task = document.getElementById('task');
 	var form = document.getElementById('adminForm');
 	var newfoldername = prompt('Create Folder in ' + activepath.value);
 	if (newfoldername != null) {
 		// make sure the foldername is acceptable
-		newfoldername = newfoldername.trim();
+		newfoldername = activepath.value + '/' + newfoldername.trim();
 		if (!newfoldername) {
 			alert(Joomla.Text._('COM_MEDIACAT_JS_FOLDER_NAME_EMPTY'))
 			return;
@@ -360,7 +360,7 @@ function mediacatCreateFolder(view) {
 }
 
 function mediacatTrash() {
-	var activepath = document.getElementById('jform_activepath');
+	var activepath = document.getElementById('filter_activepath');
 	if (confirm(Joomla.Text._('COM_MEDIACAT_JS_FOLDER_TRASH_ITEMS') + activepath.value)) {
 		var task = document.getElementById('task');
 		var form = document.getElementById('adminForm');

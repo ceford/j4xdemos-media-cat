@@ -41,29 +41,24 @@ class FoldersController extends BaseController
 	}
 
 	/*
-	 * delete a folder if it is empty
+	 * Create a new folder from data in the adminForm
 	 *
-	 *  return a json encoded message
+	 *  redirect to the folders view
 	 */
 	public function deleteifempty()
 	{
 		// Check for request forgeries.
 		$this->checkToken();
+		FolderHelper::deleteifempty();
+
+		// just deletedd the active branch so move up one
 		$app = Factory::getApplication();
-		$jform = $this->input->get('jform', '', 'array');
-		$folder = $jform['activepath'];
+		$activepath = $app->getUserState('com_mediacat.folders.filter.activepath');
+		$parts = explode('/', $activepath);
+		array_pop($parts);
+		$newactivepath = implode('/', $parts);
+		$app->setUserState('com_mediacat.folders.filter.activepath', $newactivepath);
 
-		$nfiles = count(scandir(JPATH_SITE . $folder)) - 2;
-
-		if (!empty($nfiles))
-		{
-			$app->enqueueMessage(Text::sprintf('COM_MEDIACAT_WARNING_FOLDER_NOT_DELETED', $folder, $nfiles), 'warning');
-		}
-		else
-		{
-			Folder::delete(JPATH_SITE . $folder);
-			$app->enqueueMessage(Text::_('COM_MEDIACAT_WARNING_FOLDER_DELETED') . ' ' . $folder, 'success');
-		}
 		$this->setRedirect('index.php?option=com_mediacat&view=folders');
 	}
 

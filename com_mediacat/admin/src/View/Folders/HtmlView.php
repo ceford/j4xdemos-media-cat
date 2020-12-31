@@ -135,14 +135,22 @@ class HtmlView extends BaseHtmlView
 		$layout = new FileLayout('toolbar.hash-all', JPATH_COMPONENT_ADMINISTRATOR . '/layouts');
 		$childBar->appendButton('Custom', $layout->render([]), 'hashtag');
 
-		$layout = new FileLayout('toolbar.delete-if-empty', JPATH_COMPONENT_ADMINISTRATOR . '/layouts');
-		$childBar->appendButton('Custom', $layout->render([]), 'times');
-
 		if ($user->authorise('core.create', 'com_mediacat'))
 		{
+			$dropdown = $toolbar->dropdownButton('folders')
+			->text('COM_MEDIACAT_FOLDERS')
+			->toggleSplit(false)
+			->icon('icon-folder')
+			->buttonClass('btn btn-action');
+
+			$childBar = $dropdown->getChildToolbar();
+
 			// Add the create folder button
 			$layout = new FileLayout('toolbar.create-folder', JPATH_COMPONENT_ADMINISTRATOR . '/layouts', array('view' => 'folders'));
-			$toolbar->appendButton('Custom', $layout->render([]), 'new');
+			$childBar->appendButton('Custom', $layout->render([]), 'icon-folder-plus');
+
+			$layout = new FileLayout('toolbar.delete-if-empty', JPATH_COMPONENT_ADMINISTRATOR . '/layouts', array('view' => 'folders'));
+			$childBar->appendButton('Custom', $layout->render([]), 'icon-folder-minus');
 		}
 
 		// Add the preferences button

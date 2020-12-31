@@ -110,7 +110,7 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 								{
 									$zoomurl = $params->get('trash_path') . $item->folder_path . '/' . $item->id . '-' . $item->file_name;
 								}
-								$imageurl = $fileBaseUrl . '/' . $zoomurl;
+								$imageurl = $fileBaseUrl . $zoomurl;
 							?>
 								<tr>
 									<?php if ($this->state->get('filter.state') != -3) : ?>

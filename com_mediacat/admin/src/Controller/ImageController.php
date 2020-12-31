@@ -27,6 +27,13 @@ class ImageController extends FormController
 {
 	protected $text_prefix = 'COM_MEDIACAT_IMAGE';
 
+	/**
+	 * Deletes an image file and updates its database record.
+	 *
+	 * @return  void
+	 *
+	 * @since   4.0
+	 */
 	public function delete()
 	{
 		$this->checkToken();
@@ -68,6 +75,13 @@ class ImageController extends FormController
 	}
 
 
+	/**
+	 * Moves an image file to the trash folder updates its database record.
+	 *
+	 * @return  void
+	 *
+	 * @since   4.0
+	 */
 	public function trash()
 	{
 		$this->checkToken();
@@ -115,6 +129,13 @@ class ImageController extends FormController
 		$this->setRedirect('index.php?option=com_mediacat&view=images');
 	}
 
+	/**
+	 * Restores an image file from the trash folder and updates its database record.
+	 *
+	 * @return  void
+	 *
+	 * @since   4.0
+	 */
 	public function restore()
 	{
 		$this->checkToken();
@@ -153,6 +174,13 @@ class ImageController extends FormController
 		$this->setRedirect('index.php?option=com_mediacat&view=images');
 	}
 
+	/**
+	 * Gets an image file database record.
+	 *
+	 * @return  record object
+	 *
+	 * @since   4.0
+	 */
 	protected function getRecord($id)
 	{
 		$db = Factory::getDbo();

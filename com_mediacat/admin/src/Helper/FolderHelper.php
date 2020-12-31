@@ -23,6 +23,13 @@ use Joomla\CMS\Language\Text;
 
 Class FolderHelper
 {
+	/*
+	 *  Delete a folder if it is empty - called from Controllers
+	 *
+	 *  Queues a succes or fail message
+	 *
+	 * @return void
+	 */
 	public static function deleteifempty()
 	{
 		$app = Factory::getApplication();
@@ -42,6 +49,15 @@ Class FolderHelper
 		}
 	}
 
+	/*
+	 * Create a folder - called from Controllers
+	 *
+	 * Queues a succes or fail message
+	 *
+	 * @return void
+	 *
+	 * @since   4.0.0
+	 */
 	public static function make()
 	{
 		$app = Factory::getApplication();
@@ -76,6 +92,15 @@ Class FolderHelper
 		}
 	}
 
+	/*
+	 * Creates the tree used in the images and files view
+	 *
+	 * @param  path $activepath the folder to be shown expanded
+	 *
+	 * @return html markup
+	 *
+	 * @since  4.0.0
+	 */
 	public static function tree($activepath)
 	{
 		$root = JPATH_SITE;

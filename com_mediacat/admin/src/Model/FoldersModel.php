@@ -167,6 +167,9 @@ class FoldersModel extends ListModel
 		return array('Folder = ' . $folder, ' New = ' . $new, ' Old = ' . $old, ' Dud = ' . $dud);
 	}
 
+	/*
+	 *
+	 */
 	protected function saveData($media_type, $folder, $filename)
 	{
 		$root = JPATH_SITE;
@@ -245,6 +248,15 @@ class FoldersModel extends ListModel
 		return $result;
 	}
 
+	/*
+	 * Get a list all folders from the images or files root
+	 *
+	 * @param string $folder Start folder
+	 *
+	 * @return A sorted array of folders
+	 *
+	 * @since   4.0
+	 */
 	public function getFolders($folder)
 	{
 		// if folder is empty - abort

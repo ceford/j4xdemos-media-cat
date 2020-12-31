@@ -16,7 +16,7 @@ use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Language\Text;
 
 /**
- * Clicks field.
+ * Allextensions field.
  *
  * @since  1.6
  */
@@ -31,7 +31,7 @@ class AllextensionsField extends FormField
 	protected $type = 'Allextensions';
 
 	/**
-	 * Method to get the field input markup for image extensions.
+	 * Method to get the field input markup for image and file extensions.
 	 *
 	 * @return  string  The field input markup.
 	 *
@@ -39,7 +39,7 @@ class AllextensionsField extends FormField
 	 */
 	protected function getInput()
 	{
-		// get the list of allowed image extensions
+		// get the list of allowed image and file extensions
 		$params = ComponentHelper::getParams('com_mediacat');
 		$extensions = $params->get('image_upload_extensions');
 		$extensions .= ',' . $params->get('file_upload_extensions');

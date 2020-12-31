@@ -16,7 +16,7 @@ use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Language\Text;
 
 /**
- * Clicks field.
+ * ImageextensionsField field.
  *
  * @since  1.6
  */

@@ -36,9 +36,9 @@ class FilesController extends AdminController
 	protected $text_prefix = 'COM_MEDIACAT_FILES';
 
 	/*
-	 * Create a new folder from data in the adminForm
+	 *  Create a new folder from data in the adminForm
 	 *
-	 *  redirect to the folders view
+	 *  redirect to the files view
 	 */
 	public function newfolder()
 	{
@@ -49,9 +49,9 @@ class FilesController extends AdminController
 	}
 
 	/*
-	 * Create a new folder from data in the adminForm
+	 * Delete a folder from data in the adminForm
 	 *
-	 *  redirect to the folders view
+	 *  redirect to the files view
 	 */
 	public function deleteifempty()
 	{

@@ -27,6 +27,13 @@ class FileController extends FormController
 {
 	protected $text_prefix = 'COM_MEDIACAT_FILE';
 
+	/**
+	 * Deletes a file and updates its database record.
+	 *
+	 * @return  void
+	 *
+	 * @since   4.0
+	 */
 	public function delete()
 	{
 		$this->checkToken();
@@ -67,7 +74,13 @@ class FileController extends FormController
 		$this->setRedirect('index.php?option=com_mediacat&view=files');
 	}
 
-
+	/**
+	 * Moves a file to the trash folder updates its database record.
+	 *
+	 * @return  void
+	 *
+	 * @since   4.0
+	 */
 	public function trash()
 	{
 		$this->checkToken();
@@ -115,6 +128,13 @@ class FileController extends FormController
 		$this->setRedirect('index.php?option=com_mediacat&view=files');
 	}
 
+	/**
+	 * Restores a file from the trash folder and updates its database record.
+	 *
+	 * @return  void
+	 *
+	 * @since   4.0
+	 */
 	public function restore()
 	{
 		$this->checkToken();
@@ -153,6 +173,13 @@ class FileController extends FormController
 		$this->setRedirect('index.php?option=com_mediacat&view=files');
 	}
 
+	/**
+	 * Gets a file database record.
+	 *
+	 * @return  record object
+	 *
+	 * @since   4.0
+	 */
 	protected function getRecord($id)
 	{
 		$db = Factory::getDbo();

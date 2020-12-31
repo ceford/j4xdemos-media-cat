@@ -170,6 +170,15 @@ class FileModel extends AdminModel
 		return parent::save($data);
 	}
 
+	/**
+	 * Method to save a file.
+	 *
+	 * @param   array  $data  The form data.
+	 *
+	 * @return  boolean  True on success.
+	 *
+	 * @since   4.0
+	 */
 	protected function saveFile(&$data)
 	{
 		$app = Factory::getApplication();
@@ -262,6 +271,8 @@ class FileModel extends AdminModel
 	 *
 	 * @since   4.0.0
 	 * @see     ApiModel::getFile()
+	 *
+	 * Not being used!
 	 */
 	public function getFileInformation($path)
 	{

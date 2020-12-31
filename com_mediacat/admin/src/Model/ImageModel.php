@@ -22,7 +22,7 @@ use J4xdemos\Component\Mediacat\Administrator\Helper\MimetypesHelper;
 use J4xdemos\Component\Mediacat\Administrator\Sanitizer\Sanitizer;
 
 /**
- * Item Model for a single walk.
+ * Item Model for a single image.
  *
  * @since  1.6
  */
@@ -180,6 +180,15 @@ class ImageModel extends AdminModel
 		return parent::save($data);
 	}
 
+	/**
+	 * Method to save the image data.
+	 *
+	 * @param   array  $data  The form data.
+	 *
+	 * @return  boolean  True on success.
+	 *
+	 * @since   4.0
+	 */
 	protected function saveImage(&$data)
 	{
 		$app = Factory::getApplication();

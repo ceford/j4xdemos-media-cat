@@ -22,7 +22,7 @@ use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
 /**
- * Media List View
+ * Folders List View
  *
  * @since  4.0.0
  */

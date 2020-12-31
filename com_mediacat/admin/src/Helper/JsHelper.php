@@ -20,7 +20,13 @@ use Joomla\CMS\Language\Text;
  */
 
 Class JsHelper
-{
+{	/*
+	 * Set the strings used in Javascript
+	 *
+	 * @return void
+	 *
+	 * @since   4.0.0
+	*/
 	public static function getJstext()
 	{
 		Text::script('COM_MEDIACAT_JS_CLICK_TO_COPY', true);

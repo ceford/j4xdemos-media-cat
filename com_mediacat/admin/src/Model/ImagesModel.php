@@ -18,9 +18,9 @@ use Joomla\CMS\Table\Table;
 use Joomla\Database\ParameterType;
 
 /**
- * Methods supporting a list of banner records.
+ * Methods supporting a list of image records.
  *
- * @since  1.6
+ * @since  4.0
  */
 class ImagesModel extends ListModel
 {

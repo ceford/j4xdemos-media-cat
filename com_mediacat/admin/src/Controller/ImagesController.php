@@ -36,9 +36,9 @@ class ImagesController extends AdminController
 	protected $text_prefix = 'COM_MEDIACAT_IMAGES';
 
 	/*
-	 * Create a new folder from data in the adminForm
+	 *  Delete a folder from data in the adminForm
 	 *
-	 *  redirect to the folders view
+	 *  redirect to the images view
 	 */
 	public function deleteifempty()
 	{
@@ -57,10 +57,10 @@ class ImagesController extends AdminController
 		$this->setRedirect('index.php?option=com_mediacat&view=images');
 	}
 
-		/*
+	/*
 	 * Create a new folder from data in the adminForm
 	 *
-	 *  redirect to the folders view
+	 *  redirect to the images view
 	 */
 	public function newfolder()
 	{

@@ -19,11 +19,13 @@ namespace J4xdemos\Component\Mediacat\Administrator\Helper;
 
 Class MaxfilesizeHelper
 {
-	// from https://stackoverflow.com/questions/13076480/php-get-actual-maximum-upload-size/25370978
-
-	// Returns a file size limit in bytes based on the PHP upload_max_filesize
-	// and post_max_size
-	function file_upload_max_size() {
+	/*
+	 * Returns a file size limit in bytes based on the PHP upload_max_filesize and post_max_size
+	 * See https://stackoverflow.com/questions/13076480/php-get-actual-maximum-upload-size/25370978
+	 *
+	 * @return Integer
+	 */
+	public function file_upload_max_size() {
 		static $max_size = -1;
 
 		if ($max_size < 0) {
@@ -42,7 +44,9 @@ Class MaxfilesizeHelper
 		}
 		return $max_size;
 	}
-
+	/*
+	 * Not sure why this is here!
+	 */
 	function parse_size($size) {
 		$unit = preg_replace('/[^bkmgtpezy]/i', '', $size); // Remove the non-unit characters from the size.
 		$size = preg_replace('/[^0-9\.]/', '', $size); // Remove the non-numeric characters from the size.

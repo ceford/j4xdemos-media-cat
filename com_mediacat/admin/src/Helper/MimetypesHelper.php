@@ -23,11 +23,12 @@ use Joomla\CMS\Language\Text;
 class MimetypesHelper
 {
 	/*
-	 * List of mimetypes used to obtain mimetype from extensio
-	 * and vice-versa
+	 * List of mimetypes used to obtain mimetype from extension and vice-versa
+	 *
+	 * from https://gist.github.com/raphael-riel/1253986
+	 *
+	 * with some additions
 	 */
-
-	// from https://gist.github.com/raphael-riel/1253986
 	protected $types = array(
 			'ai'      => 'application/postscript',
 			'aif'     => 'audio/x-aiff',

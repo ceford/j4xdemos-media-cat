@@ -26,9 +26,9 @@ use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\Registry\Registry;
 
 /**
- * View class for a list of mediacat.
+ * View class for a list of mediacat images.
  *
- * @since  1.6
+ * @since  4.0
  */
 class HtmlView extends BaseHtmlView
 {

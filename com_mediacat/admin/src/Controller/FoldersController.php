@@ -41,7 +41,7 @@ class FoldersController extends BaseController
 	}
 
 	/*
-	 * Create a new folder from data in the adminForm
+	 *  Delete a folder from data in the adminForm
 	 *
 	 *  redirect to the folders view
 	 */
@@ -63,7 +63,7 @@ class FoldersController extends BaseController
 	}
 
 	/*
-	 * index all of the files in a given folder
+	 *  Set md5 hashes for files in a given folder
 	 *
 	 *  return a json encoded message
 	 */
@@ -76,13 +76,12 @@ class FoldersController extends BaseController
 		$media_type = $jform['media_type'];
 		$model = $this->getModel();
 		$result = $model->getHashes($media_type, $folder);
-		echo json_encode($result);//$folder . ' = ' . $result);
-		// not finished
+		echo json_encode($result);
 		jexit();
 	}
 
 	/*
-	 * index all of the files in a given folder
+	 *  Index all of the files in a given folder
 	 *
 	 *  return a json encoded message
 	 */
@@ -95,8 +94,7 @@ class FoldersController extends BaseController
 		$media_type = $jform['media_type'];
 		$model = $this->getModel();
 		$result = $model->getFiles($media_type, $folder);
-		echo json_encode($result);//$folder . ' = ' . $result);
-		// not finished
+		echo json_encode($result);
 		jexit();
 	}
 

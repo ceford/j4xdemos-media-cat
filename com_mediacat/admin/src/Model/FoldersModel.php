@@ -42,8 +42,7 @@ class FoldersModel extends ListModel
 			return array ('That', 'went', 'wrong');
 		}
 
-		$params = ComponentHelper::getParams('com_mediacat');
-		$table = '#__mediacat_' . $params->get($media_type . '_path');
+		$table = '#__mediacat';
 
 		$db = Factory::getDbo();
 		$query = $db->getQuery(true);

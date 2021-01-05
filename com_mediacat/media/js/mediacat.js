@@ -298,15 +298,33 @@ function mediacatHashOne() {
 	}
 }
 
-function mediacatHashAll() {
+async function mediacatHashAll() {
 	if (!confirm(Joomla.Text._('COM_MEDIACAT_JS_HASH_ALL'))) {
 		return;
 	}
+	var form = document.getElementById('adminForm');
+	var task = document.getElementById('task');
 	var activepath = document.getElementById('filter_activepath');
-	var current = activepath.value;
-	document.getElementById('rb-0').checked = true;
-	activepath.value = current.split('/', 2).join('/');
-	doHash(activepath.value);
+	var results = document.getElementById('results');
+	var hr = document.createElement("hr");
+
+	task.value = 'folders.getTree';
+
+	let response = await fetch(form.action, {
+			method: form.method,
+			body: new FormData(form)
+	});
+	if (!response.ok) {
+		throw new Error(Joomla.Text._('COM_MEDIACAT_JS_ERROR_STATUS') + `${response.status}`);
+	} else {
+		let folders = await response.json();
+		var nFolders = folders.length;
+		var text = Joomla.Text._('COM_MEDIACAT_JS_NFOLDERS_TO_PROCESS') + nFolders + '\n';
+		var message = document.createTextNode(text);
+		results.appendChild(hr);
+		results.appendChild(message);
+		folders.forEach (element => doHash(element));
+	}
 }
 
 function mediacatIndexOne() {

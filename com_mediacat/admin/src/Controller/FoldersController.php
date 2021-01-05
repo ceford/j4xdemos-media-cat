@@ -32,8 +32,9 @@ class FoldersController extends BaseController
 	public function getTree()
 	{
 		$this->checkToken();
-		$jform = $this->input->get('jform', '', 'array');
-		$folder = $jform['activepath'];
+		//$jform = $this->input->get('jform', '', 'array');
+		$filter = $this->input->get('filter', '', 'array');
+		$folder = $filter['activepath'];
 		$model = $this->getModel();
 		$result = $model->getFolders($folder);
 		echo json_encode($result);
@@ -53,8 +54,9 @@ class FoldersController extends BaseController
 
 		// just deletedd the active branch so move up one
 		$app = Factory::getApplication();
-		$activepath = $app->getUserState('com_mediacat.folders.filter.activepath');
-		$parts = explode('/', $activepath);
+		$filter = $this->input->get('filter', '', 'array');
+		$folder = $filter['activepath'];
+		$parts = explode('/', $folder);
 		array_pop($parts);
 		$newactivepath = implode('/', $parts);
 		$app->setUserState('com_mediacat.folders.filter.activepath', $newactivepath);
@@ -71,8 +73,9 @@ class FoldersController extends BaseController
 	{
 		// Check for request forgeries.
 		$this->checkToken();
+		$filter = $this->input->get('filter', '', 'array');
+		$folder = $filter['activepath'];
 		$jform = $this->input->get('jform', '', 'array');
-		$folder = $jform['activepath'];
 		$media_type = $jform['media_type'];
 		$model = $this->getModel();
 		$result = $model->getHashes($media_type, $folder);
@@ -89,8 +92,9 @@ class FoldersController extends BaseController
 	{
 		// Check for request forgeries.
 		$this->checkToken();
+		$filter = $this->input->get('filter', '', 'array');
+		$folder = $filter['activepath'];
 		$jform = $this->input->get('jform', '', 'array');
-		$folder = $jform['activepath'];
 		$media_type = $jform['media_type'];
 		$model = $this->getModel();
 		$result = $model->getFiles($media_type, $folder);

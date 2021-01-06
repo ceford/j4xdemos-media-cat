@@ -159,7 +159,9 @@ class HtmlView extends BaseHtmlView
 		}
 
 		$nRecords = $this->pagination->total;
-		ToolbarHelper::custom('','info', '', $nRecords . ' ' . Text::_('COM_MEDIACAT_TOOLBAR_BUTTON_RECORDS'), true);
+		$layout = new FileLayout('toolbar.nrecords', JPATH_COMPONENT_ADMINISTRATOR . '/layouts', array('nrecords' => $nRecords));
+		$toolbar->appendButton('Custom', $layout->render([]), 'icon-info');
+
 
 		if ($user->authorise('core.admin', 'com_mediacat') || $user->authorise('core.options', 'com_mediacat'))
 		{

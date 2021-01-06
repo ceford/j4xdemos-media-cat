@@ -65,7 +65,7 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 						</caption>
 						<thead>
 							<tr>
-								<td><?php echo Text::_('COM_MEDIACAT_ICON'); ?></td>
+								<td class="preview"><?php echo Text::_('COM_MEDIACAT_ICON'); ?></td>
 								<td>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_MEDIACAT_MEDIA_NAME', 'a.file_name', $listDirn, $listOrder); ?>
 								</td>
@@ -101,7 +101,7 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 								$imageurl = substr($item->folder_path, 1) . '/' . $item->file_name;
 							?>
 								<tr>
-									<td rowspan="2" class="">
+									<td rowspan="2" class="preview">
 										<?php if ($this->state->get('filter.state') == -3) : ?>
 											<span class="fiv-cla fiv-icon-<?php echo $item->extension; ?>"></span>
 										<?php elseif ($this->state->get('filter.state') == -2) : ?>

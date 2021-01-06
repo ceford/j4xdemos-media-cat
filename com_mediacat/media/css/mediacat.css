@@ -50,3 +50,13 @@
 .fiv-cla, .fiv-viv, .fiv-sqo {
 	font-size: 6rem; 
 }
+
+.preview{
+	width: 100px;
+	text-align: center;
+}
+
+.preview img {
+	max-width: 100px;
+	object-fit: cover;
+}

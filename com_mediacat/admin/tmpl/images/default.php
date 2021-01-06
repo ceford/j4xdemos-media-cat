@@ -65,7 +65,7 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 						</caption>
 						<thead>
 							<tr>
-								<td><?php echo Text::_('COM_MEDIACAT_PREVIEW'); ?></td>
+								<td class="preview"><?php echo Text::_('COM_MEDIACAT_PREVIEW'); ?></td>
 								<td>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_MEDIACAT_MEDIA_NAME', 'a.file_name', $listDirn, $listOrder); ?>
 								</td>
@@ -114,9 +114,9 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 							?>
 								<tr>
 									<?php if ($this->state->get('filter.state') != -3) : ?>
-									<td rowspan="2" class="image-cropped preview cursor-zoom"
-									style="background-image: url('<?php echo $imageurl; ?>');"
-									onclick="mediacatAction('zoom',<?php echo "'{$zoomurl}'";?>)">
+									<td rowspan="2" class="preview cursor-zoom"
+										onclick="mediacatAction('zoom',<?php echo "'{$zoomurl}'";?>)">
+										<img src="<?php echo $imageurl; ?>" alt="<?php echo $item->alt; ?>" />
 									</td>
 									<?php else : ?>
 									<td rowspan="2">

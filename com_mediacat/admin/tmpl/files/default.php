@@ -167,16 +167,16 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 								<tr>
 									<td>
 										<?php if ($this->state->get('filter.state') >= 0) : ?>
-										<select id="actionlist_<?php echo $item->id; ?>" class="custom-select"
-											onChange="mediacatAction(this, '<?php echo $imageurl; ?>')">
+										<select id="actionlist_<?php echo $item->id; ?>" class="actionselect custom-select"
+											data-url="<?php echo $imageurl; ?>">
 											<option value=""><?php echo Text::_('COM_MEDIACAT_ACTIONS'); ?></option>
 											<option value="share"><?php echo Text::_('COM_MEDIACAT_ACTIONS_SHARE_URL'); ?></option>
 											<option value="link"><?php echo Text::_('COM_MEDIACAT_ACTIONS_LINK'); ?></option>
 											<option value="trashfile"><?php echo Text::_('JTRASH'); ?></option>
 										</select>
 										<?php else : ?>
-										<select id="actionlist_<?php echo $item->id; ?>" class="custom-select"
-											onChange="mediacatAction(this, '')">
+										<select id="actionlist_<?php echo $item->id; ?>" class="actionselect custom-select"
+											data-url="">
 											<option value=""><?php echo Text::_('COM_MEDIACAT_ACTIONS'); ?></option>
 											<option value="restorefile"><?php echo Text::_('COM_MEDIACAT_ACTIONS_RESTORE'); ?></option>
 											<option value="deletefile"><?php echo Text::_('COM_MEDIACAT_ACTIONS_DELETE'); ?></option>

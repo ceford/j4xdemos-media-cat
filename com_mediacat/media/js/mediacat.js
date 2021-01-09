@@ -15,22 +15,24 @@ function setFolder(newPath) {
 	form.submit();
 }
 
-function mediacatAction(element, url) {
+function mediacatAction(element) {
 	var paths = Joomla.getOptions(["system.paths"], 'No good');
 	var root = paths.root;
 	var rootFull = paths.rootFull;
 	var modal = document.getElementById('collapseModal');
 	var title = document.getElementsByClassName('modal-title')[0];
 	var body = document.getElementsByClassName('modal-body')[0];
-	if (element === 'zoom') {
-		var selected = element
-	} else {
-		var selected = element.value;
+	var url = element.dataset.url;
+	
+	var selected = 'zoom';
+	if (! element.classList.contains('img-preview')) {
+		selected = element.value;
 		var id = element.id.split('_')[1];
 	}
+
 	switch (selected) {
 		case 'zoom':
-			var tag = '<img src="'+root+'/'+url+'" class="cover">';
+			var tag = '<img src="'+root+url+'" class="cover">';
 			title.innerText = Joomla.Text._('COM_MEDIACAT_JS_IMAGE_ZOOM');
 			body.classList.add("text-center");
 			body.innerHTML = tag;
@@ -49,13 +51,21 @@ function mediacatAction(element, url) {
 			body.innerHTML = share;
 			modal.open();
 		break;
+		case 'link':
+			// get a link to use on this site
+			var value = '<a href="' + url + '">Link Text</a>';
+			var share = '<input class="form-control" type="text" value=\'' + value + '\'" onclick="this.select();document.execCommand(\'copy\');" />' + Joomla.Text._('COM_MEDIACAT_JS_CLICK_TO_COPY');
+			title.innerText = Joomla.Text._('COM_MEDIACAT_JS_SHARE_LINK');
+			body.innerHTML = share;
+			modal.open();
+		break;
 		case 'image':
 			// get an image tag
 			var width = document.getElementById('width-' + id).innerText;
 			var height = document.getElementById('height-' + id).innerText;
 			var alt = document.getElementById('alt-' + id).innerText;
-			var value = '<img src="'+root+'/'+url+'" width="'+width+'" height="'+height+'" alt="'+alt+'" class="cover">';
-			var share = '<input class="form-control" type="text" value=\'' + value + '\' onclick="this.select();document.execCommand(\'copy\');" /> Click to Copy';
+			var value = '<img src="' + url + '" width="' + width + '" height="' + height + '" alt="' + alt + '" class="cover">';
+			var share = '<input class="form-control" type="text" value=\'' + value + '\' onclick="this.select();document.execCommand(\'copy\');" />' + Joomla.Text._('COM_MEDIACAT_JS_CLICK_TO_COPY');
 			title.innerText = Joomla.Text._('COM_MEDIACAT_JS_IMAGE_TAG');
 			body.innerHTML = share;
 			modal.open();
@@ -67,7 +77,7 @@ function mediacatAction(element, url) {
 			var alt = document.getElementById('alt-' + id).innerText;
 			var figure = document.getElementById('caption-' + id).innerText;
 			var value = '<figure>';
-			value += '<img src="'+root+'/'+url+'" width="'+width+'" height="'+height+'" alt="'+alt+'" class="cover">';
+			value += '<img src="' + url + '" width="' + width + '" height="' + height + '" alt="' + alt + '" class="cover">';
 			value += '<figcaption>' + figure + '</figcaption>';
 			value += '</figure>';
 			var share = '<input class="form-control" type="text" value=\'' + value + '\' onclick="this.select();document.execCommand(\'copy\');" /> Click to Copy';
@@ -81,7 +91,7 @@ function mediacatAction(element, url) {
 			var height = document.getElementById('height-' + id).innerText;
 			var alt = document.getElementById('alt-' + id).innerText;
 			var value = '<picture>';
-			value += '<source srcset="'+root+'/'+url+'" media="(min-width: 800px)">';
+			value += '<source srcset="' + url + '" media="(min-width: 800px)">';
 			value += '<img src="' + url + '">';
 			value += '</picture>';
 			var share = '<input class="form-control" type="text" value=\'' + value + '\' onclick="this.select();document.execCommand(\'copy\');" /> Click to Copy';
@@ -427,6 +437,12 @@ trash && trash.addEventListener("click", function() {
 	mediacatTrash();
 });
 
+var setmediatype = document.getElementById('filter_mediatype');
+setmediatype && setmediatype.addEventListener("change", function() {
+	var form = document.getElementById('adminForm')
+	form.submit();
+});
+
 var catfolders = document.getElementsByClassName("cat-folder");
 
 var setCatfolder = function() {
@@ -439,4 +455,24 @@ var setCatfolder = function() {
 
 for (var i = 0; i < catfolders.length; i++) {
 	catfolders[i].addEventListener('click', setCatfolder, false);
+}
+
+var imgpreview = document.getElementsByClassName("img-preview");
+
+var imgPreview = function() {
+	mediacatAction(this);
+}
+
+for (var i = 0; i < imgpreview.length; i++) {
+	imgpreview[i].addEventListener('click', imgPreview, false);
+}
+
+var actionselect = document.getElementsByClassName("actionselect");
+
+var actionlistSelect = function() {
+	mediacatAction(this);
+}
+
+for (var i = 0; i < actionselect.length; i++) {
+	actionselect[i].addEventListener('change', actionlistSelect, false);
 }

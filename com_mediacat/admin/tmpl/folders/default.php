@@ -46,7 +46,7 @@ $media_type_options = array('image' => Text::_('COM_MEDIACAT_FIELDSET_IMAGES_LAB
 				</label>
 			</div>
 			<div class="controls media-select">
-				<select id="filter_mediatype" name="filter[mediatype]" onchange="Joomla.submitbutton();" class="custom-select">
+				<select id="filter_mediatype" name="filter[mediatype]" class="custom-select">
 					<?php echo HTMLHelper::_('select.options', $media_type_options, 'value', 'text', $this->mediatype, true); ?>
 				</select>
 			</div>

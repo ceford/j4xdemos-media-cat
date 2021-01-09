@@ -122,8 +122,7 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 							?>
 								<tr>
 									<?php if ($this->state->get('filter.state') != -3) : ?>
-									<td rowspan="2" class="preview cursor-zoom"
-										onclick="mediacatAction('zoom',<?php echo "'{$zoomurl}'";?>)">
+									<td rowspan="2" class="preview img-preview cursor-zoom" data-url="<?php echo $zoomurl;?>">
 										<img src="<?php echo $imageurl; ?>" alt="<?php echo $item->alt; ?>" />
 									</td>
 									<?php else : ?>
@@ -171,8 +170,8 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 								<tr>
 									<td>
 										<?php if ($this->state->get('filter.state') >= 0) : ?>
-										<select id="actionlist_<?php echo $item->id; ?>" class="custom-select"
-											onChange="mediacatAction(this, '<?php echo $imageurl; ?>')">
+										<select id="actionlist_<?php echo $item->id; ?>" class="actionselect custom-select"
+											data-url="<?php echo substr($zoomurl, 1); ?>">
 											<option value=""><?php echo Text::_('COM_MEDIACAT_ACTIONS'); ?></option>
 											<option value="share"><?php echo Text::_('COM_MEDIACAT_ACTIONS_SHARE_URL'); ?></option>
 											<option value="image"><?php echo Text::_('COM_MEDIACAT_ACTIONS_IMAGE_TAG'); ?></option>
@@ -181,8 +180,8 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 											<option value="trashimage"><?php echo Text::_('JTRASH'); ?></option>
 										</select>
 										<?php elseif ($this->state->get('filter.state') == -2) : ?>
-										<select id="actionlist_<?php echo $item->id; ?>" class="custom-select"
-											onChange="mediacatAction(this, '')">
+										<select id="actionlist_<?php echo $item->id; ?>" class="actionselect custom-select"
+											data-url="">
 											<option value=""><?php echo Text::_('COM_MEDIACAT_ACTIONS'); ?></option>
 											<option value="restoreimage"><?php echo Text::_('COM_MEDIACAT_ACTIONS_RESTORE'); ?></option>
 											<option value="deleteimage"><?php echo Text::_('COM_MEDIACAT_ACTIONS_DELETE'); ?></option>

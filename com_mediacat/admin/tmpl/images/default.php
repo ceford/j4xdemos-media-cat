@@ -12,6 +12,7 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Layout\FileLayout;
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Session\Session;
@@ -47,9 +48,16 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 				?>
 				<div class="row">
 					<div class="col-12 col-md-3">
+
 					<h3><?php echo Text::_('COM_MEDIACAT_FOLDER_TREE'); ?></h3>
-					<?php echo FolderHelper::tree($this->state->get('filter.activepath')); ?>
+
+					<?php
+						$folders = FolderHelper::getTree($this->state->get('filter.activepath'));
+						$layout = new FileLayout('foldertree', JPATH_COMPONENT .'/layouts', array('activepath' => $this->state->get('filter.activepath'),'folders' => $folders));
+						echo $layout->render();
+					?>
 					</div>
+
 					<div class="col-12 col-md-9">
 					<?php if (empty($this->items)) : ?>
 						<div class="alert alert-info">
@@ -200,7 +208,7 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 				<input type="hidden" name="jform[media_type]" id="jform_media_type" value="image">
 				<input type="hidden" name="task" id="task" value="">
 				<input type="hidden" name="boxchecked" value="0">
-				<input type="hidden" name="filter[activepath]" id="filter_activepath" value="<?php echo $this->state->get('filter.activepath')?>">
+				<input type="hidden" name="filter[activepath]" id="filter_activepath" value="<?php echo $this->state->get('filter.activepath'); ?>">
 				<input type="hidden" name="jform[newfoldername]" id="jform_newfoldername" value="">
 				<?php echo HTMLHelper::_('form.token'); ?>
 			</div>

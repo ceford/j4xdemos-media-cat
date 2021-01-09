@@ -16,9 +16,10 @@ Factory::getDocument()->getWebAssetManager()
 	->useScript('webcomponent.toolbar-button');
 
 $title = Text::_('JTOOLBAR_UPLOAD');
+
 ?>
 <joomla-toolbar-button>
-	<button class="btn btn-success" onclick="MediacatManager.Event.fire('onClickUpload');">
+	<button class="btn btn-success" id="mediacatUpload">
 		<span class="icon-upload" aria-hidden="true"></span>
 		<?php echo $title; ?>
 	</button>

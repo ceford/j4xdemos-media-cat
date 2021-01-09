@@ -177,4 +177,64 @@ Class FolderHelper
 		}
 		return $html;
 	}
+
+	/*
+	 * Creates the tree used in the images and files view
+	 *
+	 * @param  path $activepath the folder to be shown expanded
+	 *
+	 * @return html markup
+	 *
+	 * @since  4.0.0
+	 */
+	public static function getTree($activepath)
+	{
+		$root = JPATH_SITE;
+		$path = '';
+
+		$dirs = explode('/', $activepath);
+		array_shift($dirs);
+		$subs[] = '/' . $dirs[0];
+
+		foreach ($dirs as $dir)
+		{
+			if (empty($dir))
+			{
+				continue;
+			}
+			// skip if dir begins with .
+			if (strpos($dir, '.') === 0)
+			{
+				continue;
+			}
+			$path .= '/' . $dir;
+
+			foreach (new \DirectoryIterator($root . $path) as $fileInfo)
+			{
+				if($fileInfo->isDot())
+				{
+					continue;
+				}
+				// skip if dir begins with .
+				if (strpos($fileInfo->getFilename(), '.') === 0)
+				{
+					continue;
+				}
+				if ($fileInfo->isDir())
+				{
+					$subs[] = $path . '/' . $fileInfo->getFilename();
+				}
+			}
+		}
+
+		asort($subs);
+		/* example:
+		 * /files
+		 * /files/odt
+		 * /files/pdf
+		 * /files/png
+		 * /files/webp
+		 */
+		return $subs;
+	}
 }

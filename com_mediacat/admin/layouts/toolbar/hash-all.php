@@ -13,8 +13,8 @@ use Joomla\CMS\Language\Text;
 
 ?>
 
-<joomla-toolbar-button id="status-group-children-hash-on" task="">
-	<button onclick="mediacatHashAll();" class="button-mediacat dropdown-item">
+<joomla-toolbar-button>
+	<button id="mediacatHashAll" class="button-mediacat dropdown-item">
 		<span class="fa-hashtag icon-fw" aria-hidden="true"></span>
 		<?php echo Text::_('COM_MEDIACAT_TOOLBAR_BUTTON_HASH_ALL'); ?>
 	</button>

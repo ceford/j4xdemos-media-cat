@@ -340,7 +340,6 @@ function mediacatIndexAll() {
 	}
 	var activepath = document.getElementById('filter_activepath');
 	var current = activepath.value;
-	document.getElementById('rb-0').checked = true;
 	activepath.value = current.split('/', 2).join('/');
 	indexAll();
 }
@@ -389,4 +388,55 @@ function mediacatTrash() {
 		
 	}
 	task.value = '';
+}
+
+var createfolder = document.getElementById('mediacatCreateFolder');
+createfolder && createfolder.addEventListener("click", function() {
+	var view = this.getAttribute('data-view');
+	mediacatCreateFolder(view);
+});
+
+var deleteifempty = document.getElementById('mediacatDeleteIfEmpty');
+deleteifempty && deleteifempty.addEventListener("click", function() {
+	var view = this.getAttribute('data-view');
+	mediacatDeleteIfEmpty(view);
+});
+
+var hashall = document.getElementById('mediacatHashAll');
+hashall && hashall.addEventListener("click", function() {
+	mediacatHashAll();
+});
+
+var hashone = document.getElementById('mediacatHashOne');
+hashone && hashone.addEventListener("click", function() {
+	mediacatHashOne();
+});
+
+var indexall = document.getElementById('mediacatIndexAll');
+indexall && indexall.addEventListener("click", function() {
+	mediacatIndexAll();
+});
+
+var indexone = document.getElementById('mediacatIndexOne');
+indexone && indexone.addEventListener("click", function() {
+	mediacatIndexOne();
+});
+
+var trash = document.getElementById('mediacatTrash');
+trash && trash.addEventListener("click", function() {
+	mediacatTrash();
+});
+
+var catfolders = document.getElementsByClassName("cat-folder");
+
+var setCatfolder = function() {
+	var datalink = this.getAttribute("data-link");
+	var activepath = document.getElementById('filter_activepath');
+	activepath.value = datalink;
+	var form = document.getElementById('adminForm');
+	form.submit();
+};
+
+for (var i = 0; i < catfolders.length; i++) {
+	catfolders[i].addEventListener('click', setCatfolder, false);
 }

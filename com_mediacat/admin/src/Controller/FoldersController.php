@@ -32,7 +32,6 @@ class FoldersController extends BaseController
 	public function getTree()
 	{
 		$this->checkToken();
-		//$jform = $this->input->get('jform', '', 'array');
 		$filter = $this->input->get('filter', '', 'array');
 		$folder = $filter['activepath'];
 		$model = $this->getModel();
@@ -75,10 +74,9 @@ class FoldersController extends BaseController
 		$this->checkToken();
 		$filter = $this->input->get('filter', '', 'array');
 		$folder = $filter['activepath'];
-		$jform = $this->input->get('jform', '', 'array');
-		$media_type = $jform['media_type'];
+		$mediatype = $filter['mediatype'];
 		$model = $this->getModel();
-		$result = $model->getHashes($media_type, $folder);
+		$result = $model->getHashes($mediatype, $folder);
 		echo json_encode($result);
 		jexit();
 	}
@@ -94,10 +92,9 @@ class FoldersController extends BaseController
 		$this->checkToken();
 		$filter = $this->input->get('filter', '', 'array');
 		$folder = $filter['activepath'];
-		$jform = $this->input->get('jform', '', 'array');
-		$media_type = $jform['media_type'];
+		$mediatype = $filter['mediatype'];
 		$model = $this->getModel();
-		$result = $model->getFiles($media_type, $folder);
+		$result = $model->getFiles($mediatype, $folder);
 		echo json_encode($result);
 		jexit();
 	}

@@ -13,8 +13,8 @@ use Joomla\CMS\Language\Text;
 
 ?>
 
-<joomla-toolbar-button id="status-group-children-index-all" task="">
-	<button onclick="mediacatIndexAll('');" class="button-mediacat dropdown-item" type="button">
+<joomla-toolbar-button>
+	<button id="mediacatIndexAll" class="button-mediacat dropdown-item" type="button">
 		<span class="icon-archive icon-fw" aria-hidden="true"></span>
 		<?php echo Text::_('COM_MEDIACAT_TOOLBAR_BUTTON_INDEX_ALL'); ?>
 	</button>

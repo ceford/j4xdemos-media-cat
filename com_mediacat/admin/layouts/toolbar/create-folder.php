@@ -14,9 +14,9 @@ use Joomla\CMS\Language\Text;
 $view = $this->options->get('view');
 
 ?>
-<joomla-toolbar-button id="status-group-children-create-folder" task="">
+<joomla-toolbar-button>
 	<button id="mediacatCreateFolder" class="button-mediacat dropdown-item"
-	onclick="mediacatCreateFolder('<?php echo $view; ?>');">
+		data-view="<?php echo $view; ?>">
 		<span class="fa-folder-plus icon-fw" aria-hidden="true"></span>
 		<?php echo Text::_('COM_MEDIACAT_CREATE_NEW_FOLDER'); ?>
 	</button>

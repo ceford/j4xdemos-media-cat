@@ -15,8 +15,9 @@ $view = $this->options->get('view');
 
 ?>
 
-<joomla-toolbar-button id="status-group-children-delete-if-empty" task="">
-	<button onclick="mediacatDeleteIfEmpty('<?php echo $view; ?>');" class="button-mediacat dropdown-item">
+<joomla-toolbar-button>
+	<button id="mediacatDeleteIfEmpty" class="button-mediacat dropdown-item"
+		data-view="<?php echo $view; ?>">
 		<span class="fa-folder-minus icon-fw" aria-hidden="true"></span>
 		<?php echo Text::_('COM_MEDIACAT_TOOLBAR_BUTTON_DELETE_IF_EMPTY'); ?>
 	</button>

@@ -18,7 +18,7 @@ Factory::getDocument()->getWebAssetManager()
 $title = Text::_('JTOOLBAR_TRASH');
 ?>
 <joomla-toolbar-button>
-	<button id="mediacatTrash" class="btn btn-danger" onclick="mediacatTrash();">
+	<button id="mediacatTrash" class="btn btn-danger">
 		<span class="icon-times" aria-hidden="true"></span>
 		<?php echo $title; ?>
 	</button>

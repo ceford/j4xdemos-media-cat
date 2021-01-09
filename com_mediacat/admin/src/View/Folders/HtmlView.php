@@ -63,35 +63,50 @@ class HtmlView extends BaseHtmlView
 		$app = Factory::getApplication();
 		$params = ComponentHelper::getParams('com_mediacat');
 
-		$jform = $app->input->get('jform', '', 'array');
+		$filter = $app->input->get('filter', '', 'array');
+		$old_mediatype = $app->getUserState('com_mediacat.folders.filter.mediatype');
+		$old_activepath = $app->getUserState('com_mediacat.folders.filter.activepath');
 
-		if (empty($jform))
+		if (empty($filter))
 		{
-			$media_type = $app->getUserState('com_mediacat.folders.media_type', 'image');
+			if (empty($old_mediatype))
+			{
+				$this->activepath = '/' . $params->get('image_path');
+				$this->mediatype = 'image';
+			}
+			else
+			{
+				$this->activepath = $app->getUserState('com_mediacat.folders.filter.activepath');
+				$this->mediatype = $app->getUserState('com_mediacat.folders.filter.mediatype');
+			}
 		}
 		else
 		{
-			$media_type = $jform['media_type'];
+			// has the media type changed
+			if ($filter['mediatype'] != $old_mediatype)
+			{
+				if ($filter['mediatype'] == 'image')
+				{
+					$this->activepath = '/' . $params->get('image_path');
+				}
+				else
+				{
+					$this->activepath = '/' . $params->get('file_path');
+				}
+				$this->mediatype = $filter['mediatype'];
+			}
+			else
+			{
+				$this->activepath = $filter['activepath'];
+				$this->mediatype = $filter['mediatype'];
+			}
 		}
+		$app->setUserState('com_mediacat.folders.filter.activepath', $this->activepath);
+		$app->setUserState('com_mediacat.folders.filter.mediatype', $this->mediatype);
 
-		$app->setUserState('com_mediacat.folders.media_type', $media_type);
-
-		if ($media_type == 'image')
-		{
-			$this->activepath = '/' . $params->get('image_path');
-			$this->media_type = 'image';
-			$folder = '/' . $params->get('image_path');
-		}
-		else
-		{
-			$this->activepath = '/' . $params->get('file_path');
-			$this->media_type = 'file';
-			$folder = '/' . $params->get('file_path');
-		}
-
-		$this->folders = $model->getFolders($folder);
+		$this->folders = $model->getFolders($this->activepath);
 		$this->prepareToolbar();
-		$this->currentPath = Factory::getApplication()->input->getString('path');
+		//$this->currentPath = Factory::getApplication()->input->getString('path');
 
 		parent::display($tpl);
 	}

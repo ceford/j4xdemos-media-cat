@@ -162,7 +162,6 @@ class HtmlView extends BaseHtmlView
 		$layout = new FileLayout('toolbar.nrecords', JPATH_COMPONENT_ADMINISTRATOR . '/layouts', array('nrecords' => $nRecords));
 		$toolbar->appendButton('Custom', $layout->render([]), 'icon-info');
 
-
 		if ($user->authorise('core.admin', 'com_mediacat') || $user->authorise('core.options', 'com_mediacat'))
 		{
 			$toolbar->preferences('com_mediacat');

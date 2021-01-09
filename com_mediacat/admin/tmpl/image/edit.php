@@ -170,7 +170,7 @@ JsHelper::getJstext();
 						class="cover"
 					/>
 					<?php else : ?>
-					<div style="width: 300px; height:225px;background-color:#eee; text-align:center;">
+					<div class="image-holder">
 						<p><?php echo Text::_('COM_MEDIACAT_IMAGE_UPLOAD_NOT_YET'); ?></p>
 					</div>
 					<?php endif; ?>

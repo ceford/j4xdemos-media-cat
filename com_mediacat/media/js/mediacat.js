@@ -1,13 +1,3 @@
-var test4jformalt = document.getElementById("jform_alt");
-if (test4jformalt) {
-	document.getElementById("jform_alt").onkeyup = function() {
-		updateFilename();
-	}
-	document.getElementById("jform_alt").onchange = function() {
-		updateFilename();
-	}
-}
-
 function setFolder(newPath) {
 	var folderPath = document.getElementById('filter_activepath');
 	folderPath.value = newPath;
@@ -476,3 +466,14 @@ var actionlistSelect = function() {
 for (var i = 0; i < actionselect.length; i++) {
 	actionselect[i].addEventListener('change', actionlistSelect, false);
 }
+
+var test4jformalt = document.getElementById("jform_alt");
+
+test4jformalt && test4jformalt.addEventListener("change", function() {
+	updateFilename();
+});
+
+test4jformalt && test4jformalt.addEventListener("keyup", function() {
+	updateFilename();
+});
+

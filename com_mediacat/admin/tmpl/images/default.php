@@ -217,7 +217,7 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 
 <?php
 $footer = '
-	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 ';
 	echo HTMLHelper::_(
 	'bootstrap.renderModal',

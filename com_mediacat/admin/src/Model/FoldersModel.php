@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     Joomla.Administrator
+ * @package     Mediacat.Administrator
  * @subpackage  com_mediacat
  *
  * @copyright   (C) 2021 Open Source Matters, Inc. <https://www.joomla.org>
@@ -267,6 +267,8 @@ class FoldersModel extends ListModel
 		$root = JPATH_SITE;
 		$rootlen = strlen($root);
 		$folders[] = $folder;
+		$params = ComponentHelper::getParams('com_mediacat');
+		$prefix = $params->get('thumbnail_prefix');
 
 		try
 		{
@@ -281,6 +283,10 @@ class FoldersModel extends ListModel
 				// skip if any path element begins with .
 				if (strpos($name, '/.') > 0)
 				{
+					continue;
+				}
+				// skip if a thumbnail folder
+				if (strpos($name, $prefix) === 0) {
 					continue;
 				}
 				$folders[] = substr($name, $rootlen);

@@ -5,4 +5,25 @@
 			<![CDATA[COM_MEDIACAT_IMAGES_VIEW_DEFAULT_DESC]]>
 		</message>
 	</layout>
+	<!-- Add fields to the parameters object for the layout. -->
+	<fields name="params">
+		<fieldset name="request" label="COM_MENUS_BASIC_FIELDSET_LABEL">
+
+		</fieldset>
+
+		<!-- Add fields to the parameters object for the layout. -->
+
+		<!-- Scroll. -->
+		<fieldset name="basic">
+
+		</fieldset>
+
+		<!-- Advanced options. -->
+		<fieldset name="advanced">
+			<field name="imagepath"
+			type="text"
+			label="Image Path"
+			/>
+		</fieldset>
+	</fields>
 </metadata>

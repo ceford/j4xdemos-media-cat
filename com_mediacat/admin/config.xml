@@ -33,6 +33,15 @@
 			default="images"
 		/>
 
+		<field
+			name="thumbnail_prefix"
+			type="text"
+			label="COM_MEDIACAT_FIELD_THUMBNAIL_PREFIX_LABEL"
+			description="COM_MEDIACAT_FIELD_THUMBNAIL_PREFIX_DESC"
+			size="10"
+			default="tn-"
+		/>
+
 	</fieldset>
 
 	<fieldset

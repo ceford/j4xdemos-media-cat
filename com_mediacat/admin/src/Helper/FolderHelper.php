@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     Joomla.Administrator
+ * @package     Mediacat.Administrator
  * @subpackage  com_mediacat
  *
  * @copyright   (C) 2021 Open Source Matters, Inc. <https://www.joomla.org>
@@ -11,6 +11,7 @@ namespace J4xdemos\Component\Mediacat\Administrator\Helper;
 
 \defined('_JEXEC') or die;
 
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Language\Text;
@@ -110,6 +111,9 @@ Class FolderHelper
 		array_shift($dirs);
 		$subs[] = '/' . $dirs[0];
 
+		$params = ComponentHelper::getParams('com_mediacat');
+		$prefix = $params->get('thumbnail_prefix');
+
 		foreach ($dirs as $dir)
 		{
 			if (empty($dir))
@@ -122,6 +126,11 @@ Class FolderHelper
 				continue;
 			}
 			$path .= '/' . $dir;
+			// skip if a directory does not exist
+			if (!file_exists($root . $path))
+			{
+				continue;
+			}
 
 			foreach (new \DirectoryIterator($root . $path) as $fileInfo)
 			{
@@ -136,7 +145,11 @@ Class FolderHelper
 				}
 				if ($fileInfo->isDir())
 				{
-					$subs[] = $path . '/' . $fileInfo->getFilename();
+					$filename = $fileInfo->getFilename();
+					// skip if a thumbnail folder
+					if (strpos($filename, $prefix) !== 0) {
+						$subs[] = $path . '/' . $filename;
+					}
 				}
 			}
 		}

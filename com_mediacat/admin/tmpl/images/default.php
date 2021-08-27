@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     Joomla.Administrator
+ * @package     Mediacat.Administrator
  * @subpackage  com_mediacat
  *
  * @copyright   (C) 2021 Open Source Matters, Inc. <https://www.joomla.org>
@@ -22,6 +22,8 @@ use J4xdemos\Component\Mediacat\Administrator\Helper\FolderHelper;
 use J4xdemos\Component\Mediacat\Administrator\Helper\JsHelper;
 
 $params = ComponentHelper::getParams('com_mediacat');
+$prefix = $params->get('thumbnail_prefix');
+
 $fileBaseUrl = Uri::root(true);
 
 /** @var Joomla\CMS\WebAsset\WebAssetManager $wa */
@@ -113,12 +115,24 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 								if ($this->state->get('filter.state') >= 0)
 								{
 									$zoomurl = $item->folder_path . '/' . $item->file_name;
+									$tn = $item->folder_path . '/' . $prefix . $item->tn_width . '/' . $item->file_name;
 								}
 								else if ($this->state->get('filter.state') == -2)
 								{
-									$zoomurl = $params->get('trash_path') . $item->folder_path . '/' . $item->id . '-' . $item->file_name;
+									$zoomurl = '/' . $params->get('trash_path') . $item->folder_path . '/' . $item->id . '-' . $item->file_name;
+									$tn = '/' . $params->get('trash_path') . $item->folder_path . '/' . $prefix . $item->tn_width . '/' . $item->file_name;
 								}
-								$imageurl = $fileBaseUrl . $zoomurl;
+								if ($this->state->get('filter.state') != -3)
+								{
+									if (file_exists(JPATH_SITE . $tn))
+									{
+										$imageurl = $fileBaseUrl . $tn;
+									}
+									else
+									{
+										$imageurl = $fileBaseUrl . $zoomurl;
+									}
+								}
 							?>
 								<tr>
 									<?php if ($this->state->get('filter.state') != -3) : ?>
@@ -168,7 +182,7 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 									</td>
 								</tr>
 								<tr>
-									<td>
+									<td colspan="2">
 										<?php if ($this->state->get('filter.state') >= 0) : ?>
 										<select id="actionlist_<?php echo $item->id; ?>" class="actionselect custom-select"
 											data-url="<?php echo substr($zoomurl, 1); ?>">
@@ -188,7 +202,7 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 										</select>
 										<?php endif; ?>
 									</td>
-									<td id="alt-<?php echo $item->id; ?>" colspan="6">
+									<td id="alt-<?php echo $item->id; ?>" colspan="5">
 										<?php echo Text::_('COM_MEDIACAT_IMAGE_ALT_LABEL'); ?> = <span id="alt-<?php echo $item->id; ?>"><?php echo $item->alt; ?></span><br>
 										<?php echo Text::_('COM_MEDIACAT_IMAGE_CAPTION_LABEL'); ?> = <span id="caption-<?php echo $item->id; ?>"><?php echo $item->caption; ?></span>
 									</td>

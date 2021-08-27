@@ -20,7 +20,17 @@
       "name": "com_mediacat.mediacat",
       "type": "style",
       "uri": "com_mediacat/mediacat.css"
+    },
+    {
+      "name": "com_mediacat.mediacat-site",
+      "type": "script",
+      "uri": "com_mediacat/mediacat-site.js",
+      "dependencies": [
+        "core"
+      ],
+      "attributes": {
+        "defer": true
+      }
     }
-
   ]
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     Joomla.Administrator
+ * @package     Mediacat.Administrator
  * @subpackage  com_mediacat
  *
  * @copyright   (C) 2021 Open Source Matters, Inc. <https://www.joomla.org>
@@ -148,7 +148,8 @@ class ImageModel extends AdminModel
 	 *
 	 * @since   4.0.0
 	 */
-	public function publish(&$pks, $value = 1) {
+	public function publish(&$pks, $value = 1)
+	{
 		/* this is a very simple method to change the state of each item selected */
 		$db = $this->getDbo();
 
@@ -192,7 +193,8 @@ class ImageModel extends AdminModel
 	protected function saveImage(&$data)
 	{
 		$app = Factory::getApplication();
-		$file = $app->input->files->get('jform', '', 'array');
+		// need to use raw because anything else causes an error with an empty file name
+		$file = $app->input->files->get('jform', array(), 'array');
 		// array (size=1)
 		// 'uploadfile' =>
 		// array (size=5)
@@ -270,10 +272,6 @@ class ImageModel extends AdminModel
 			File::delete($tmp_name);
 			return false;
 		}
-		File::delete($tmp_name);
-
-		// add the file information to the data
-		$data['folder_path'] = $activePath;
 
 		if ($mime != 'image/svg+xml')
 		{
@@ -285,11 +283,119 @@ class ImageModel extends AdminModel
 			$data['width'] = 100;
 			$data['height'] = 100;
 		}
+
+		if (!empty($data['tn_width']) && ($width > $data['tn_width']))
+		{
+			$prefix = $params->get('thumbnail_prefix');
+			$thumb_path = JPATH_SITE . $activePath . '/' . $prefix . $data['tn_width'];
+			// make the path if it does not exist
+			if (!file_exists($thumb_path))
+			{
+				mkdir($thumb_path, 0777, true);
+			}
+			// make the thumbnail
+
+			switch ($mime) {
+				case 'image/jpeg':
+					$thumb = imagecreatefromjpeg($tmp_name);
+					$thumb = imagescale($thumb, $data['tn_width']);
+					imagejpeg($thumb, $thumb_path . '/' . $data['file_name']);
+					break;
+				case 'image/png':
+					$img = imagecreatefrompng($tmp_name);
+
+					$newWidth = $data['tn_width'];
+					$newHeight = intval($height / $width * $newWidth);
+
+					$thumb = imagecreatetruecolor($newWidth, $newHeight);
+					imagealphablending($thumb, false);
+
+					$transparency = imagecolorallocatealpha($thumb, 255, 255, 255, 127);
+					imagefill($thumb, 0, 0, $transparency);
+
+					imagecolortransparent($thumb, $transparency);
+
+					imagecopyresampled($thumb, $img, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+					imagesavealpha($thumb,true);
+					imagepng($thumb, $thumb_path . '/' . $data['file_name']);
+					break;
+				case 'image/gif':
+					$img = imagecreatefromgif($tmp_name);
+
+					$newWidth = $data['tn_width'];
+					$newHeight = intval($height / $width * $newWidth);
+
+					$thumb = imagecreatetruecolor($newWidth, $newHeight);
+					imagealphablending($thumb, false);
+
+					# get and reallocate transparency-color
+					$transindex = imagecolortransparent($img);
+
+					if ($transindex >= 0) {
+						$transcol = imagecolorsforindex($img, $transindex);
+						$transindex = imagecolorallocatealpha(
+								$thumb,
+								$transcol['red'],
+								$transcol['green'],
+								$transcol['blue'],
+								127
+								);
+						imagefill($thumb, 0, 0, $transindex);
+					}
+					# resample
+					imagecopyresampled($thumb, $img, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+
+					# restore transparency
+					if ($transindex >= 0) {
+						imagecolortransparent($thumb, $transindex);
+						for ($y = 0; $y < $newHeight; ++$y) {
+							for ($x = 0; $x < $newWidth; ++$x) {
+								if (((imagecolorat($thumb, $x, $y) >> 24) & 0x7F) >= 100) {
+									imagesetpixel(
+											$thumb,
+											$x,
+											$y,
+											$transindex
+											);
+								}
+							}
+						}
+
+					}
+					# save GIF
+					imagetruecolortopalette($thumb, true, 255);
+					imagesavealpha($thumb, false);
+					imagegif($thumb, $thumb_path . '/' . $data['file_name']);
+					break;
+				case 'image/webp':
+					$thumb = imagecreatefromwebp($tmp_name);
+					$thumb = imagescale($thumb, $data['tn_width']);
+					imagewebp($thumb, $thumb_path . '/' . $data['file_name']);
+					break;
+				default:
+					$thumb = '';
+			}
+			if (!empty($thumb))
+			{
+				$app->enqueueMessage('Thumbnail image created: ' . $data['tn_width'], 'info');
+			}
+			else
+			{
+				$app->enqueueMessage('Thumbnail image NOT created', 'info');
+			}
+		}
+
+		File::delete($tmp_name);
+
+		// add the file information to the data
+		$data['folder_path'] = $activePath;
+
 		$size = filesize($new_path);
 		$hash = hash('md5', $new_path);
 		$data['extension'] = substr($data['file_name'], strrpos($data['file_name'], '.') + 1);
 		$data['size'] = $size;
 		$data['hash'] = $hash;
+
 		return true;
 	}
 }

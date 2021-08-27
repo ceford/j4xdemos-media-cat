@@ -51,6 +51,17 @@
 		/>
 
 		<field
+			name="tn_width"
+			type="list"
+			label="COM_MEDIACAT_IMAGE_THUMB_LABEL"
+			default="100"
+			>
+			<option value="0">0</option>
+			<option value="100">100</option>
+			<option value="150">150</option>
+		</field>
+
+		<field
 			name="id"
 			type="number"
 			label="JGLOBAL_FIELD_ID_LABEL"

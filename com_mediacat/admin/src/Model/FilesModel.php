@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     Joomla.Administrator
+ * @package     Mediacat.Administrator
  * @subpackage  com_mediacat
  *
  * @copyright   (C) 2021 Open Source Matters, Inc. <https://www.joomla.org>
@@ -18,7 +18,7 @@ use Joomla\CMS\Table\Table;
 use Joomla\Database\ParameterType;
 
 /**
- * Methods supporting a list of banner records.
+ * Methods supporting a list of mediacat records.
  *
  * @since  1.6
  */

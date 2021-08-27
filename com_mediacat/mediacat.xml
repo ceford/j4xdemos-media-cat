@@ -3,12 +3,12 @@
 	<name>com_mediacat</name>
 	<author>Clifford E Ford</author>
 	<creationDate>December 2020</creationDate>
-	<copyright>(C) 2020 Clifford E Ford. All rights reserved.
+	<copyright>(C) 2021 Clifford E Ford. All rights reserved.
 	</copyright>
 	<license>GNU General Public License version 3</license>
 	<authorEmail></authorEmail>
 	<authorUrl></authorUrl>
-	<version>0.3.0</version>
+	<version>0.4.0</version>
 	<description>COM_MEDIACAT_XML_DESCRIPTION</description>
 	<namespace path="src">J4xdemos\Component\Mediacat</namespace>
 
@@ -34,7 +34,16 @@
 	</update>
 	
 	<scriptfile>script.php</scriptfile>
-		
+	
+	<files folder="site">
+		<folder>src</folder>
+		<folder>tmpl</folder>
+	</files>
+	
+	<languages folder="site">
+		<language tag="en-GB">language/en-GB/com_mediacat.ini</language>
+	</languages>
+	
 	<administration>
 		<files folder="admin">
 			<filename>access.xml</filename>
@@ -79,6 +88,8 @@
 				com_mediacat_folders
 			</menu>
 		</submenu>
-
 	</administration>
+	<dashboards>
+		<dashboard title="COM_MEDIACAT_DASHBOARD_TITLE" icon="icon-file-alt">mediacat</dashboard>
+	</dashboards>
 </extension>

@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     Joomla.Administrator
+ * @package     Mediacat.Administrator
  * @subpackage  com_mediacat
  *
  * @copyright   (C) 2021 Open Source Matters, Inc. <https://www.joomla.org>
@@ -63,7 +63,7 @@ class com_mediacatInstallerScript
 	 */
 	protected function setParams()
 	{
-		$params = '{"image_upload_extensions":"bmp,gif,ico,jpg,jpeg,png","image_upload_maxsize":"10","image_path":"images","file_upload_extensions":"csv,doc,odp,ods,odt,pdf,ppt,txt,xls","file_upload_maxsize":"10","file_path":"files","trash_path":"trash"}';
+		$params = '{"image_upload_extensions":"bmp,gif,ico,jpg,jpeg,png","image_upload_maxsize":"10","image_path":"images","thumbnail_prefix":"tn-","file_upload_extensions":"csv,doc,odp,ods,odt,pdf,ppt,txt,xls","file_upload_maxsize":"10","file_path":"files","trash_path":"trash"}';
 
 		$db = Factory::getDbo();
 		$query = $db->getQuery(true)

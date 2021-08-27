@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     Joomla.Administrator
+ * @package     Mediacat.Administrator
  * @subpackage  com_mediacat
  *
  * @copyright   (C) 2021 Open Source Matters, Inc. <https://www.joomla.org>
@@ -148,6 +148,21 @@ JsHelper::getJstext();
 						</div>
 					</div>
 					<?php endif; ?>
+
+					<div class="control-group">
+						<div class="control-label">
+							<label id="jform_tn_width-lbl" for="jform_tn_width">
+								<?php echo Text::_('COM_MEDIACAT_IMAGE_THUMB_LABEL'); ?>
+							</label>
+						</div>
+						<div class="controls">
+							<select name="jform[tn_width]" id="jform_tn_width" class="form-select">
+							<option value="100">100</option>
+							<option value="150">150</option>
+							<option value="0">0</option>
+							</select>
+						</div>
+					</div>
 
 					<div class="control-group">
 						<div class="control-label">

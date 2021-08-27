@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS `#__mediacat` (
   `width` int(11) NOT NULL DEFAULT '0',
   `height` int(11) NOT NULL DEFAULT '0',
   `size` int(11) NOT NULL DEFAULT '0',
+  `tn_width` int(11) NOT NULL DEFAULT '0',
   `alt` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `caption` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `hash` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,

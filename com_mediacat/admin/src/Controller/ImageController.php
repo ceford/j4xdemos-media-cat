@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     Joomla.Administrator
+ * @package     Mediacat.Administrator
  * @subpackage  com_mediacat
  *
  * @copyright   (C) 2021 Open Source Matters, Inc. <https://www.joomla.org>
@@ -66,6 +66,23 @@ class ImageController extends FormController
 			$db->setQuery($query);
 			$db->execute();
 			$app->enqueueMessage(Text::_('COM_MEDIACAT_DELETE_SUCCESS') . ' ' . $id . ' ' . $item->file_name, 'success');
+
+			// delete the thumbnail if it exists
+			$query = $db->getQuery(true);
+			$query->select('tn_width')
+			->from('#__mediacat')
+			->where('id = ' . $id);
+			$db->setQuery($query);
+			$tn_width = $db->loadResult();
+			if (!empty($tn_width))
+			{
+				$target = $trash_path . '/tn-' . $tn_width . '/' . $id . '-' . $item->file_name;
+				// delete the file
+				if (file_exists($target))
+				{
+					$removed = File::delete($target);
+				}
+			}
 		}
 		else {
 			// otherwise an error message
@@ -119,6 +136,29 @@ class ImageController extends FormController
 			$db->setQuery($query);
 			$db->execute();
 			$app->enqueueMessage(Text::_('COM_MEDIACAT_WARNING_ITEM_TRASHED') . ' ' . $id . ' ' . $item->file_name, 'success');
+
+			// move the thumbnail if it exists
+			$query = $db->getQuery(true);
+			$query->select('tn_width')
+			->from('#__mediacat')
+			->where('id = ' . $id);
+			$db->setQuery($query);
+			$tn_width = $db->loadResult();
+			if (!empty($tn_width))
+			{
+				$source = JPATH_SITE . $item->folder_path . '/tn-' . $tn_width . '/' . $item->file_name;
+				$destination = $trash_path . '/tn-' . $tn_width . '/' . $id . '-' . $item->file_name;
+				// move the file
+				if (file_exists($source))
+				{
+					// make the path if it does not exist
+					if (!file_exists($trash_path . '/tn-' . $tn_width))
+					{
+						mkdir($trash_path . '/tn-' . $tn_width, 0777, true);
+					}
+					$moved = File::move($source, $destination);
+				}
+			}
 		}
 		else
 		{
@@ -169,6 +209,21 @@ class ImageController extends FormController
 			$db->setQuery($query);
 			$db->execute();
 			$app->enqueueMessage(Text::_('COM_MEDIACAT_FILE_RESTORED') . $id . ' ' . $item->file_name, 'success');
+
+			// restore thumbnail if it exists
+			$query = $db->getQuery(true);
+			$query->select('tn_width')
+			->from('#__mediacat')
+			->where('id = ' . $id);
+			$db->setQuery($query);
+			$tn_width = $db->loadResult();
+			if (!empty($tn_width))
+			{
+				$source  = $trash_path . '/tn-' . $tn_width . '/' . $id . '-' . $item->file_name;
+				$destination = JPATH_SITE . $item->folder_path . '/tn-' . $tn_width . '/' . $item->file_name;
+				$moved = File::move($source, $destination);
+			}
+
 		}
 
 		$this->setRedirect('index.php?option=com_mediacat&view=images');

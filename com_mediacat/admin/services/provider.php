@@ -23,7 +23,7 @@ use Joomla\DI\ServiceProviderInterface;
 use J4xdemos\Component\Mediacat\Administrator\Extension\MediacatComponent;
 
 /**
- * The media service provider.
+ * The mediacat service provider.
  *
  * @since  4.0.0
  */

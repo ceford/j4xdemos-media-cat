@@ -1,4 +1,6 @@
-# Joomla 4x Component - Media Cat
+# This component is soon to be archived - please use j4xdemos-com-ffmedia instead
+
+## Joomla 4x Component - Media Cat
 
 A component to manage media: Image files and Document files.
 
